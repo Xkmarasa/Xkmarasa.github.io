@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegancia Azul | Experiencia Premium</title>
+    <style>
+        :root {
+            --azul-oscuro: #0a192f;
+            --azul-medio: #172a45;
+            --azul-claro: #64ffda;
+            --azul-neon: #00f7ff;
+            --texto-primario: #ccd6f6;
+            --texto-secundario: #8892b0;
+            --sombra-elegante: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        body {
+            font-family: 'Avenir', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--azul-oscuro);
+            color: var(--texto-primario);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Efecto de partículas (propiedad inventada) */
+        .efecto-particulas::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(100, 255, 218, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 80% 70%, rgba(100, 255, 218, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .contenedor {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        header {
+            background: linear-gradient(145deg, var(--azul-oscuro) 0%, #0d1f3a 100%);
+            padding: 60px 0 100px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--sombra-elegante);
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M1200 0L0 0 0 120 1200 120 1200 0z" fill="%230a192f"/></svg>');
+            background-size: cover;
+            z-index: 2;
+            transform: rotate(180deg);
+        }
+        
+        h1 {
+            font-size: 4.5rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--texto-primario), var(--azul-claro));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(10, 25, 47, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .subtitulo {
+            font-size: 1.4rem;
+            color: var(--azul-claro);
+            margin-top: 15px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+        
+        /* Nuevo efecto de texto (propiedad inventada) */
+        .texto-fluido {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .texto-fluido::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, var(--azul-claro), var(--azul-neon));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        
+        .texto-fluido:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* Sección hero mejorada */
+        .hero {
+            padding: 100px 0;
+            position: relative;
+            background: radial-gradient(ellipse at bottom, #0a192f 0%, #020c1b 100%);
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .hero-texto {
+            position: relative;
+            z-index: 3;
+        }
+        
+        .hero-imagen {
+            position: relative;
+            height: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--sombra-elegante);
+            background: linear-gradient(45deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Nuevo componente: Tarjeta flotante */
+        .tarjeta-flotante {
+            background: rgba(23, 42, 69, 0.6);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--sombra-elegante);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 255, 218, 0.15);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tarjeta-flotante::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 0%,
+                transparent 45%,
+                rgba(100, 255, 218, 0.03) 50%,
+                transparent 55%,
+                transparent 100%
+            );
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+        
+        .tarjeta-flotante:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(100, 255, 218, 0.3);
+        }
+        
+        .tarjeta-flotante:hover::before {
+            animation: brillo-deslizante 3s infinite;
+        }
+        
+        @keyframes brillo-deslizante {
+            0% { transform: rotate(30deg) translate(-30%, -30%); }
+            100% { transform: rotate(30deg) translate(30%, 30%); }
+        }
+        
+        /* Galería mejorada */
+        .galeria-avanzada {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .item-galeria {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        .item-galeria::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(10, 25, 47, 0.9) 0%, transparent 50%);
+        }
+        
+        .item-galeria:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        .info-galeria {
+            position: relative;
+            z-index: 2;
+            padding: 30px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .item-galeria:hover .info-galeria {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Nuevo componente: Barra de progreso elegante */
+        .barra-habilidad {
+            margin: 30px 0;
+        }
+        
+        .barra-titulo {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--azul-claro);
+        }
+        
+        .barra-contenedor {
+            height: 6px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .barra-progreso {
+            height: 100%;
+            background: linear-gradient(to right, var(--azul-claro), var(--azul-neon));
+            border-radius: 3px;
+            position: relative;
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        
+        .barra-progreso::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 100%
+            );
+            animation: brillo-barra 2.5s infinite;
+        }
+        
+        @keyframes brillo-barra {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Efecto de scroll personalizado */
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        body::-webkit-scrollbar-track {
+            background: var(--azul-oscuro);
+        }
+        
+        body::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--azul-claro), var(--azul-neon));
+            border-radius: 5px;
+        }
+        
+        /* Footer mejorado */
+        footer {
+            background: linear-gradient(to top, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+            padding: 60px 0 30px;
+            text-align: center;
+            margin-top: 100px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M1200 0L0 0 0 120 1200 120 1200 0z" fill="%23172a45"/></svg>');
+            background-size: cover;
+        }
+        
+        .redes-sociales {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .icono-social {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(100, 255, 218, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+        
+        .icono-social:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="efecto-particulas">
+    <header>
+        <div class="contenedor">
+            <h1><span class="texto-fluido">Elegancia Azul</span></h1>
+            <div class="subtitulo">DISEÑO SOFISTICADO • TECNOLOGÍA AVANZADA • EXPERIENCIA PREMIUM</div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="contenedor hero-grid">
+            <div class="hero-texto">
+                <div class="tarjeta-flotante">
+                    <h2 class="tarjeta-titulo">Experiencia <span class="texto-fluido">Ultra Premium</span></h2>
+                    <p>Sumérgete en un mundo donde el diseño y la tecnología se fusionan para crear experiencias digitales incomparables. Nuestro enfoque meticuloso en cada detalle garantiza una presencia en línea que refleja exclusividad y sofisticación.</p>
+                    
+                    <div class="barra-habilidad">
+                        <div class="barra-titulo">
+                            <span>Diseño Elegante</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="barra-contenedor">
+                            <div class="barra-progreso" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="barra-habilidad">
+                        <div class="barra-titulo">
+                            <span>Innovación Tecnológica</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="barra-contenedor">
+                            <div class="barra-progreso" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="barra-habilidad">
+                        <div class="barra-titulo">
+                            <span>Satisfacción del Cliente</span>
+                            <span>98%</span>
+                        </div>
+                        <div class="barra-contenedor">
+                            <div class="barra-progreso" style="width: 98%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-imagen">
+                <svg width="80%" height="80%" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#64ffda" />
+                            <stop offset="100%" stop-color="#00f7ff" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="none" stroke="url(#grad1)" stroke-width="2" d="M20,100 Q50,50 100,100 T180,100" opacity="0.8" />
+                    <path fill="none" stroke="url(#grad1)" stroke-width="1.5" d="M20,120 Q50,70 100,120 T180,120" opacity="0.6" />
+                    <path fill="none" stroke="url(#grad1)" stroke-width="1" d="M20,80 Q50,30 100,80 T180,80" opacity="0.6" />
+                    <circle cx="100" cy="100" r="30" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.7" />
+                    <circle cx="100" cy="100" r="15" fill="none" stroke="url(#grad1)" stroke-width="1.5" opacity="0.9" />
+                </svg>
+            </div>
+        </div>
+    </section>
+    
+    <section class="contenedor">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px;"><span class="texto-fluido">Galería Exclusiva</span></h2>
+        
+        <div class="galeria-avanzada">
+            <div class="item-galeria" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"350\" height=\"350\" viewBox=\"0 0 350 350\"><rect width=\"350\" height=\"350\" fill=\"%230a192f\"/><path d=\"M0,175 Q175,350 350,175 L350,350 L0,350 Z\" fill=\"%23172a45\"/><circle cx=\"175\" cy=\"175\" r=\"60\" fill=\"%2364ffda\" opacity=\"0.7\"/><circle cx=\"175\" cy=\"175\" r=\"30\" fill=\"%2300f7ff\" opacity=\"0.9\"/></svg>')">
+                <div class="info-galeria">
+                    <h3>Concepto Aurora</h3>
+                    <p>Diseño inspirado en las luces del norte, combinando movimiento y profundidad.</p>
+                </div>
+            </div>
+            
+            <div class="item-galeria" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"350\" height=\"350\" viewBox=\"0 0 350 350\"><rect width=\"350\" height=\"350\" fill=\"%23172a45\"/><line x1=\"0\" y1=\"0\" x2=\"350\" y2=\"350\" stroke=\"%2364ffda\" stroke-width=\"2\" opacity=\"0.6\"/><line x1=\"350\" y1=\"0\" x2=\"0\" y2=\"350\" stroke=\"%2364ffda\" stroke-width=\"2\" opacity=\"0.6\"/><rect x=\"75\" y=\"75\" width=\"200\" height=\"200\" fill=\"none\" stroke=\"%2300f7ff\" stroke-width=\"2\" opacity=\"0.8\"/><rect x=\"100\" y=\"100\" width=\"150\" height=\"150\" fill=\"none\" stroke=\"%2300f7ff\" stroke-width=\"1.5\" opacity=\"0.8\"/></svg>')">
+                <div class="info-galeria">
+                    <h3>Esencia Cuántica</h3>
+                    <p>Geometría precisa que representa la fusión entre tecnología y arte.</p>
+                </div>
+            </div>
+            
+            <div class="item-galeria" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"350\" height=\"350\" viewBox=\"0 0 350 350\"><rect width=\"350\" height=\"350\" fill=\"%230a192f\"/><path d=\"M0,175 L350,175 M175,0 L175,350\" stroke=\"%2364ffda\" stroke-width=\"1\" opacity=\"0.3\"/><path d=\"M0,0 Q350,0 350,350 Q0,350 0,0 Z\" fill=\"none\" stroke=\"%2300f7ff\" stroke-width=\"2\" opacity=\"0.7\"/><path d=\"M50,50 Q300,50 300,300 Q50,300 50,50 Z\" fill=\"none\" stroke=\"%2300f7ff\" stroke-width=\"1.5\" opacity=\"0.7\"/></svg>')">
+                <div class="info-galeria">
+                    <h3>Armonía Digital</h3>
+                    <p>Flujo continuo que simboliza la perfecta integración de elementos.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tarjeta-flotante" style="margin-top: 60px;">
+            <h2 class="tarjeta-titulo">Tecnologías <span class="texto-fluido">Exclusivas</span></h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div>
+                    <h3 style="color: var(--azul-claro); margin-top: 0;">FluidMotion™</h3>
+                    <p>Nuestro sistema patentado de animaciones fluidas que adapta su comportamiento según el contenido y el dispositivo, ofreciendo una experiencia siempre óptima.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--azul-claro); margin-top: 0;">DeepColor AI</h3>
+                    <p>Algoritmo de inteligencia artificial que analiza el contenido para sugerir paletas de colores perfectamente equilibradas en tiempo real.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--azul-claro); margin-top: 0;">CrystalText®</h3>
+                    <p>Tecnología de renderizado de texto que mejora la legibilidad y añade efectos de profundidad dinámicos según la iluminación virtual.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="contenedor">
+            <h2 style="margin-top: 0; font-size: 2rem;"><span class="texto-fluido">Elegancia Azul</span></h2>
+            <p>Redefiniendo los estándares del diseño digital</p>
+            
+            <div class="redes-sociales">
+                <div class="icono-social">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </div>
+                <div class="icono-social">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </div>
+                <div class="icono-social">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                    </svg>
+                </div>
+                <div class="icono-social">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </div>
+            </div>
+            
+            <p style="margin-top: 40px; font-size: 0.9em; color: var(--texto-secundario);">
+                © 2023 Elegancia Azul. Todos los derechos reservados.<br>
+                Diseñado con pasión en tonos profundos.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Animación para las barras de progreso
+        document.addEventListener('DOMContentLoaded', function() {
+            const barras = document.querySelectorAll('.barra-progreso');
+            barras.forEach(barra => {
+                // Reiniciamos el ancho para que la animación funcione
+                const porcentaje = barra.style.width;
+                barra.style.width = '0';
+                setTimeout(() => {
+                    barra.style.width = porcentaje;
+                }, 100);
+            });
+            
+            // Efecto de aparición suave para los elementos
+            const elementos = document.querySelectorAll('.tarjeta-flotante, .item-galeria');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elementos.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
