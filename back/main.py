@@ -23,6 +23,16 @@ def get_db():
     finally:
         db.close()
 
+
+
+@app.get("/data")
+def get_properties():
+    return db.get_properties()
+
+@app.delete("/data")
+def delete_properties():
+    return db.delete_properties()
+
 @app.post("/propiedades/")
 def crear_propiedad(titulo: str, precio: float, db: Session = Depends(get_db)):
     propiedad = Propiedad(
