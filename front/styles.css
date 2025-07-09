@@ -1,0 +1,17 @@
+/* Estilos base (iguales a tu ejemplo) */
+body { font-family: 'Roboto', sans-serif; }
+h1 { font-family: 'Playfair Display', serif; }
+
+/* Colores de categorías */
+#tapas-container h2 { color: #5a2d07; }
+#hamburguesas-container h2 { color: #7b4f2c; }
+#bebidas-container h2 { color: #d4af37; }
+
+/* Responsive: 2 columnas en pantallas grandes */
+@media (min-width: 768px) {
+    .category-container { 
+        width: 48%; 
+        display: inline-block;
+        vertical-align: top;
+    }
+}
