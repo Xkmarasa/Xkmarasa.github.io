@@ -28,22 +28,25 @@ app.get('/menu', async (req, res) => {
             pool.query('SELECT * FROM cervezas'),
             pool.query('SELECT * FROM ensaladas'),
             pool.query('SELECT * FROM menu_infantil'),
-            pool.query('SELECT * FROM platos'),
+            pool.query('SELECT * FROM platos_combinados'),
             pool.query('SELECT * FROM postres'),
             pool.query('SELECT * FROM refrescos'),
             pool.query('SELECT * FROM sandwich') // Asegúrate que coincida con el nombre real en BD
         ]);
         
         res.json({
+  bocadillos: bocadillos.rows,
   cervezas: cervezas.rows,
   ensaladas: ensaladas.rows,
   hamburguesa: hamburguesa.rows,
   menu_infantil: menu_infantil.rows,
-  platos: platos.rows,
+  platos_combinados: platos_combinados.rows,
   postres: postres.rows,
   refrescos: refrescos.rows,
   sandwich: sandwich.rows,
-  tapas: tapas.rows
+  tapas: tapas.rows,
+  
+  
 });
 res.setHeader('Content-Type', 'application/json');
 res.send(JSON.stringify(result.rows, null, 2));
@@ -163,9 +166,9 @@ app.post('/menu_infantil', async (req, res) => {
 });
 
 // 🚀 5. Platos
-app.get('/platos', async (req, res) => {
+app.get('/platos_combinados', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM platos');
+        const result = await pool.query('SELECT * FROM platos_combinados');
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(result.rows, null, 2));
     } catch (err) {
@@ -174,11 +177,11 @@ app.get('/platos', async (req, res) => {
     }
 });
 
-app.post('/platos', async (req, res) => {
+app.post('/platos_combinados', async (req, res) => {
     try {
         const { nombre, precio } = req.body;
         const result = await pool.query(
-            'INSERT INTO platos (nombre, precio) VALUES ($1, $2) RETURNING *',
+            'INSERT INTO platos_combinados (nombre, precio) VALUES ($1, $2) RETURNING *',
             [nombre, precio]
         );
         res.status(201).json(result.rows[0]);
@@ -290,7 +293,33 @@ app.post('/tapas', async (req, res) => {
         console.error('Error POST tapas:', err);
         res.status(500).json({ error: err.message });
     }
+});
+    app.get('/bocadillos', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM bocadillos');
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(result.rows, null, 2));
+    } catch (err) {
+        console.error('Error GET bocadillos:', err);
+        res.status(500).json({ error: err.message });
+    }
 
 });
 
+
+app.post('/bocadillos', async (req, res) => {
+    try {
+        const { nombre, precio } = req.body;
+        const result = await pool.query(
+            'INSERT INTO bocadillos (nombre, precio) VALUES ($1, $2) RETURNING *',
+            [nombre, precio]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Error POST bocadillos:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.listen(3000, () => console.log('Servidor en http://localhost:3000'));
+   
