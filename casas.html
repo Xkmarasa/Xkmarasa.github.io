@@ -42,37 +42,25 @@
             border-bottom: 1px solid var(--medium-gray);
         }
         
-        .logo-container {
+        .logo {
             display: flex;
+            flex-direction: column;
             align-items: center;
             margin-bottom: 15px;
             text-decoration: none;
         }
         
-        .logo-img {
-            height: 40px;
-            margin-right: 10px;
-        }
-        
-        .logo-text {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-blue);
-            letter-spacing: 0.5px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-        }
-        
         .logo-main {
-            font-size: 1.1em;
+            font-size: 1.4em;
+            font-weight: bold;
             color: var(--dark-blue);
+            letter-spacing: 0.5px;
         }
         
         .logo-sub {
-            font-size: 0.7em;
+            font-size: 0.8em;
             color: var(--primary-blue);
-            font-weight: normal;
+            font-weight: bold;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -326,6 +314,7 @@
             justify-content: center;
             margin: 30px 0;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .page-btn {
@@ -373,14 +362,11 @@
                 padding: 15px 40px;
             }
             
-            .logo-container {
-                margin-bottom: 0;
-                margin-right: 30px;
-            }
-            
-            .logo-text {
+            .logo {
                 flex-direction: row;
                 align-items: baseline;
+                margin-bottom: 0;
+                margin-right: 30px;
             }
             
             .logo-sub {
@@ -420,12 +406,10 @@
 </head>
 <body>
     <header>
-        <a href="#" class="logo-container">
-            <div class="logo-text">
-                <span class="logo-main">Mediterranean Blue International</span>
-                <span class="logo-sub">LLC REALTY</span>
-            </div>
-        </a>
+        <div class="logo">
+            <span class="logo-main">Mediterranean Blue International</span>
+            <span class="logo-sub">LLC REALTY</span>
+        </div>
         
         <div class="nav-section">
             <div class="nav-item">Buy</div>
@@ -613,35 +597,7 @@
                 paginationContainer.appendChild(prevBtn);
                 
                 // Números de página
-                const maxVisiblePages = 5;
-                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-                
-                if (endPage - startPage + 1 < maxVisiblePages) {
-                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
-                }
-                
-                if (startPage > 1) {
-                    const firstPageBtn = document.createElement('button');
-                    firstPageBtn.className = 'page-btn';
-                    firstPageBtn.textContent = '1';
-                    firstPageBtn.addEventListener('click', () => {
-                        currentPage = 1;
-                        updatePropertiesDisplay();
-                        setupPagination();
-                        window.scrollTo({top: 0, behavior: 'smooth'});
-                    });
-                    paginationContainer.appendChild(firstPageBtn);
-                    
-                    if (startPage > 2) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.padding = '8px 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                }
-                
-                for (let i = startPage; i <= endPage; i++) {
+                for (let i = 1; i <= totalPages; i++) {
                     const pageBtn = document.createElement('button');
                     pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
                     pageBtn.textContent = i;
@@ -652,26 +608,6 @@
                         window.scrollTo({top: 0, behavior: 'smooth'});
                     });
                     paginationContainer.appendChild(pageBtn);
-                }
-                
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        const dots = document.createElement('span');
-                        dots.textContent = '...';
-                        dots.style.padding = '8px 5px';
-                        paginationContainer.appendChild(dots);
-                    }
-                    
-                    const lastPageBtn = document.createElement('button');
-                    lastPageBtn.className = 'page-btn';
-                    lastPageBtn.textContent = totalPages;
-                    lastPageBtn.addEventListener('click', () => {
-                        currentPage = totalPages;
-                        updatePropertiesDisplay();
-                        setupPagination();
-                        window.scrollTo({top: 0, behavior: 'smooth'});
-                    });
-                    paginationContainer.appendChild(lastPageBtn);
                 }
                 
                 // Botón Siguiente
