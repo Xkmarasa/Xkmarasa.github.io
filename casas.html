@@ -122,11 +122,15 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         
         .carousel-image.active {
-            display: block;
+            opacity: 1;
         }
         
         .carousel-nav {
@@ -137,6 +141,7 @@
             justify-content: space-between;
             transform: translateY(-50%);
             padding: 0 10px;
+            z-index: 10;
         }
         
         .carousel-btn {
@@ -160,21 +165,29 @@
             transform: scale(1.1);
         }
         
-        .no-image {
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100%;
-            color: var(--text-gray);
-            font-size: 1em;
-            flex-direction: column;
-            padding: 20px;
+            gap: 8px;
+            z-index: 10;
         }
         
-        .no-image:before {
-            content: '🏠';
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator.active {
+            background-color: var(--white);
+            transform: scale(1.2);
         }
         
         .property-title {
@@ -422,15 +435,43 @@
                             'Thoughtfully designed living spaces'
                         ];
                     
+                    // Manejo de imágenes desde el array JSON
+                    let imagesHTML = '';
+                    let indicatorsHTML = '';
+                    let hasImages = false;
+                    
+                    if (property.imagenes && property.imagenes.length > 0) {
+                        hasImages = true;
+                        // Convertir string JSON a array si es necesario
+                        const imagesArray = typeof property.imagenes === 'string' ? 
+                            JSON.parse(property.imagenes) : property.imagenes;
+                        
+                        imagesHTML = imagesArray.map((img, index) => `
+                            <img src="${img}" class="carousel-image ${index === 0 ? 'active' : ''}" alt="Property image ${index + 1}">
+                        `).join('');
+                        
+                        indicatorsHTML = imagesArray.map((img, index) => `
+                            <div class="indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
+                        `).join('');
+                    }
+                    
                     // Generar HTML de la propiedad
                     propertyCard.innerHTML = `
                         <div class="property-image-container">
                             <div class="image-carousel">
-                                <div class="no-image">Property Image Coming Soon</div>
-                                <div class="carousel-nav">
-                                    <button class="carousel-btn prev">‹</button>
-                                    <button class="carousel-btn next">›</button>
-                                </div>
+                                ${hasImages ? 
+                                    imagesHTML : 
+                                    '<div class="no-image">Property Image Coming Soon</div>'
+                                }
+                                ${hasImages ? `
+                                    <div class="carousel-nav">
+                                        <button class="carousel-btn prev">‹</button>
+                                        <button class="carousel-btn next">›</button>
+                                    </div>
+                                    <div class="carousel-indicators">
+                                        ${indicatorsHTML}
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
                         
@@ -459,10 +500,12 @@
                     `;
                     
                     container.appendChild(propertyCard);
+                    
+                    // Inicializar carrusel si hay imágenes
+                    if (hasImages) {
+                        initCarousel(propertyCard);
+                    }
                 });
-                
-                // Inicializar carruseles (simulado)
-                initCarousels();
             })
             .catch(error => {
                 console.error('Error loading properties:', error);
@@ -477,12 +520,53 @@
             });
         });
         
-        function initCarousels() {
-            // Simulación de funcionalidad de carrusel
-            document.querySelectorAll('.carousel-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    alert('Carrusel funcionaría con imágenes reales');
+        function initCarousel(propertyCard) {
+            const carousel = propertyCard.querySelector('.image-carousel');
+            const images = carousel.querySelectorAll('.carousel-image');
+            const prevBtn = carousel.querySelector('.prev');
+            const nextBtn = carousel.querySelector('.next');
+            const indicators = carousel.querySelectorAll('.indicator');
+            
+            let currentIndex = 0;
+            
+            function showImage(index) {
+                images.forEach(img => img.classList.remove('active'));
+                indicators.forEach(ind => ind.classList.remove('active'));
+                
+                images[index].classList.add('active');
+                indicators[index].classList.add('active');
+                currentIndex = index;
+            }
+            
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % images.length;
+                showImage(currentIndex);
+            }
+            
+            function prevImage() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                showImage(currentIndex);
+            }
+            
+            // Event listeners
+            if (nextBtn) nextBtn.addEventListener('click', nextImage);
+            if (prevBtn) prevBtn.addEventListener('click', prevImage);
+            
+            indicators.forEach(indicator => {
+                indicator.addEventListener('click', () => {
+                    showImage(parseInt(indicator.dataset.index));
                 });
+            });
+            
+            // Auto-rotate (opcional)
+            let interval = setInterval(nextImage, 5000);
+            
+            carousel.addEventListener('mouseenter', () => {
+                clearInterval(interval);
+            });
+            
+            carousel.addEventListener('mouseleave', () => {
+                interval = setInterval(nextImage, 5000);
             });
         }
     </script>
