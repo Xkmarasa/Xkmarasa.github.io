@@ -42,10 +42,16 @@
             border-bottom: 1px solid var(--medium-gray);
         }
         
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 40px;
+            margin-right: 10px;
         }
         
         .logo-text {
@@ -54,13 +60,21 @@
             color: var(--primary-blue);
             letter-spacing: 0.5px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
         }
         
-        .logo-text span {
-            color: var(--dark-gray);
+        .logo-main {
+            font-size: 1.1em;
+            color: var(--dark-blue);
+        }
+        
+        .logo-sub {
+            font-size: 0.7em;
+            color: var(--primary-blue);
             font-weight: normal;
-            font-size: 0.8em;
-            display: block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         
         .nav-section {
@@ -307,6 +321,41 @@
             color: var(--text-gray);
         }
         
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            background-color: var(--white);
+            color: var(--dark-blue);
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .page-btn:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
         footer {
             background-color: var(--dark-blue);
             color: var(--white);
@@ -324,14 +373,18 @@
                 padding: 15px 40px;
             }
             
-            .logo {
+            .logo-container {
                 margin-bottom: 0;
                 margin-right: 30px;
             }
             
-            .logo-text span {
-                display: inline;
-                margin-left: 5px;
+            .logo-text {
+                flex-direction: row;
+                align-items: baseline;
+            }
+            
+            .logo-sub {
+                margin-left: 10px;
             }
             
             .nav-section {
@@ -367,9 +420,12 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <div class="logo-text">MEDITERRANEAN BLUE <span>INTERNATIONAL. LLC</span></div>
-        </div>
+        <a href="#" class="logo-container">
+            <div class="logo-text">
+                <span class="logo-main">Mediterranean Blue International</span>
+                <span class="logo-sub">LLC REALTY</span>
+            </div>
+        </a>
         
         <div class="nav-section">
             <div class="nav-item">Buy</div>
@@ -384,12 +440,18 @@
         <div class="loading">Loading properties...</div>
     </div>
     
+    <div class="pagination" id="pagination-container"></div>
+    
     <footer>
         © 2023 Mediterranean Blue International LLC. All rights reserved.
     </footer>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            let allProperties = [];
+            let currentPage = 1;
+            const propertiesPerPage = 10;
+            
             fetch('https://xkmarasa-github-io.onrender.com/data')
                 .then(response => {
                 if (!response.ok) {
@@ -398,10 +460,27 @@
                 return response.json();
             })
             .then(properties => {
+                allProperties = properties;
+                updatePropertiesDisplay();
+                setupPagination();
+            })
+            .catch(error => {
+                console.error('Error loading properties:', error);
+                document.getElementById('properties-container').innerHTML = `
+                    <div class="property-card">
+                        <div class="no-image" style="color: #e74c3c;">
+                            We're currently updating our property listings<br>
+                            <small>Please try again later or contact us directly</small>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            function updatePropertiesDisplay() {
                 const container = document.getElementById('properties-container');
                 container.innerHTML = '';
                 
-                if (properties.length === 0) {
+                if (allProperties.length === 0) {
                     container.innerHTML = `
                         <div class="property-card">
                             <div class="no-image">No properties available at the moment</div>
@@ -410,7 +489,11 @@
                     return;
                 }
                 
-                properties.forEach(property => {
+                const startIndex = (currentPage - 1) * propertiesPerPage;
+                const endIndex = Math.min(startIndex + propertiesPerPage, allProperties.length);
+                const propertiesToShow = allProperties.slice(startIndex, endIndex);
+                
+                propertiesToShow.forEach(property => {
                     const propertyCard = document.createElement('div');
                     propertyCard.className = 'property-card';
                     
@@ -506,69 +589,156 @@
                         initCarousel(propertyCard);
                     }
                 });
-            })
-            .catch(error => {
-                console.error('Error loading properties:', error);
-                document.getElementById('properties-container').innerHTML = `
-                    <div class="property-card">
-                        <div class="no-image" style="color: #e74c3c;">
-                            We're currently updating our property listings<br>
-                            <small>Please try again later or contact us directly</small>
-                        </div>
-                    </div>
-                `;
-            });
-        });
-        
-        function initCarousel(propertyCard) {
-            const carousel = propertyCard.querySelector('.image-carousel');
-            const images = carousel.querySelectorAll('.carousel-image');
-            const prevBtn = carousel.querySelector('.prev');
-            const nextBtn = carousel.querySelector('.next');
-            const indicators = carousel.querySelectorAll('.indicator');
+            }
             
-            let currentIndex = 0;
-            
-            function showImage(index) {
-                images.forEach(img => img.classList.remove('active'));
-                indicators.forEach(ind => ind.classList.remove('active'));
+            function setupPagination() {
+                const totalPages = Math.ceil(allProperties.length / propertiesPerPage);
+                const paginationContainer = document.getElementById('pagination-container');
+                paginationContainer.innerHTML = '';
                 
-                images[index].classList.add('active');
-                indicators[index].classList.add('active');
-                currentIndex = index;
-            }
-            
-            function nextImage() {
-                currentIndex = (currentIndex + 1) % images.length;
-                showImage(currentIndex);
-            }
-            
-            function prevImage() {
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                showImage(currentIndex);
-            }
-            
-            // Event listeners
-            if (nextBtn) nextBtn.addEventListener('click', nextImage);
-            if (prevBtn) prevBtn.addEventListener('click', prevImage);
-            
-            indicators.forEach(indicator => {
-                indicator.addEventListener('click', () => {
-                    showImage(parseInt(indicator.dataset.index));
+                if (totalPages <= 1) return;
+                
+                // Botón Anterior
+                const prevBtn = document.createElement('button');
+                prevBtn.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
+                prevBtn.textContent = 'Previous';
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
                 });
-            });
+                paginationContainer.appendChild(prevBtn);
+                
+                // Números de página
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+                
+                if (startPage > 1) {
+                    const firstPageBtn = document.createElement('button');
+                    firstPageBtn.className = 'page-btn';
+                    firstPageBtn.textContent = '1';
+                    firstPageBtn.addEventListener('click', () => {
+                        currentPage = 1;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    });
+                    paginationContainer.appendChild(firstPageBtn);
+                    
+                    if (startPage > 2) {
+                        const dots = document.createElement('span');
+                        dots.textContent = '...';
+                        dots.style.padding = '8px 5px';
+                        paginationContainer.appendChild(dots);
+                    }
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    });
+                    paginationContainer.appendChild(pageBtn);
+                }
+                
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        const dots = document.createElement('span');
+                        dots.textContent = '...';
+                        dots.style.padding = '8px 5px';
+                        paginationContainer.appendChild(dots);
+                    }
+                    
+                    const lastPageBtn = document.createElement('button');
+                    lastPageBtn.className = 'page-btn';
+                    lastPageBtn.textContent = totalPages;
+                    lastPageBtn.addEventListener('click', () => {
+                        currentPage = totalPages;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    });
+                    paginationContainer.appendChild(lastPageBtn);
+                }
+                
+                // Botón Siguiente
+                const nextBtn = document.createElement('button');
+                nextBtn.className = `page-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+                nextBtn.textContent = 'Next';
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+                paginationContainer.appendChild(nextBtn);
+            }
             
-            // Auto-rotate (opcional)
-            let interval = setInterval(nextImage, 5000);
-            
-            carousel.addEventListener('mouseenter', () => {
-                clearInterval(interval);
-            });
-            
-            carousel.addEventListener('mouseleave', () => {
-                interval = setInterval(nextImage, 5000);
-            });
-        }
+            function initCarousel(propertyCard) {
+                const carousel = propertyCard.querySelector('.image-carousel');
+                const images = carousel.querySelectorAll('.carousel-image');
+                const prevBtn = carousel.querySelector('.prev');
+                const nextBtn = carousel.querySelector('.next');
+                const indicators = carousel.querySelectorAll('.indicator');
+                
+                let currentIndex = 0;
+                
+                function showImage(index) {
+                    images.forEach(img => img.classList.remove('active'));
+                    indicators.forEach(ind => ind.classList.remove('active'));
+                    
+                    images[index].classList.add('active');
+                    indicators[index].classList.add('active');
+                    currentIndex = index;
+                }
+                
+                function nextImage() {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    showImage(currentIndex);
+                }
+                
+                function prevImage() {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    showImage(currentIndex);
+                }
+                
+                // Event listeners
+                if (nextBtn) nextBtn.addEventListener('click', nextImage);
+                if (prevBtn) prevBtn.addEventListener('click', prevImage);
+                
+                indicators.forEach(indicator => {
+                    indicator.addEventListener('click', () => {
+                        showImage(parseInt(indicator.dataset.index));
+                    });
+                });
+                
+                // Auto-rotate (opcional)
+                let interval = setInterval(nextImage, 5000);
+                
+                carousel.addEventListener('mouseenter', () => {
+                    clearInterval(interval);
+                });
+                
+                carousel.addEventListener('mouseleave', () => {
+                    interval = setInterval(nextImage, 5000);
+                });
+            }
+        });
     </script>
 </body>
 </html>
