@@ -321,10 +321,10 @@
         © 2023 Mediterranean Blue International LLC. All rights reserved.
     </footer>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('https://xkmarasa-github-io.onrender.com')
-                .then(response => {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                fetch('https://xkmarasa-github-io.onrender.com/${endpoint}')
+                    .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
