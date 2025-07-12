@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors'); // Añade esta línea
 const pool = require('./db.js');
 
 const app = express();
+app.use(cors()); // Añade esta línea
 app.use(express.json());
 
 // Ruta GET (obtener datos)
@@ -44,7 +46,7 @@ app.delete('/data/:id', async (req, res) => {
     );
     if (rowCount === 0) {
       return res.status(404).json({ error: 'Propiedad no encontrada' });
-    }
+    } 
     res.status(200).json({ message: 'Propiedad eliminada correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });
