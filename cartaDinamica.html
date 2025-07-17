@@ -104,100 +104,12 @@
       color: var(--secondary);
     }
 
+    /* Estilos para la cuadrícula de menú */
     .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-@media (max-width: 480px) {
-  .menu-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .menu-item {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    background: #fff; /* Fondo uniforme */
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-
-  .menu-item-content {
-    padding: 10px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    /* Gradiente suave para integrar precio */
-    background: linear-gradient(to bottom, 
-                transparent 0%, 
-                transparent 70%, 
-                rgba(255,255,255,0.9) 90%,
-                white 100%);
-  }
-
-  .item-name {
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: 5px;
-    padding-right: 50px; /* Espacio para precio */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .item-description {
-    font-size: 0.65rem;
-    color: #555;
-    line-height: 1.4;
-    flex-grow: 1;
-    padding-bottom: 22px; /* Espacio para precio */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .item-price {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #e74c3c;
-    z-index: 2;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
-    padding: 0;
-    background: none;
-    border: none;
-  }
-
-  /* Degradado suave para integrar el precio con el contenido */
-  .menu-item-content::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to left, 
-                rgba(255,255,255,1) 20%, 
-                transparent 70%);
-    pointer-events: none;
-    z-index: 1;
-  }
-}
-
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
 
     .menu-item {
       background: white;
@@ -220,6 +132,7 @@
 
     .menu-item-content {
       padding: 15px;
+      position: relative;
     }
 
     .item-name {
@@ -227,13 +140,12 @@
       font-size: clamp(1rem, 3vw, 1.3rem);
       color: var(--primary);
       margin: 0 0 8px 0;
-      display: flex;
-      justify-content: space-between;
     }
 
     .item-price {
       color: var(--secondary);
       font-weight: bold;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
     }
 
     .item-description {
@@ -242,19 +154,7 @@
       margin-bottom: 10px;
     }
 
-    .footer {
-      background-color: var(--dark);
-      color: white;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-    }
-
-    .footer p {
-      margin: 5px 0;
-      font-size: clamp(0.8rem, 2vw, 0.9rem);
-    }
-
+    /* Estilos para listas simples (Bocadillos, Refrescos, Cervezas) */
     .simple-menu-list {
       list-style: none;
       padding: 0;
@@ -282,7 +182,107 @@
       font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
-    
+    .footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+
+    .footer p {
+      margin: 5px 0;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    /* Media queries para móvil */
+    @media (max-width: 480px) {
+      /* Estilos para cuadrícula en móvil */
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .menu-item {
+        min-height: 200px;
+      }
+
+      .menu-item-img {
+        height: 120px;
+      }
+
+      .menu-item-content {
+        padding: 10px;
+        background: linear-gradient(to bottom, 
+                    transparent 0%, 
+                    transparent 70%, 
+                    rgba(255,255,255,0.9) 90%,
+                    white 100%);
+      }
+
+      .item-name {
+        font-size: 0.8rem;
+        padding-right: 60px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 5px;
+      }
+
+      .item-description {
+        font-size: 0.7rem;
+        margin-bottom: 24px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .menu-grid .item-price {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.85rem;
+        padding: 0;
+        background: none;
+        border: none;
+        z-index: 2;
+      }
+
+      .menu-grid .menu-item-content::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(to left, 
+                    rgba(255,255,255,1) 20%, 
+                    transparent 70%);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Ajustes para listas simples en móvil */
+      .simple-menu-list li {
+        flex-wrap: wrap;
+        padding: 10px 0;
+      }
+
+      .simple-menu-list li .item-name {
+        flex: 1 0 70%;
+        padding-right: 0;
+        white-space: normal;
+        font-size: 0.9rem;
+      }
+
+      .simple-menu-list li .item-price {
+        flex: 1 0 30%;
+        text-align: right;
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -415,8 +415,9 @@
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.image || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.name} <span class="item-price">${item.price}€</span></h3>
+              <h3 class="item-name">${item.name}</h3>
               ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
+              <span class="item-price">${item.price}€</span>
             </div>
           `;
           container.appendChild(div);
@@ -430,6 +431,10 @@
       loadMenuSimple('cervezas', 'cervezas_lista');
       loadMenuSimple('refrescos', 'refrescos_lista');
       loadMenuSimple('bocadillos', 'bocadillos_lista');
+
+
+
+
 
       loadMenu('tapas', 'tapas', 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=634&q=80');
       loadMenu('ensaladas', 'ensaladas', 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=634&q=80');
