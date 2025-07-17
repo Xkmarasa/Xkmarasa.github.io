@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BAR CASTELLÓ - Carta Elegante</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,21 +16,28 @@
       --accent: #5D4037;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      margin: 0;
-      padding: 0;
       line-height: 1.6;
-      font-size: 16px;
+      font-size: clamp(14px, 1.8vw, 16px);
+      -webkit-text-size-adjust: 100%;
     }
 
     .header {
       background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
       background-size: cover;
       background-position: center;
-      height: 200px;
+      height: 30vh;
+      min-height: 200px;
+      max-height: 300px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -43,27 +50,26 @@
 
     .header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 6vw, 3.5rem);
       margin: 0;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
     .header p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
       max-width: 600px;
+      margin-top: 10px;
     }
 
     .container {
+      width: 92%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 15px;
-      width: 100%;
-      box-sizing: border-box;
+      padding: 0 20px;
     }
 
     .menu-section {
       margin-bottom: 40px;
-      position: relative;
     }
 
     .section-header {
@@ -74,7 +80,7 @@
 
     .section-header h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
       color: var(--primary);
       margin: 0;
       position: relative;
@@ -92,9 +98,15 @@
       background-color: var(--secondary);
     }
 
+    .category-icon {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      margin-right: 15px;
+      color: var(--secondary);
+    }
+
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
 
@@ -112,7 +124,7 @@
     }
 
     .menu-item-img {
-      height: 180px;
+      height: 200px;
       background-size: cover;
       background-position: center;
     }
@@ -123,7 +135,7 @@
 
     .item-name {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3vw, 1.3rem);
       color: var(--primary);
       margin: 0 0 8px 0;
       display: flex;
@@ -137,7 +149,7 @@
 
     .item-description {
       color: var(--accent);
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
       margin-bottom: 10px;
     }
 
@@ -151,13 +163,7 @@
 
     .footer p {
       margin: 5px 0;
-      font-size: 0.9rem;
-    }
-
-    .category-icon {
-      font-size: 1.3rem;
-      margin-right: 12px;
-      color: var(--secondary);
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
     }
 
     .simple-menu-list {
@@ -171,54 +177,25 @@
       justify-content: space-between;
       border-bottom: 1px solid rgba(0,0,0,0.1);
       padding: 12px 0;
-      font-size: 1rem;
       align-items: center;
     }
 
     .simple-menu-list li .item-name {
       color: var(--primary);
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 2.8vw, 1.1rem);
       margin: 0;
     }
 
     .simple-menu-list li .item-price {
       color: var(--secondary);
       font-weight: bold;
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
-    /* Ajustes específicos para pantallas grandes */
-    @media (min-width: 768px) {
-      .header {
-        height: 250px;
-      }
-      
-      .header h1 {
-        font-size: 3rem;
-      }
-      
-      .header p {
-        font-size: 1.1rem;
-      }
-      
+    @media (max-width: 480px) {
       .menu-grid {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      }
-      
-      .menu-item-img {
-        height: 200px;
-      }
-    }
-
-    /* Ajustes para pantallas muy grandes */
-    @media (min-width: 1200px) {
-      .header {
-        height: 300px;
-      }
-      
-      .header h1 {
-        font-size: 3.5rem;
+        grid-template-columns: 1fr;
       }
     }
   </style>
