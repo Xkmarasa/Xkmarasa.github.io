@@ -114,6 +114,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
+
 @media (max-width: 480px) {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -123,26 +124,32 @@
   .menu-item {
     display: flex;
     flex-direction: column;
-    position: relative; /* Necesario para el posicionamiento del precio */
-    min-height: 180px; /* Altura mínima para consistencia */
-  }
-
-  .menu-item-img {
-    height: 70px;
-    object-fit: cover;
+    position: relative;
+    overflow: hidden;
+    background: #fff; /* Fondo uniforme */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
 
   .menu-item-content {
-    padding: 8px;
+    padding: 10px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    /* Gradiente suave para integrar precio */
+    background: linear-gradient(to bottom, 
+                transparent 0%, 
+                transparent 70%, 
+                rgba(255,255,255,0.9) 90%,
+                white 100%);
   }
 
   .item-name {
     font-size: 0.75rem;
-    line-height: 1.2;
-    margin-bottom: 4px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 5px;
+    padding-right: 50px; /* Espacio para precio */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -152,9 +159,9 @@
   .item-description {
     font-size: 0.65rem;
     color: #555;
-    flex-grow: 1; /* Ocupa el espacio disponible */
-    margin-bottom: 24px; /* Espacio para el precio */
-    line-height: 1.3;
+    line-height: 1.4;
+    flex-grow: 1;
+    padding-bottom: 22px; /* Espacio para precio */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -163,16 +170,31 @@
 
   .item-price {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
+    bottom: 10px;
+    right: 10px;
     font-size: 0.8rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #e74c3c;
-    background: white;
-    padding: 3px 8px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     z-index: 2;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+    padding: 0;
+    background: none;
+    border: none;
+  }
+
+  /* Degradado suave para integrar el precio con el contenido */
+  .menu-item-content::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to left, 
+                rgba(255,255,255,1) 20%, 
+                transparent 70%);
+    pointer-events: none;
+    z-index: 1;
   }
 }
 
