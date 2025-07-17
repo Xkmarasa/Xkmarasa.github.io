@@ -109,33 +109,43 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
   }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
 
-  @media (max-width: 768px) {
-    .menu-grid {
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-    }
-
-    .menu-item {
-      font-size: 0.85rem;
-    }
-
-    .menu-item-img {
-      height: 90px;
-    }
-
-    .item-name {
-      font-size: 0.85rem;
-    }
-
-    .item-price {
-      font-size: 0.8rem;
-    }
-
-    .item-description {
-      font-size: 0.7rem;
-    }
+@media (max-width: 480px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, 1fr); /* Fuerza 4 columnas en móvil */
+    gap: 6px;
   }
+
+  .menu-item {
+    font-size: 0.75rem;
+  }
+
+  .menu-item-img {
+    height: 70px;
+  }
+
+  .menu-item-content {
+    padding: 6px;
+  }
+
+  .item-name {
+    font-size: 0.75rem;
+  }
+
+  .item-price {
+    font-size: 0.7rem;
+  }
+
+  .item-description {
+    font-size: 0.6rem;
+  }
+}
+
 
     .menu-item {
       background: white;
