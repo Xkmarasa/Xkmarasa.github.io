@@ -114,77 +114,67 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
-
 @media (max-width: 480px) {
   .menu-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Forzar ajuste al contenedor */
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
-  
+
   .menu-item {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    position: relative; /* Necesario para el posicionamiento del precio */
+    min-height: 180px; /* Altura mínima para consistencia */
   }
-  
+
   .menu-item-img {
-    height: 60px;
+    height: 70px;
     object-fit: cover;
-    flex-shrink: 0;
   }
-  
+
   .menu-item-content {
-    padding: 6px;
+    padding: 8px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
-  
+
   .item-name {
-    font-size: clamp(0.6rem, 3.2vw, 0.7rem); /* Tamaño responsive */
+    font-size: 0.75rem;
     line-height: 1.2;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Máximo 2 líneas */
-    -webkit-box-orient: vertical;
     margin-bottom: 4px;
-  }
-  
-  .item-description {
-    font-size: clamp(0.55rem, 2.8vw, 0.6rem);
-    line-height: 1.3;
-    color: #555;
-    flex-grow: 1; /* Ocupa espacio disponible */
-    overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Máximo 3 líneas */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  
-  .item-price-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: auto; /* Empuja el precio hacia abajo */
-    padding-top: 4px;
+
+  .item-description {
+    font-size: 0.65rem;
+    color: #555;
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    margin-bottom: 24px; /* Espacio para el precio */
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  
+
   .item-price {
-    font-size: clamp(0.65rem, 3.5vw, 0.75rem);
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #e74c3c;
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
     padding: 3px 8px;
     border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    display: inline-block;
-    white-space: nowrap; /* Precio en una sola línea */
-    overflow: visible;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
   }
 }
-
-
 
 
     .menu-item {
