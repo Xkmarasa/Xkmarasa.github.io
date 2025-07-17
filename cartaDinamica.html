@@ -154,7 +154,7 @@
       margin-bottom: 10px;
     }
 
-    /* Estilos para listas simples (Bocadillos, Refrescos, Cervezas) */
+    /* Estilos para listas simples (Tapas, Bocadillos, Refrescos, Cervezas) */
     .simple-menu-list {
       list-style: none;
       padding: 0;
@@ -167,6 +167,11 @@
       border-bottom: 1px solid rgba(0,0,0,0.1);
       padding: 12px 0;
       align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .simple-menu-list li:hover {
+      background-color: rgba(139, 0, 0, 0.05);
     }
 
     .simple-menu-list li .item-name {
@@ -174,12 +179,14 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(1rem, 2.8vw, 1.1rem);
       margin: 0;
+      flex: 1;
     }
 
     .simple-menu-list li .item-price {
       color: var(--secondary);
       font-weight: bold;
       font-size: clamp(0.9rem, 2.5vw, 1rem);
+      margin-left: 15px;
     }
 
     .footer {
@@ -294,13 +301,13 @@
 
   <div class="container">
 
-    <!-- Tapas -->
+    <!-- Tapas (ahora como lista simple) -->
     <div class="menu-section">
       <div class="section-header">
         <span class="category-icon">🍤</span>
         <h2>Tapas</h2>
       </div>
-      <div class="menu-grid" id="tapas"></div>
+      <ul id="tapas_lista" class="simple-menu-list"></ul>
     </div>
 
     <!-- Ensaladas -->
@@ -428,15 +435,13 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Cargar secciones con formato de lista simple
+      loadMenuSimple('tapas', 'tapas_lista');
       loadMenuSimple('cervezas', 'cervezas_lista');
       loadMenuSimple('refrescos', 'refrescos_lista');
       loadMenuSimple('bocadillos', 'bocadillos_lista');
 
-
-
-
-
-      loadMenu('tapas', 'tapas', 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=634&q=80');
+      // Cargar secciones con formato de cuadrícula
       loadMenu('ensaladas', 'ensaladas', 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=634&q=80');
       loadMenu('sandwich', 'sandwich', 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
       loadMenu('menu_infantil', 'menu_infantil', 'https://images.unsplash.com/photo-1544025162-d76694265947');
