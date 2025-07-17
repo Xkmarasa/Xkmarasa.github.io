@@ -114,35 +114,43 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
-
 @media (max-width: 480px) {
   .menu-grid {
-    grid-template-columns: repeat(4, 1fr); /* Fuerza 4 columnas en móvil */
-    gap: 6px;
+    /* Cambia a 2 columnas para más espacio */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 8px; /* Espacio entre items */
   }
 
   .menu-item {
-    font-size: 0.75rem;
+    font-size: 0.7rem; /* Texto ligeramente más pequeño */
   }
 
   .menu-item-img {
-    height: 70px;
+    height: 60px; /* Reduce altura de imágenes */
+    object-fit: cover; /* Evita deformaciones */
   }
 
   .menu-item-content {
-    padding: 6px;
+    padding: 4px; /* Reduce espacio interno */
+  }
+
+  .item-name, 
+  .item-price {
+    white-space: nowrap; /* Evita saltos de línea */
+    overflow: hidden;
+    text-overflow: ellipsis; /* ... si texto es largo */
   }
 
   .item-name {
-    font-size: 0.75rem;
+    font-size: 0.7rem; /* Ajuste proporcional */
   }
 
   .item-price {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
 
   .item-description {
-    font-size: 0.6rem;
+    display: none; /* Oculta descripción en móviles */
   }
 }
 
