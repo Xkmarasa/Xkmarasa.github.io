@@ -165,6 +165,28 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .menu-item-content {
+    position: relative;
+    padding: 4px 6px 20px 6px; /* Más padding abajo para el precio */
+  }
+
+  .item-price {
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    font-size: 0.75rem; /* Tamaño ligeramente mayor */
+    font-weight: bold;
+    color: #e74c3c; /* Color destacado */
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo para contraste */
+    padding: 2px 5px;
+    border-radius: 3px;
+    z-index: 2;
+  }
+
+  .item-name {
+    padding-right: 40px; /* Espacio para evitar solapamiento con precio */
+    margin-bottom: 5px;
+  }
 }
 
 
