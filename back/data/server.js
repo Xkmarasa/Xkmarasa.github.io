@@ -321,19 +321,48 @@ app.post('/bocadillos', async (req, res) => {
     }
 });
 // Ejemplo en Node.js / Express
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'clave-ultra-secreta-barcastello';
+
 app.post('/usuarios', async (req, res) => {
-  const { usuario, contrasena } = req.body;
-  const user = await db.collection('usuarios').findOne({ usuario });
+    try {
+        const { usuario, contrasena, nombre } = req.body;
 
-  if (!user || user.contrasena !== contrasena) {
-    return res.status(401).json({ error: 'Credenciales inválidas' });
-  }
+        if (!usuario || !contrasena || !nombre) {
+            return res.status(400).json({ error: 'Faltan datos requeridos' });
+        }
 
-  res.json({ usuario: user.usuario, nombre: user.nombre });
+        // Verifica si ya existe
+        const existe = await pool.query('SELECT * FROM usuarios WHERE usuario = $1', [usuario]);
+        if (existe.rows.length > 0) {
+            return res.status(409).json({ error: 'Usuario ya registrado' });
+        }
+
+        // Hash de contraseña
+        const hash = await bcrypt.hash(contrasena, 10);
+
+        // Insertar usuario
+        const result = await pool.query(
+            'INSERT INTO usuarios (usuario, contrasena_hash, nombre) VALUES ($1, $2, $3) RETURNING id, usuario, nombre',
+            [usuario, hash, nombre]
+        );
+
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Error POST usuarios:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
-app.get('/usuarios', verificarToken, async (req, res) => {
-  const usuario = req.usuario;
-  res.json({ mensaje: 'Acceso autorizado', usuario });
+
+app.get('/usuarios', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, usuario, nombre FROM usuarios');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET usuarios:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Middleware para verificar token
