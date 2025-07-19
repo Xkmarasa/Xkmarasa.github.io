@@ -77,21 +77,6 @@
       background-color: #a30000;
     }
 
-    .footer-text {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .footer-text a {
-      color: var(--secondary);
-      text-decoration: none;
-    }
-
-    .footer-text a:hover {
-      text-decoration: underline;
-    }
-
     .error {
       color: red;
       text-align: center;
@@ -113,9 +98,6 @@
       <button type="submit">Entrar</button>
     </form>
     <div class="error" id="error-msg"></div>
-    <div class="footer-text">
-      ¿No tienes cuenta? <a href="/registro">Regístrate</a>
-    </div>
   </div>
 
   <script>
@@ -137,9 +119,8 @@
         }
 
         const data = await res.json();
-        // Aquí puedes almacenar token o redireccionar
-        localStorage.setItem('usuario', JSON.stringify(data));
-        window.location.href = "/cartaDinamica.html"; // o a cualquier otra sección
+        localStorage.setItem('token', data.token);
+        window.location.href = "/cartaDinamica.html";
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('error-msg').innerText = "Error en el servidor.";
