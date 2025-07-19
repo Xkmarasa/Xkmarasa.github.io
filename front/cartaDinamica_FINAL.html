@@ -104,12 +104,38 @@
       color: var(--secondary);
     }
 
-    /* Estilos para la cuadrícula de menú */
     .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .menu-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
     }
+
+    .menu-item {
+      font-size: 0.85rem;
+    }
+
+    .menu-item-img {
+      height: 90px;
+    }
+
+    .item-name {
+      font-size: 0.85rem;
+    }
+
+    .item-price {
+      font-size: 0.8rem;
+    }
+
+    .item-description {
+      font-size: 0.7rem;
+    }
+  }
 
     .menu-item {
       background: white;
@@ -132,7 +158,6 @@
 
     .menu-item-content {
       padding: 15px;
-      position: relative;
     }
 
     .item-name {
@@ -140,53 +165,19 @@
       font-size: clamp(1rem, 3vw, 1.3rem);
       color: var(--primary);
       margin: 0 0 8px 0;
+      display: flex;
+      justify-content: space-between;
     }
 
     .item-price {
       color: var(--secondary);
       font-weight: bold;
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
     }
 
     .item-description {
       color: var(--accent);
       font-size: clamp(0.8rem, 2vw, 0.9rem);
       margin-bottom: 10px;
-    }
-
-    /* Estilos para listas simples (Tapas, Bocadillos, Refrescos, Cervezas) */
-    .simple-menu-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .simple-menu-list li {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      padding: 12px 0;
-      align-items: center;
-      transition: background-color 0.3s ease;
-    }
-
-    .simple-menu-list li:hover {
-      background-color: rgba(139, 0, 0, 0.05);
-    }
-
-    .simple-menu-list li .item-name {
-      color: var(--primary);
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1rem, 2.8vw, 1.1rem);
-      margin: 0;
-      flex: 1;
-    }
-
-    .simple-menu-list li .item-price {
-      color: var(--secondary);
-      font-weight: bold;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      margin-left: 15px;
     }
 
     .footer {
@@ -202,95 +193,34 @@
       font-size: clamp(0.8rem, 2vw, 0.9rem);
     }
 
-    /* Media queries para móvil */
-    @media (max-width: 480px) {
-      /* Estilos para cuadrícula en móvil */
-      .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-
-      .menu-item {
-        min-height: 200px;
-      }
-
-      .menu-item-img {
-        height: 120px;
-      }
-
-      .menu-item-content {
-        padding: 10px;
-        background: linear-gradient(to bottom, 
-                    transparent 0%, 
-                    transparent 70%, 
-                    rgba(255,255,255,0.9) 90%,
-                    white 100%);
-      }
-
-      .item-name {
-        font-size: 0.8rem;
-        padding-right: 60px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-bottom: 5px;
-      }
-
-      .item-description {
-        font-size: 0.7rem;
-        margin-bottom: 24px;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .menu-grid .item-price {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        font-size: 0.85rem;
-        padding: 0;
-        background: none;
-        border: none;
-        z-index: 2;
-      }
-
-      .menu-grid .menu-item-content::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(to left, 
-                    rgba(255,255,255,1) 20%, 
-                    transparent 70%);
-        pointer-events: none;
-        z-index: 1;
-      }
-
-      /* Ajustes para listas simples en móvil */
-      .simple-menu-list li {
-        flex-wrap: wrap;
-        padding: 10px 0;
-      }
-
-      .simple-menu-list li .item-name {
-        flex: 1 0 70%;
-        padding-right: 0;
-        white-space: normal;
-        font-size: 0.9rem;
-      }
-
-      .simple-menu-list li .item-price {
-        flex: 1 0 30%;
-        text-align: right;
-        font-size: 0.9rem;
-      }
+    .simple-menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
+
+    .simple-menu-list li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding: 12px 0;
+      align-items: center;
+    }
+
+    .simple-menu-list li .item-name {
+      color: var(--primary);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2.8vw, 1.1rem);
+      margin: 0;
+    }
+
+    .simple-menu-list li .item-price {
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    
   </style>
 </head>
 <body>
@@ -302,13 +232,13 @@
 
   <div class="container">
 
-    <!-- Tapas (ahora como lista simple) -->
+    <!-- Tapas -->
     <div class="menu-section">
       <div class="section-header">
         <span class="category-icon">🍤</span>
         <h2>Tapas</h2>
       </div>
-      <ul id="tapas_lista" class="simple-menu-list"></ul>
+      <div class="menu-grid" id="tapas"></div>
     </div>
 
     <!-- Ensaladas -->
@@ -423,9 +353,8 @@
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.image || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.name}</h3>
+              <h3 class="item-name">${item.name} <span class="item-price">${item.price}€</span></h3>
               ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <span class="item-price">${item.price}€</span>
             </div>
           `;
           container.appendChild(div);
@@ -436,13 +365,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Cargar secciones con formato de lista simple
-      loadMenuSimple('tapas', 'tapas_lista');
       loadMenuSimple('cervezas', 'cervezas_lista');
       loadMenuSimple('refrescos', 'refrescos_lista');
       loadMenuSimple('bocadillos', 'bocadillos_lista');
 
-      // Cargar secciones con formato de cuadrícula
+      loadMenu('tapas', 'tapas', 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=634&q=80');
       loadMenu('ensaladas', 'ensaladas', 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=634&q=80');
       loadMenu('sandwich', 'sandwich', 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
       loadMenu('menu_infantil', 'menu_infantil', 'https://images.unsplash.com/photo-1544025162-d76694265947');
