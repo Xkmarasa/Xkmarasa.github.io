@@ -113,7 +113,9 @@
       <button type="submit">Entrar</button>
     </form>
     <div class="error" id="error-msg"></div>
-    
+    <div class="footer-text">
+      ¿No tienes cuenta? <a href="/registro">Regístrate</a>
+    </div>
   </div>
 
   <script>
@@ -123,7 +125,7 @@
       const contrasena = e.target.contrasena.value;
 
       try {
-        const res = await fetch('https://barcastello.onrender.com/usuarios', {
+        const res = await fetch('https://barcastello.onrender.com/usuarios/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ usuario, contrasena })
