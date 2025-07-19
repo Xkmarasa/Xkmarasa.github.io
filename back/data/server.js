@@ -324,35 +324,38 @@ app.post('/bocadillos', async (req, res) => {
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'clave-ultra-secreta-barcastello';
-
 app.post('/usuarios', async (req, res) => {
-    try {
-        const { usuario, contrasena} = req.body;
+  try {
+    const { usuario, contrasena } = req.body;
 
-        if (!usuario || !contrasena ) {
-            return res.status(400).json({ error: 'Faltan datos requeridos' });
-        }
-
-        // Verifica si ya existe
-        const existe = await pool.query('SELECT * FROM usuarios WHERE usuario = $1', [usuario]);
-        if (existe.rows.length > 0) {
-            return res.status(409).json({ error: 'Usuario ya registrado' });
-        }
-
-        // Hash de contraseña
-        const hash = await bcrypt.hash(contrasena, 10);
-
-        // Insertar usuario
-        const result = await pool.query(
-            'INSERT INTO usuarios (usuario, contrasena_hash) VALUES ($1, $2) RETURNING id, usuario',
-            [usuario, hash ]
-        );
-
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST usuarios:', err);
-        res.status(500).json({ error: err.message });
+    if (!usuario || !contrasena) {
+      return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
+
+    const result = await pool.query('SELECT * FROM usuarios WHERE usuario = $1', [usuario]);
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({ error: 'Usuario no encontrado' });
+    }
+
+    const match = await bcrypt.compare(contrasena, user.contrasena_hash);
+    if (!match) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    const token = jwt.sign({ id: user.id, usuario: user.usuario }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({
+      mensaje: 'Login exitoso',
+      usuario: user.usuario,
+      token
+    });
+
+  } catch (err) {
+    console.error('Error POST /usuarios:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/usuarios', async (req, res) => {
