@@ -321,7 +321,7 @@ app.post('/bocadillos', async (req, res) => {
     }
 });
 // Ejemplo en Node.js / Express
-app.post('/usuarios/login', async (req, res) => {
+app.post('/usuarios', async (req, res) => {
   const { usuario, contrasena } = req.body;
   const user = await db.collection('usuarios').findOne({ usuario });
 
