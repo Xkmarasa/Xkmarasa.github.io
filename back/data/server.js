@@ -331,7 +331,23 @@ app.post('/usuarios', async (req, res) => {
 
   res.json({ usuario: user.usuario, nombre: user.nombre });
 });
+app.get('/usuarios', verificarToken, async (req, res) => {
+  const usuario = req.usuario;
+  res.json({ mensaje: 'Acceso autorizado', usuario });
+});
 
+// Middleware para verificar token
+function verificarToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token requerido' });
+
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ error: 'Token inválido' });
+    req.usuario = decoded;
+    next();
+  });
+}
 
 const PORT = process.env.PORT || 3000; // Render asigna su propio puerto via variable de entorno
 
