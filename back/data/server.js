@@ -320,6 +320,18 @@ app.post('/bocadillos', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+// Ejemplo en Node.js / Express
+app.post('/usuarios/login', async (req, res) => {
+  const { usuario, contrasena } = req.body;
+  const user = await db.collection('usuarios').findOne({ usuario });
+
+  if (!user || user.contrasena !== contrasena) {
+    return res.status(401).json({ error: 'Credenciales inválidas' });
+  }
+
+  res.json({ usuario: user.usuario, nombre: user.nombre });
+});
+
 
 const PORT = process.env.PORT || 3000; // Render asigna su propio puerto via variable de entorno
 
