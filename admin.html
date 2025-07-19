@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio de Sesión - Bar Castelló</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
   <style>
@@ -13,14 +13,20 @@
       --dark: #1A1A1A;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: var(--light);
-      margin: 0;
+      color: var(--dark);
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
     }
 
@@ -38,16 +44,18 @@
     .header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     }
 
     .login-box {
-      background: white;
+      background-color: white;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 90%;
       max-width: 400px;
+      width: 90%;
       margin-top: -40px;
+      z-index: 1;
     }
 
     .login-box h2 {
@@ -57,28 +65,34 @@
       margin-bottom: 20px;
     }
 
-    input, button {
+    .login-box input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      font-size: 1rem;
-      border-radius: 6px;
       border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
     }
 
-    button {
+    .login-box button {
+      width: 100%;
+      padding: 12px;
       background-color: var(--primary);
       color: white;
       border: none;
+      border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
+      margin-top: 10px;
     }
 
-    button:hover {
+    .login-box button:hover {
       background-color: #a30000;
     }
 
     .footer-text {
       text-align: center;
+      margin-top: 15px;
       font-size: 0.9rem;
       color: #555;
     }
@@ -91,12 +105,6 @@
     .footer-text a:hover {
       text-decoration: underline;
     }
-
-    .error {
-      color: red;
-      text-align: center;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
@@ -107,45 +115,13 @@
 
   <div class="login-box">
     <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-      <input type="text" name="usuario" placeholder="Usuario" required />
-      <input type="password" name="contrasena" placeholder="Contraseña" required />
+    <form action="/usuarios" method="POST">
+      <input type="text" name="usuario" placeholder="Usuario" required>
+      <input type="password" name="contrasena" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>
     </form>
-    <div class="error" id="error-msg"></div>
-    <div class="footer-text">
-      ¿No tienes cuenta? <a href="/registro">Regístrate</a>
-    </div>
+    
   </div>
-
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const usuario = e.target.usuario.value;
-      const contrasena = e.target.contrasena.value;
-
-      try {
-        const res = await fetch('https://barcastello.onrender.com/usuarios', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usuario, contrasena })
-        });
-
-        if (!res.ok) {
-          document.getElementById('error-msg').innerText = "Credenciales inválidas.";
-          return;
-        }
-
-        const data = await res.json();
-        // Aquí puedes almacenar token o redireccionar
-        localStorage.setItem('usuario', JSON.stringify(data));
-        window.location.href = "/cartaDinamica.html"; // o a cualquier otra sección
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('error-msg').innerText = "Error en el servidor.";
-      }
-    });
-  </script>
 
 </body>
 </html>
