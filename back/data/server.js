@@ -327,9 +327,9 @@ const JWT_SECRET = 'clave-ultra-secreta-barcastello';
 
 app.post('/usuarios', async (req, res) => {
     try {
-        const { usuario, contrasena, nombre } = req.body;
+        const { usuario, contrasena} = req.body;
 
-        if (!usuario || !contrasena || !nombre) {
+        if (!usuario || !contrasena ) {
             return res.status(400).json({ error: 'Faltan datos requeridos' });
         }
 
@@ -344,8 +344,8 @@ app.post('/usuarios', async (req, res) => {
 
         // Insertar usuario
         const result = await pool.query(
-            'INSERT INTO usuarios (usuario, contrasena_hash, nombre) VALUES ($1, $2, $3) RETURNING id, usuario, nombre',
-            [usuario, hash, nombre]
+            'INSERT INTO usuarios (usuario, contrasena_hash) VALUES ($1, $2) RETURNING id, usuario',
+            [usuario, hash ]
         );
 
         res.status(201).json(result.rows[0]);
@@ -357,7 +357,7 @@ app.post('/usuarios', async (req, res) => {
 
 app.get('/usuarios', async (req, res) => {
   try {
-    const result = await pool.query('SELECT id, usuario, nombre FROM usuarios');
+    const result = await pool.query('SELECT  Usuario FROM usuarios');
     res.json(result.rows);
   } catch (err) {
     console.error('Error GET usuarios:', err);
