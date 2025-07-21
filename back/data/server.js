@@ -59,55 +59,6 @@ app.get('/usuarios', async (req, res) => {
 });
 
 // Endpoint de login
-app.post('/usuarios', async (req, res) => {
-  try {
-    const { usuario, contrasena } = req.body;
-
-    if (!usuario || !contrasena) {
-      return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
-    }
-
-    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [usuario.trim()]);
-    const user = result.rows[0];
-
-    if (!user) {
-      return res.status(401).json({ error: 'Credenciales inválidas' });
-    }
-
-    // Comparar contraseña (soporta texto plano y hash)
-    let match = false;
-    if (user.Contrasena.startsWith('$2a$')) {
-      match = await bcrypt.compare(contrasena.trim(), user.Contrasena);
-    } else {
-      match = contrasena.trim() === user.Contrasena;
-      // Actualizar a hash si coincide
-      if (match) {
-        const hash = await bcrypt.hash(contrasena, 10);
-        await pool.query('UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2', [hash, user.Usuario]);
-      }
-    }
-
-    if (!match) {
-      return res.status(401).json({ error: 'Credenciales inválidas' });
-    }
-
-    const token = jwt.sign(
-      { id: user.id, Usuario: user.Usuario },
-      JWT_SECRET,
-      { expiresIn: '8h' }
-    );
-
-    res.json({ 
-      mensaje: 'Login exitoso',
-      token,
-      usuario: user.Usuario
-    });
-
-  } catch (err) {
-    console.error('Error en POST /usuarios:', err);
-    res.status(500).json({ error: 'Error en el servidor' });
-  }
-});
 
 // Endpoint de registro
 app.post('/registro', async (req, res) => {
