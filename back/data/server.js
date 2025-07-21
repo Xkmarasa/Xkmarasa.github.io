@@ -339,7 +339,7 @@ app.post('/usuarios', async (req, res) => {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }   
 
-    const match = await bcrypt.compare(contrasena, user.contrasena);
+    const match = await bcrypt.compare(contrasena, result.rows[1]);
     if (!match) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
