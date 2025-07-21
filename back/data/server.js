@@ -48,6 +48,15 @@ app.get('/menu', async (req, res) => {
     res.status(500).json({ error: 'Error al cargar el menú' });
   }
 });
+app.get('/usuarios', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM usuarios');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET /usuarios:', err);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+});
 
 // Endpoint de login
 app.post('/usuarios', async (req, res) => {
