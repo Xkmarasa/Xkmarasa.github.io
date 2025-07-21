@@ -332,14 +332,14 @@ app.post('/usuarios', async (req, res) => {
       return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
 
-    const result = await pool.query('SELECT * FROM usuarios WHERE usuario = $1', [usuario]);
+    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [usuario]);
     const user = result.rows[0];
 
     if (!user) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
-    }
+    }   
 
-    const match = await bcrypt.compare(contrasena, user.contrasena);
+    const match = await bcrypt.compare(contrasena, user.Contraseña);
     if (!match) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
