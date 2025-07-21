@@ -61,7 +61,7 @@ app.get('/usuarios', async (req, res) => {
 // Endpoint de login
 
 // Endpoint de registro
-app.post('/registro', async (req, res) => {
+app.post('/usuarios', async (req, res) => {
   try {
     const { usuario, contrasena } = req.body;
 
