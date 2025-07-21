@@ -2,460 +2,342 @@ require('dotenv').config();
 const express = require('express');
 const pool = require('./db.js');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Endpoint para todas las categorías (nombre más genérico)
+const JWT_SECRET = 'clave-secreta-barcastello';
+
+// Endpoint para el menú completo
 app.get('/menu', async (req, res) => {
-    try {
-        const [
-            tapas, 
-            hamburguesa, 
-            bocadillos, 
-            cervezas, 
-            ensaladas, 
-            menu_infantil, 
-            platos, 
-            postres, 
-            refrescos, 
-            sandwich
-        ] = await Promise.all([
-            pool.query('SELECT * FROM tapas'),
-            pool.query('SELECT * FROM hamburguesas'),
-            pool.query('SELECT * FROM bocadillos'),
-            pool.query('SELECT * FROM cervezas'),
-            pool.query('SELECT * FROM ensaladas'),
-            pool.query('SELECT * FROM menu_infantil'),
-            pool.query('SELECT * FROM platos_combinados'),
-            pool.query('SELECT * FROM postres'),
-            pool.query('SELECT * FROM refrescos'),
-            pool.query('SELECT * FROM sandwich') // Asegúrate que coincida con el nombre real en BD
-        ]);
-        
-        res.json({
-  bocadillos: bocadillos.rows,
-  cervezas: cervezas.rows,
-  ensaladas: ensaladas.rows,
-  hamburguesa: hamburguesa.rows,
-  menu_infantil: menu_infantil.rows,
-  platos_combinados: platos_combinados.rows,
-  postres: postres.rows,
-  refrescos: refrescos.rows,
-  sandwich: sandwich.rows,
-  tapas: tapas.rows,
-  
-  
-});
-res.setHeader('Content-Type', 'application/json');
-res.send(JSON.stringify(result.rows, null, 2));
-    
-    } catch (err) {
-        console.error('Error en //menu:', err);
-        res.status(500).json({ 
-            error: 'Error al cargar el menú',
-            details: err.message 
-        });
-    }
-});
-  
-  app.get('/cervezas', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM cervezas');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET cervezas:', err);
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const [
+      tapas, hamburguesas, bocadillos, cervezas,
+      ensaladas, menuInfantil, platosCombinados,
+      postres, refrescos, sandwich
+    ] = await Promise.all([
+      pool.query('SELECT * FROM tapas'),
+      pool.query('SELECT * FROM hamburguesas'),
+      pool.query('SELECT * FROM bocadillos'),
+      pool.query('SELECT * FROM cervezas'),
+      pool.query('SELECT * FROM ensaladas'),
+      pool.query('SELECT * FROM menu_infantil'),
+      pool.query('SELECT * FROM platos_combinados'),
+      pool.query('SELECT * FROM postres'),
+      pool.query('SELECT * FROM refrescos'),
+      pool.query('SELECT * FROM sandwich')
+    ]);
+
+    res.json({
+      tapas: tapas.rows,
+      hamburguesas: hamburguesas.rows,
+      bocadillos: bocadillos.rows,
+      cervezas: cervezas.rows,
+      ensaladas: ensaladas.rows,
+      menu_infantil: menuInfantil.rows,
+      platos_combinados: platosCombinados.rows,
+      postres: postres.rows,
+      refrescos: refrescos.rows,
+      sandwich: sandwich.rows
+    });
+  } catch (err) {
+    console.error('Error en /menu:', err);
+    res.status(500).json({ error: 'Error al cargar el menú' });
+  }
 });
 
-app.post('/cervezas', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;  // Ajusta los campos a tu tabla real
-        const result = await pool.query(
-            'INSERT INTO cervezas (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.setHeader('Content-Type', 'application/json');
-res.send(JSON.stringify(result.rows, null, 2));
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST cervezas:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 2. Ensaladas
-app.get('/ensaladas', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM ensaladas');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET ensaladas:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/ensaladas', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO ensaladas (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST ensaladas:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 3. Hamburguesa
-app.get('/hamburguesas', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM hamburguesas');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET hamburguesa:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/hamburguesas', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO hamburguesas (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST hamburguesa:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 4. Menú Infantil
-app.get('/menu_infantil', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM menu_infantil');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET menu_infantil:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/menu_infantil', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO menu_infantil (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST menu_infantil:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 5. Platos
-app.get('/platos_combinados', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM platos_combinados');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET platos:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/platos_combinados', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO platos_combinados (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST platos:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 6. Postres
-app.get('/postres', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM postres');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET postres:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/postres', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO postres (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST postres:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 7. Refrescos
-app.get('/refrescos', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM refrescos');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET refrescos:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/refrescos', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO refrescos (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST refrescos:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 8. Sandwich
-app.get('/sandwich', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM sandwich');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET sandwich:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/sandwich', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO sandwich (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST sandwich:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 🚀 9. Tapas
-app.get('/tapas', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM tapas');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET tapas:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/tapas', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO tapas (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST tapas:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-    app.get('/bocadillos', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM bocadillos');
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(result.rows, null, 2));
-    } catch (err) {
-        console.error('Error GET bocadillos:', err);
-        res.status(500).json({ error: err.message });
-    }
-
-});
-
-
-app.post('/bocadillos', async (req, res) => {
-    try {
-        const { nombre, precio } = req.body;
-        const result = await pool.query(
-            'INSERT INTO bocadillos (nombre, precio) VALUES ($1, $2) RETURNING *',
-            [nombre, precio]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error('Error POST bocadillos:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-// Ejemplo en Node.js / Express
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
-
+// Endpoint de login
 app.post('/usuarios', async (req, res) => {
   try {
     const { usuario, contrasena } = req.body;
 
-    // Validación básica
     if (!usuario || !contrasena) {
-      return res.status(400).json({ error: 'Faltan datos requeridos' });
+      return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
     }
 
-    // Sanitización
-    const cleanUser = usuario.trim();
-    const cleanPass = contrasena.trim();
-
-    // Buscar usuario en la base de datos
-    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [cleanUser]);
-    
-    // Verificar si el usuario existe
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Usuario no encontrado' });
-    }
-
+    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [usuario.trim()]);
     const user = result.rows[0];
-    
-    // VERIFICACIÓN CRÍTICA: ¿La contraseña está hasheada?
-    const isHashed = user.Contraseña.startsWith('$2a$');
-    
-    // Comparar contraseñas (con soporte para contraseñas en texto plano durante transición)
-    let match;
-    if (isHashed) {
-      match = await bcrypt.compare(cleanPass, user.Contraseña);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    // Comparar contraseña (soporta texto plano y hash)
+    let match = false;
+    if (user.Contrasena.startsWith('$2a$')) {
+      match = await bcrypt.compare(contrasena.trim(), user.Contrasena);
     } else {
-      // Si no está hasheada, comparar directamente (solo para desarrollo/transición)
-      match = cleanPass === user.Contraseña;
-      
-      // Si coincide, actualizar a contraseña hasheada
+      match = contrasena.trim() === user.Contrasena;
+      // Actualizar a hash si coincide
       if (match) {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(cleanPass, salt);
-        await pool.query('UPDATE usuarios SET "Contraseña" = $1 WHERE "Usuario" = $2', [hash, cleanUser]);
-        console.log(`Contraseña actualizada a hash para: ${cleanUser}`);
+        const hash = await bcrypt.hash(contrasena, 10);
+        await pool.query('UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2', [hash, user.Usuario]);
       }
     }
 
     if (!match) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
+      return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Generar token JWT
     const token = jwt.sign(
-      { 
-        id: user.id, 
-        Usuario: user.Usuario 
-      }, 
-      JWT_SECRET, 
-      { expiresIn: '1h' }
+      { id: user.id, Usuario: user.Usuario },
+      JWT_SECRET,
+      { expiresIn: '8h' }
     );
 
-    // Respuesta exitosa
-    res.json({
+    res.json({ 
       mensaje: 'Login exitoso',
-      Usuario: user.Usuario,
-      token
+      token,
+      usuario: user.Usuario
     });
 
   } catch (err) {
-    console.error('Error POST /usuarios:', err);
-    res.status(500).json({ 
-      error: 'Error interno del servidor',
-      detalle: process.env.NODE_ENV === 'development' ? err.message : null
-    });
+    console.error('Error en POST /usuarios:', err);
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });
+
+// Endpoint de registro
 app.post('/registro', async (req, res) => {
-  const { usuario, contrasena } = req.body;
-  
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(contrasena, salt);
-  
-  await pool.query(
-    'INSERT INTO usuarios ("Usuario", "Contraseña") VALUES ($1, $2)',
-    [usuario, hash]
-  );
-  
-  res.status(201).json({ mensaje: 'Usuario creado' });
-});app.get('/usuarios', async (req, res) => {
   try {
-    const result = await pool.query('SELECT  "Usuario" FROM usuarios');
+    const { usuario, contrasena } = req.body;
+
+    if (!usuario || !contrasena) {
+      return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
+    }
+
+    const hash = await bcrypt.hash(contrasena, 10);
+    await pool.query(
+      'INSERT INTO usuarios ("Usuario", "Contrasena") VALUES ($1, $2)',
+      [usuario.trim(), hash]
+    );
+
+    res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
+  } catch (err) {
+    console.error('Error en POST /registro:', err);
+    res.status(500).json({ error: 'Error al registrar usuario' });
+  }
+});
+
+// Endpoints básicos para cada categoría (ejemplo con cervezas)
+app.get('/cervezas', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM cervezas');
     res.json(result.rows);
   } catch (err) {
-    console.error('Error GET usuarios:', err);
-    res.status(500).json({ error: err.message });
+    console.error('Error GET cervezas:', err);
+    res.status(500).json({ error: 'Error al obtener cervezas' });
   }
 });
 
-// Middleware para verificar token
-function verificarToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(401).json({ error: 'Token requerido' });
-
-  const token = authHeader.split(' ')[1];
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ error: 'Token inválido' });
-    req.usuario = decoded;
-    next();
-  });
-}
-
-const PORT = process.env.PORT || 3000; // Render asigna su propio puerto via variable de entorno
-
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor listo en el puerto ${PORT}`);
-  const bcrypt = require('bcryptjs');
-const saltRounds = 10;
-
-async function hashAllPasswords() {
-  const users = await pool.query('SELECT * FROM usuarios');
-  
-  for (const user of users.rows) {
-    // Saltar si ya está hasheado
-    if (user.Contraseña.startsWith('$2a$')) continue;
-    
-    const hash = await bcrypt.hash(user.Contraseña, saltRounds);
-    await pool.query(
-      'UPDATE usuarios SET "Contraseña" = $1 WHERE "Usuario" = $2',
-      [hash, user.Usuario]
+app.post('/cervezas', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO cervezas (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
     );
-    console.log(`Actualizada contraseña para ${user.Usuario}`);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST cervezas:', err);
+    res.status(500).json({ error: 'Error al crear cerveza' });
   }
-}
+});
+tapas,  bocadillos, cervezas,
+      ensaladas, menuInfantil, platosCombinados,
+      postres, refrescos, sandwich
+app.post('/tapas', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO tapas (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST tapas:', err);
+    res.status(500).json({ error: 'Error al crear tapa' });
+  }
+});
+app.post('/bocadillos', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO bocadillos (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST bocadillos:', err);
+    res.status(500).json({ error: 'Error al crear bocadillo' });
+  }
+});
+app.post('/ensaladas', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO ensaladas (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST ensaladas:', err);
+    res.status(500).json({ error: 'Error al crear ensalada' });
+  }
+});
+app.post('/menu_infantil', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO menu_infantil (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST menu_infantil:', err);
+    res.status(500).json({ error: 'Error al crear menú infantil' });
+  }
+});
+app.post('/platos_combinados', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO platos_combinados (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST platos_combinados:', err);
+    res.status(500).json({ error: 'Error al crear plato combinado' });
+  }
+});
+app.post('/postres', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO postres (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST postres:', err);
+    res.status(500).json({ error: 'Error al crear postre' });
+  }
+});
+app.post('/refrescos', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO refrescos (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST refrescos:', err);
+    res.status(500).json({ error: 'Error al crear refresco' });
+  }
+});
+app.post('/sandwich', async (req, res) => {
+  try {
+    const { nombre, precio } = req.body;
+    const result = await pool.query(
+      'INSERT INTO sandwich (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error POST sandwich:', err);
+    res.status(500).json({ error: 'Error al crear sandwich' });
+  }
+});
+app.get('/tapas', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM tapas');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET tapas:', err);
+    res.status(500).json({ error: 'Error al obtener tapas' });
+  }
+});
+app.get('/bocadillos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM bocadillos');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET bocadillos:', err);
+    res.status(500).json({ error: 'Error al obtener bocadillos' });
+  }
+});
+app.get('/ensaladas', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM ensaladas');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET ensaladas:', err);
+    res.status(500).json({ error: 'Error al obtener ensaladas' });
+  }
+});
+app.get('/menu_infantil', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM menu_infantil');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET menu_infantil:', err);
+    res.status(500).json({ error: 'Error al obtener menú infantil' });
+  }
+});
+app.get('/platos_combinados', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM platos_combinados');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET platos_combinados:', err);
+    res.status(500).json({ error: 'Error al obtener platos combinados' });
+  }
+});
+app.get('/postres', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM postres');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET postres:', err);
+    res.status(500).json({ error: 'Error al obtener postres' });
+  }
+});
+app.get('/refrescos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM refrescos');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET refrescos:', err);
+    res.status(500).json({ error: 'Error al obtener refrescos' });
+  }
+});
+app.get('/sandwich', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM sandwich');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET sandwich:', err);
+    res.status(500).json({ error: 'Error al obtener sandwich' });
+  }
+});
+// Middleware para manejar errores
+app.use((err, req, res, next) => {
+  console.error('Error en la aplicación:', err);
+  res.status(500).json({ error: 'Error interno del servidor' });
+});
+// Middleware para manejar rutas no encontradas
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
 
-hashAllPasswords();
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor Bar Castelló corriendo en puerto ${PORT}`);
 });
