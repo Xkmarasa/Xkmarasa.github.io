@@ -344,11 +344,11 @@ app.post('/usuarios', async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ id: user.id, usuario: user.Usuario }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, Usuario: user.Usuario }, JWT_SECRET, { expiresIn: '1h' });
 
     res.json({
       mensaje: 'Login exitoso',
-      usuario: user.Usuario,
+      Usuario: user.Usuario,
       token
     });
 
