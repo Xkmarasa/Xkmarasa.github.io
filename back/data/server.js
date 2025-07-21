@@ -146,9 +146,7 @@ app.post('/cervezas', async (req, res) => {
     res.status(500).json({ error: 'Error al crear cerveza' });
   }
 });
-tapas,  bocadillos, cervezas,
-      ensaladas, menuInfantil, platosCombinados,
-      postres, refrescos, sandwich
+
 app.post('/tapas', async (req, res) => {
   try {
     const { nombre, precio } = req.body;
