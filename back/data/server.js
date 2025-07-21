@@ -324,6 +324,26 @@ app.post('/bocadillos', async (req, res) => {
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const saltRounds = 10;
+
+async function hashAllPasswords() {
+  const users = await pool.query('SELECT * FROM usuarios');
+  
+  for (const user of users.rows) {
+    // Saltar si ya está hasheado
+    if (user.Contraseña.startsWith('$2a$')) continue;
+    
+    const hash = await bcrypt.hash(user.Contraseña, saltRounds);
+    await pool.query(
+      'UPDATE usuarios SET "Contraseña" = $1 WHERE "Usuario" = $2',
+      [hash, user.Usuario]
+    );
+    console.log(`Actualizada contraseña para ${user.Usuario}`);
+  }
+}
+
+hashAllPasswords();
+
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 
 app.post('/usuarios', async (req, res) => {
