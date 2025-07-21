@@ -323,29 +323,67 @@ app.post('/bocadillos', async (req, res) => {
 // Ejemplo en Node.js / Express
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'clave-ultra-secreta-barcastello';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+
 app.post('/usuarios', async (req, res) => {
   try {
     const { usuario, contrasena } = req.body;
 
+    // Validación básica
     if (!usuario || !contrasena) {
       return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
 
-    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [usuario]);
-    const user = result.rows[0];
+    // Sanitización
+    const cleanUser = usuario.trim();
+    const cleanPass = contrasena.trim();
 
-    if (!user) {
+    // Buscar usuario en la base de datos
+    const result = await pool.query('SELECT * FROM usuarios WHERE "Usuario" = $1', [cleanUser]);
+    
+    // Verificar si el usuario existe
+    if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
-    }   
+    }
 
-    const match = await bcrypt.compare(contrasena, result.rows[1]);
+    const user = result.rows[0];
+    
+    // VERIFICACIÓN CRÍTICA: ¿La contraseña está hasheada?
+    const isHashed = user.Contraseña.startsWith('$2a$');
+    
+    // Comparar contraseñas (con soporte para contraseñas en texto plano durante transición)
+    let match;
+    if (isHashed) {
+      match = await bcrypt.compare(cleanPass, user.Contraseña);
+    } else {
+      // Si no está hasheada, comparar directamente (solo para desarrollo/transición)
+      match = cleanPass === user.Contraseña;
+      
+      // Si coincide, actualizar a contraseña hasheada
+      if (match) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(cleanPass, salt);
+        await pool.query('UPDATE usuarios SET "Contraseña" = $1 WHERE "Usuario" = $2', [hash, cleanUser]);
+        console.log(`Contraseña actualizada a hash para: ${cleanUser}`);
+      }
+    }
+
     if (!match) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ id: user.id, Usuario: user.Usuario }, JWT_SECRET, { expiresIn: '1h' });
+    // Generar token JWT
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        Usuario: user.Usuario 
+      }, 
+      JWT_SECRET, 
+      { expiresIn: '1h' }
+    );
 
+    // Respuesta exitosa
     res.json({
       mensaje: 'Login exitoso',
       Usuario: user.Usuario,
@@ -354,11 +392,25 @@ app.post('/usuarios', async (req, res) => {
 
   } catch (err) {
     console.error('Error POST /usuarios:', err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ 
+      error: 'Error interno del servidor',
+      detalle: process.env.NODE_ENV === 'development' ? err.message : null
+    });
   }
 });
-
-app.get('/usuarios', async (req, res) => {
+app.post('/registro', async (req, res) => {
+  const { usuario, contrasena } = req.body;
+  
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(contrasena, salt);
+  
+  await pool.query(
+    'INSERT INTO usuarios ("Usuario", "Contraseña") VALUES ($1, $2)',
+    [usuario, hash]
+  );
+  
+  res.status(201).json({ mensaje: 'Usuario creado' });
+});app.get('/usuarios', async (req, res) => {
   try {
     const result = await pool.query('SELECT  "Usuario" FROM usuarios');
     res.json(result.rows);
