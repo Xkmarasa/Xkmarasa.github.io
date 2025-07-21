@@ -360,7 +360,7 @@ app.post('/usuarios', async (req, res) => {
 
 app.get('/usuarios', async (req, res) => {
   try {
-    const result = await pool.query('SELECT  Usuario FROM usuarios');
+    const result = await pool.query('SELECT  "Usuario" FROM usuarios');
     res.json(result.rows);
   } catch (err) {
     console.error('Error GET usuarios:', err);
