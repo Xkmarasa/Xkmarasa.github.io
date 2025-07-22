@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-<<<<<<< HEAD
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
@@ -17,10 +16,4 @@
     "pg": "^8.16.3"
   },
   "description": ""
-=======
-  "description": "",
-  "dependencies": {
-    "cors": "^2.8.5"
-  }
->>>>>>> 33afb5749860f73705f4bcac34b5ad94b9d8c553
 }
