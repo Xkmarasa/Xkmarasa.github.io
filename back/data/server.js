@@ -23,26 +23,88 @@ app.get('/usuarios', async (req, res) => {
   }
 });
 
-// Endpoint de login
+require('dotenv').config();
+const express = require('express');
+const pool = require('./db.js');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const JWT_SECRET = process.env.JWT_SECRET || 'clave-secreta-barcastello';
+
+// Endpoint para obtener todos los usuarios
+app.get('/usuarios', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM usuarios');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error GET /usuarios:', err);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+});
 
 // Endpoint de registro
-app.post('/usuarios', async (req, res) => {
+app.post('/registro', async (req, res) => {
   try {
     const { Usuario, contrasena } = req.body;
 
-    // Validación mejorada
+    // Validación
     if (!Usuario?.trim() || !contrasena?.trim()) {
       return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
     }
 
-    // Consulta con parámetros para Neon
-    const query = {
-      text: 'SELECT * FROM usuarios WHERE "Usuario" = $1',
-      values: [Usuario.trim()],
-      rowMode: 'object'
-    };
+    // Verificar si el usuario ya existe
+    const userExists = await pool.query(
+      'SELECT * FROM usuarios WHERE "Usuario" = $1',
+      [Usuario.trim()]
+    );
 
-    const result = await pool.query(query);
+    if (userExists.rows.length > 0) {
+      return res.status(400).json({ error: 'El usuario ya existe' });
+    }
+
+    // Hash de la contraseña
+    const hash = await bcrypt.hash(contrasena.trim(), 10);
+
+    // Crear nuevo usuario
+    const newUser = await pool.query(
+      'INSERT INTO usuarios ("Usuario", "contrasena") VALUES ($1, $2) RETURNING *',
+      [Usuario.trim(), hash]
+    );
+
+    res.status(201).json({
+      mensaje: 'Usuario registrado exitosamente',
+      usuario: newUser.rows[0].Usuario
+    });
+
+  } catch (error) {
+    console.error('Error en POST /registro:', error);
+    res.status(500).json({ 
+      error: 'Error al registrar usuario',
+      detalle: process.env.NODE_ENV === 'development' ? error.message : null
+    });
+  }
+});
+
+// Endpoint de login
+app.post('/login', async (req, res) => {
+  try {
+    const { Usuario, contrasena } = req.body;
+
+    // Validación
+    if (!Usuario?.trim() || !contrasena?.trim()) {
+      return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
+    }
+
+    // Buscar usuario
+    const result = await pool.query(
+      'SELECT * FROM usuarios WHERE "Usuario" = $1',
+      [Usuario.trim()]
+    );
     
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
@@ -51,27 +113,20 @@ app.post('/usuarios', async (req, res) => {
     const user = result.rows[0];
     const isHashed = user.contrasena?.startsWith('$2a$');
 
-    // Comparación segura para Neon
+    // Verificar contraseña
     let isValid = false;
     if (isHashed) {
       isValid = await bcrypt.compare(contrasena.trim(), user.contrasena);
     } else {
-      // Modo compatibilidad (solo para desarrollo)
+      // Compatibilidad con contraseñas sin hash (solo para desarrollo)
       isValid = contrasena.trim() === user.contrasena;
-      if (isValid) {
-        const hash = await bcrypt.hash(contrasena.trim(), 10);
-        await pool.query(
-          'UPDATE usuarios SET "contrasena" = $1 WHERE "Usuario" = $2',
-          [hash, user.Usuario]
-        );
-      }
     }
 
     if (!isValid) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Generación de token
+    // Generar token JWT
     const token = jwt.sign(
       {
         id: user.id,
@@ -88,15 +143,10 @@ app.post('/usuarios', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error en POST /usuarios:', error);
-    res.status(500).json({
+    console.error('Error en POST /login:', error);
+    res.status(500).json({ 
       error: 'Error interno del servidor',
-      // Detalles solo en desarrollo
-      detalle: process.env.NODE_ENV === 'development' ? {
-        message: error.message,
-        stack: error.stack,
-        query: error.query
-      } : null
+      detalle: process.env.NODE_ENV === 'development' ? error.message : null
     });
   }
 });
@@ -111,7 +161,7 @@ app.get('/hash-passwords', async (req, res) => {
       if (!user.contrasena.startsWith('$2a$')) {
         const hash = await bcrypt.hash(user.contrasena, 10);
         await pool.query(
-          'UPDATE usuarios SET "contrasena" = $1 WHERE "Usuario" = $2',
+          'UPDATE usuarios SET "contrasena" = $1 WHERE "id" = $2',
           [hash, user.id]
         );
         updated++;
