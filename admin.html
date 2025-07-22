@@ -1,398 +1,208 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio de Sesión - Bar Castelló</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #8B0000;
-      --secondary: #D4AF37;
-      --light: #F8F4E9;
-      --dark: #1A1A1A;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--light);
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .header {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-      background-size: cover;
-      background-position: center;
-      width: 100%;
-      padding: 40px 0;
-      text-align: center;
-      color: white;
-    }
-
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-    }
-
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      margin-top: -40px;
-    }
-
-    .login-box h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--primary);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #a30000;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="header">
-    <h1>BAR CASTELLÓ</h1>
-  </div>
-
-  <div class="login-box">
-    <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-      <input type="text" name="usuario" placeholder="Usuario" required />
-      <input type="password" name="contrasena" placeholder="Contraseña" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <div class="error" id="error-msg"></div>
-  </div>
-
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const usuario = e.target.usuario.value;
-      const contrasena = e.target.contrasena.value;
-
-      try {
-        const res = await fetch('https://barcastello.onrender.com/usuarios', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usuario, contrasena })
-        });
-
-        if (!res.ok) {
-          document.getElementById('error-msg').innerText = "Credenciales inválidas.";
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Bar Castelló</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
-        const data = await res.json();
-        localStorage.setItem('token', data.token);
-        window.location.href = "/cartaDinamica.html";
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('error-msg').innerText = "Error en el servidor.";
-      }
-    });
-  </script>
-
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio de Sesión - Bar Castelló</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #8B0000;
-      --secondary: #D4AF37;
-      --light: #F8F4E9;
-      --dark: #1A1A1A;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--light);
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .header {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-      background-size: cover;
-      background-position: center;
-      width: 100%;
-      padding: 40px 0;
-      text-align: center;
-      color: white;
-    }
-
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-    }
-
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      margin-top: -40px;
-    }
-
-    .login-box h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--primary);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #a30000;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="header">
-    <h1>BAR CASTELLÓ</h1>
-  </div>
-
-  <div class="login-box">
-    <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-      <input type="text" name="usuario" placeholder="Usuario" required />
-      <input type="password" name="contrasena" placeholder="Contraseña" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <div class="error" id="error-msg"></div>
-  </div>
-
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const usuario = e.target.usuario.value;
-      const contrasena = e.target.contrasena.value;
-
-      try {
-        const res = await fetch('https://barcastello.onrender.com/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usuario, contrasena })
-        });
-
-        if (!res.ok) {
-          document.getElementById('error-msg').innerText = "Credenciales inválidas.";
-          return;
+        /* Estilos del header */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            padding: 40px 0;
+            text-align: center;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        const data = await res.json();
-        localStorage.setItem('token', data.token);
-        window.location.href = "../cartaDinamica.html";
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('error-msg').innerText = "Error en el servidor.";
-      }
-    });
-  </script>
-
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio de Sesión - Bar Castelló</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #8B0000;
-      --secondary: #D4AF37;
-      --light: #F8F4E9;
-      --dark: #1A1A1A;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--light);
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .header {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-      background-size: cover;
-      background-position: center;
-      width: 100%;
-      padding: 40px 0;
-      text-align: center;
-      color: white;
-    }
-
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-    }
-
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      margin-top: -40px;
-    }
-
-    .login-box h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--primary);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #a30000;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="header">
-    <h1>BAR CASTELLÓ</h1>
-  </div>
-
-  <div class="login-box">
-    <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-      <input type="text" name="usuario" placeholder="Usuario" required />
-      <input type="password" name="contrasena" placeholder="Contraseña" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <div class="error" id="error-msg"></div>
-  </div>
-
-  <script>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const usuario = e.target.usuario.value;
-      const contrasena = e.target.contrasena.value;
-
-      try {
-        const res = await fetch('https://barcastello.onrender.com/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usuario, contrasena })
-        });
-
-        if (!res.ok) {
-          document.getElementById('error-msg').innerText = "Credenciales inválidas.";
-          return;
+        header h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 2.5rem;
+            margin: 0;
         }
 
-        const data = await res.json();
-        localStorage.setItem('token', data.token);
-        window.location.href = "/cartaDinamica.html";
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('error-msg').innerText = "Error en el servidor.";
-      }
-    });
-  </script>
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
+        /* Mensajes de error */
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffeeee;
+            border-radius: 4px;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Panel de Administración - Bar Castelló</h1>
+    </header>
+
+    <div class="container">
+        <h2>Gestión de Menú</h2>
+        
+        <!-- Mensajes de error -->
+        <div id="error-msg" class="error-message" style="display: none;"></div>
+        
+        <!-- Formulario de login (si es necesario) -->
+        <form id="login-form" style="max-width: 400px; margin: 0 auto;">
+            <div class="form-group">
+                <label for="usuario">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+            </div>
+            
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <!-- Contenido administrativo (se mostrará después del login) -->
+        <div id="admin-content" style="display: none;">
+            <!-- Aquí irían las secciones de administración -->
+            <section id="menu-management">
+                <h3>Gestión de Categorías</h3>
+                <!-- Contenido de administración -->
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Script para manejar el login
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const usuario = e.target.usuario.value;
+            const contrasena = e.target.contrasena.value;
+            const errorMsg = document.getElementById('error-msg');
+
+            try {
+                const res = await fetch('https://barcastello.onrender.com/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        Usuario: usuario,
+                        contrasena: contrasena 
+                    })
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    errorMsg.innerText = errorData.error || "Credenciales inválidas";
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                const data = await res.json();
+                localStorage.setItem('token', data.token);
+                
+                // Ocultar formulario de login y mostrar contenido admin
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.innerText = "Error en el servidor";
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        // Verificar si ya está logueado al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                // Aquí podrías cargar los datos del menú, etc.
+            }
+        });
+    </script>
 </body>
 </html>
