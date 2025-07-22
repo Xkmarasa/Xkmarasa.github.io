@@ -28,17 +28,17 @@ app.get('/usuarios', async (req, res) => {
 // Endpoint de registro
 app.post('/usuarios', async (req, res) => {
   try {
-    const { usuario, contrasena } = req.body;
+    const { Usuario, contrasena } = req.body;
 
     // Validación mejorada
-    if (!usuario?.trim() || !contrasena?.trim()) {
+    if (!Usuario?.trim() || !contrasena?.trim()) {
       return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
     }
 
     // Consulta con parámetros para Neon
     const query = {
       text: 'SELECT * FROM usuarios WHERE Usuario = $1',
-      values: [usuario.trim()],
+      values: [Usuario.trim()],
       rowMode: 'object'
     };
 
@@ -61,7 +61,7 @@ app.post('/usuarios', async (req, res) => {
       if (isValid) {
         const hash = await bcrypt.hash(contrasena.trim(), 10);
         await pool.query(
-          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
+          'UPDATE usuarios SET "Contrasena" = $1 WHERE Usuario = $2',
           [hash, user.Usuario]
         );
       }
@@ -75,7 +75,7 @@ app.post('/usuarios', async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
-        usuario: user.Usuario
+        Usuario: user.Usuario
       },
       JWT_SECRET,
       { expiresIn: '1h' }
@@ -84,7 +84,7 @@ app.post('/usuarios', async (req, res) => {
     res.json({
       mensaje: 'Login exitoso',
       token,
-      usuario: user.Usuario
+      Usuario: user.Usuario
     });
 
   } catch (error) {
