@@ -655,7 +655,7 @@
       const overlay = document.getElementById('overlay');
       
       // Configurar título del formulario
-      document.getElementById('form-title').textContent = `Editar ${item.nombre}`;
+      document.getElementById('form-title').textContent = `Editar ${item.name}`;
       
       // Configurar campos del formulario
       document.getElementById('item-id').value = item.id;
@@ -669,8 +669,8 @@
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
       
       if (isGridItem) {
-        document.getElementById('item-description').value = item.descripcion || '';
-        document.getElementById('item-image').value = item.imagen || '';
+        document.getElementById('item-description').value = item.description || '';
+        document.getElementById('item-image').value = item.image || '';
       }
       
       // Mostrar formulario
