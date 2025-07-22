@@ -602,8 +602,8 @@
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
           li.innerHTML = `
-            <span class="item-name">${item.nombre}</span>
-            <span class="item-price">${item.precio}€</span>
+            <span class="item-name">${item.name}</span>
+            <span class="item-price">${item.price}€</span>
             <button class="edit-btn" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
               <i class="fas fa-edit" style="color: var(--secondary);"></i>
             </button>
@@ -705,7 +705,7 @@
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
       
       if (isGridItem) {
-        document.getElementById('item-description').value = item.descripcion || '';
+        document.getElementById('item-description').value = item.description || '';
         document.getElementById('item-image').value = item.imagen || '';
       }
       
