@@ -660,8 +660,8 @@
       // Configurar campos del formulario
       document.getElementById('item-id').value = item.id;
       document.getElementById('item-category').value = item.category || getCategoryFromEndpoint(item);
-      document.getElementById('item-name').value = item.nombre;
-      document.getElementById('item-price').value = item.precio;
+      document.getElementById('item-name').value = item.name;
+      document.getElementById('item-price').value = item.price;
       
       // Mostrar/ocultar campos según el tipo de ítem
       const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category || getCategoryFromEndpoint(item));
