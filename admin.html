@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración - Bar Castelló</title>
+    <title>Login Administración - Bar Castelló</title>
     <style>
         /* Estilos generales */
         body {
@@ -11,198 +11,208 @@
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
-            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        /* Estilos del header */
-        header {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        /* Contenedor de login */
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Header con el diseño anterior */
+        .login-header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
                         url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            width: 100%;
-            padding: 40px 0;
-            text-align: center;
             color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin: -2rem -2rem 2rem -2rem;
         }
 
-        header h1 {
+        .login-header h1 {
             font-family: "Playfair Display", serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin: 0;
         }
 
-        /* Contenedor principal */
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Mensajes de error */
-        .error-message {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #ffeeee;
-            border-radius: 4px;
-        }
-
-        /* Formularios */
+        /* Formulario */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
+            color: #555;
             font-weight: bold;
         }
 
-        input, select {
+        input {
             width: 100%;
-            padding: 10px;
+            padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 1rem;
             box-sizing: border-box;
         }
 
         button {
-            background-color: #4CAF50;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #d4af37; /* Dorado elegante */
             color: white;
-            padding: 10px 15px;
             border: none;
             border-radius: 4px;
+            font-size: 1rem;
             cursor: pointer;
-            font-size: 16px;
+            transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #c9a227;
         }
 
-        /* Tablas */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        /* Mensajes de error */
+        .error-msg {
+            color: #d9534f;
+            margin-top: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            background-color: #f9f2f2;
+            border-radius: 4px;
+            display: none;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        /* Enlace de registro */
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        th {
-            background-color: #f2f2f2;
+        .register-link a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: bold;
         }
 
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            header h1 {
-                font-size: 2rem;
-            }
+        .register-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Panel de Administración - Bar Castelló</h1>
-    </header>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Bar Castelló</h1>
+            <p>Panel de Administración</p>
+        </div>
 
-    <div class="container">
-        <h2>Gestión de Menú</h2>
-        
-        <!-- Mensajes de error -->
-        <div id="error-msg" class="error-message" style="display: none;"></div>
-        
-        <!-- Formulario de login (si es necesario) -->
-        <form id="login-form" style="max-width: 400px; margin: 0 auto;">
+        <form id="login-form">
             <div class="form-group">
-                <label for="usuario">Usuario:</label>
+                <label for="usuario">Usuario</label>
                 <input type="text" id="usuario" name="usuario" required>
             </div>
             
             <div class="form-group">
-                <label for="contrasena">Contraseña:</label>
+                <label for="contrasena">Contraseña</label>
                 <input type="password" id="contrasena" name="contrasena" required>
             </div>
             
-            <button type="submit">Ingresar</button>
+            <button type="submit">Iniciar Sesión</button>
+            
+            <div id="error-msg" class="error-msg"></div>
         </form>
 
-        <!-- Contenido administrativo (se mostrará después del login) -->
-        <div id="admin-content" style="display: none;">
-            <!-- Aquí irían las secciones de administración -->
-            <section id="menu-management">
-                <h3>Gestión de Categorías</h3>
-                <!-- Contenido de administración -->
-            </section>
+        <div class="register-link">
+            ¿Necesitas acceso? <a href="mailto:admin@barcastello.com">Contacta al administrador</a>
         </div>
     </div>
 
     <script>
-        // Script para manejar el login
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const usuario = e.target.usuario.value;
-            const contrasena = e.target.contrasena.value;
+            
+            // Obtener valores
+            const usuario = document.getElementById('usuario').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
             const errorMsg = document.getElementById('error-msg');
-
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Validación
+            if (!usuario || !contrasena) {
+                errorMsg.innerText = "Usuario y contraseña son requeridos";
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            // Mostrar estado de carga
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            
             try {
+                // Enviar solicitud al backend
                 const res = await fetch('https://barcastello.onrender.com/login', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({ 
                         Usuario: usuario,
                         contrasena: contrasena 
                     })
                 });
 
+                // Restaurar botón
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Iniciar Sesión";
+                
+                // Manejar respuesta
                 if (!res.ok) {
-                    const errorData = await res.json();
-                    errorMsg.innerText = errorData.error || "Credenciales inválidas";
+                    const errorData = await res.json().catch(() => ({}));
+                    errorMsg.innerText = errorData.error || "Credenciales incorrectas";
                     errorMsg.style.display = 'block';
                     return;
                 }
 
                 const data = await res.json();
-                localStorage.setItem('token', data.token);
                 
-                // Ocultar formulario de login y mostrar contenido admin
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
+                // Almacenar token y redirigir
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('usuario', data.Usuario);
+                
+                // Redirección a la carta dinámica
+                window.location.href = "https://xkmarasa.github.io/cartaDinamica.html";
                 
             } catch (error) {
                 console.error('Error:', error);
-                errorMsg.innerText = "Error en el servidor";
+                errorMsg.innerText = "Error de conexión con el servidor";
                 errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Iniciar Sesión";
             }
         });
 
-        /* Verificar si ya está logueado al cargar la página
+        // Verificar si ya está autenticado al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (token) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
-                // Aquí podrías cargar los datos del menú, etc.
+                window.location.href = "https://xkmarasa.github.io/cartaDinamica.html";
             }
-        });*/
+        });
     </script>
 </body>
 </html>
