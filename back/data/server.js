@@ -37,7 +37,7 @@ app.post('/usuarios', async (req, res) => {
 
     // Consulta con parámetros para Neon
     const query = {
-      text: 'SELECT * FROM usuarios WHERE Usuario = $1',
+      text: 'SELECT * FROM usuarios WHERE "Usuario" = $1',
       values: [Usuario.trim()],
       rowMode: 'object'
     };
@@ -61,7 +61,7 @@ app.post('/usuarios', async (req, res) => {
       if (isValid) {
         const hash = await bcrypt.hash(contrasena.trim(), 10);
         await pool.query(
-          'UPDATE usuarios SET "Contrasena" = $1 WHERE Usuario = $2',
+          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
           [hash, user.Usuario]
         );
       }
@@ -111,7 +111,7 @@ app.get('/hash-passwords', async (req, res) => {
       if (!user.contrasena.startsWith('$2a$')) {
         const hash = await bcrypt.hash(user.contrasena, 10);
         await pool.query(
-          'UPDATE usuarios SET "Contrasena" = $1 WHERE id = $2',
+          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
           [hash, user.id]
         );
         updated++;
