@@ -556,8 +556,8 @@
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
           li.innerHTML = `
-            <span class="item-name">${item.nombre}</span>
-            <span class="item-price">${item.precio}€</span>
+            <span class="item-name">${item.name}</span>
+            <span class="item-price">${item.price}€</span>
           `;
           container.appendChild(li);
         });
@@ -588,11 +588,11 @@
           div.dataset.id = item.id;
           div.dataset.category = endpoint;
           div.innerHTML = `
-            <div class="menu-item-img" style="background-image: url('${item.imagen || defaultImage}');"></div>
+            <div class="menu-item-img" style="background-image: url('${item.image || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.nombre}</h3>
-              ${item.descripcion ? `<p class="item-description">${item.descripcion}</p>` : ''}
-              <span class="item-price">${item.precio}€</span>
+              <h3 class="item-name">${item.name}</h3>
+              ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
+              <span class="item-price">${item.price}€</span>
             </div>
           `;
           container.appendChild(div);
@@ -719,15 +719,15 @@
       
       const id = document.getElementById('item-id').value;
       const category = document.getElementById('item-category').value;
-      const nombre = document.getElementById('item-name').value;
-      const precio = parseFloat(document.getElementById('item-price').value);
-      const descripcion = document.getElementById('item-description')?.value || '';
-      const imagen = document.getElementById('item-image')?.value || '';
-      
-      const itemData = { nombre, precio };
-      if (descripcion) itemData.descripcion = descripcion;
-      if (imagen) itemData.imagen = imagen;
-      
+      const name = document.getElementById('item-name').value;
+      const price = parseFloat(document.getElementById('item-price').value);
+      const description = document.getElementById('item-description')?.value || '';
+      const image = document.getElementById('item-image')?.value || '';
+
+      const itemData = { name, price };
+      if (description) itemData.description = description;
+      if (image) itemData.image = image;
+
       try {
         let response;
         let method;
