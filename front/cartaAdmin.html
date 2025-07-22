@@ -618,7 +618,11 @@
             if (!response.ok) throw new Error('Error al cargar el ítem');
             
             const itemData = await response.json();
-            showEditForm(itemData);
+            showEditForm({
+              ...itemData,
+              category: item.dataset.category,
+              id: item.dataset.id
+            });
           } catch (error) {
             console.error('Error al cargar el ítem:', error);
             alert('Error al cargar el ítem');
@@ -639,7 +643,11 @@
             if (!response.ok) throw new Error('Error al cargar el ítem');
             
             const itemData = await response.json();
-            showEditForm(itemData);
+            showEditForm({
+              ...itemData,
+              category: item.dataset.category,
+              id: item.dataset.id
+            });
           } catch (error) {
             console.error('Error al cargar el ítem:', error);
             alert('Error al cargar el ítem');
@@ -659,12 +667,12 @@
       
       // Configurar campos del formulario
       document.getElementById('item-id').value = item.id;
-      document.getElementById('item-category').value = item.category || getCategoryFromEndpoint(item);
+      document.getElementById('item-category').value = item.category;
       document.getElementById('item-name').value = item.nombre;
       document.getElementById('item-price').value = item.precio;
       
       // Mostrar/ocultar campos según el tipo de ítem
-      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category || getCategoryFromEndpoint(item));
+      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
       document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
       
@@ -673,17 +681,12 @@
         document.getElementById('item-image').value = item.imagen || '';
       }
       
+      // Mostrar botón de eliminar
+      document.querySelector('.btn-delete').style.display = 'block';
+      
       // Mostrar formulario
       form.style.display = 'block';
       overlay.style.display = 'block';
-    }
-
-    // Función auxiliar para obtener la categoría del endpoint
-    function getCategoryFromEndpoint(item) {
-      if (item.id && item.id.includes('/')) {
-        return item.id.split('/')[0];
-      }
-      return '';
     }
 
     // Mostrar formulario para añadir nuevo ítem
@@ -731,30 +734,26 @@
       try {
         let response;
         let method;
+        let url;
         
         if (id) {
           // Actualizar ítem existente
           method = 'PUT';
-          response = await fetch(`https://barcastello.onrender.com/${category}/${id}`, {
-            method: method,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(itemData)
-          });
+          url = `https://barcastello.onrender.com/${category}/${id}`;
         } else {
           // Crear nuevo ítem
           method = 'POST';
-          response = await fetch(`https://barcastello.onrender.com/${category}`, {
-            method: method,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(itemData)
-          });
+          url = `https://barcastello.onrender.com/${category}`;
         }
+        
+        response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(itemData)
+        });
         
         if (!response.ok) throw new Error('Error al guardar');
         
@@ -811,7 +810,6 @@
     function closeForm() {
       document.getElementById('edit-form').style.display = 'none';
       document.getElementById('overlay').style.display = 'none';
-      document.querySelector('.btn-delete').style.display = 'block';
     }
 
     // Cerrar formulario al hacer clic en el overlay
