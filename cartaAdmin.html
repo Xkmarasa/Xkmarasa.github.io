@@ -106,27 +106,6 @@
       color: var(--secondary);
     }
 
-    /* Botón de administración */
-    .admin-btn {
-      margin-left: auto;
-      background: var(--secondary);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .admin-btn:hover {
-      background: var(--primary);
-      transform: rotate(90deg);
-    }
-
     /* Estilos para la cuadrícula de menú */
     .menu-grid {
       display: grid;
@@ -141,6 +120,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
+      cursor: pointer;
     }
 
     .menu-item:hover {
@@ -193,6 +173,7 @@
       align-items: center;
       transition: background-color 0.3s ease;
       position: relative;
+      cursor: pointer;
     }
 
     .simple-menu-list li:hover {
@@ -371,9 +352,6 @@
       <div class="section-header">
         <span class="category-icon">🍤</span>
         <h2>Tapas</h2>
-        <button class="admin-btn" onclick="showAddForm('tapas')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <ul id="tapas_lista" class="simple-menu-list"></ul>
       <button class="add-item-btn" onclick="showAddForm('tapas')">
@@ -386,9 +364,6 @@
       <div class="section-header">
         <span class="category-icon">🥗</span>
         <h2>Ensaladas</h2>
-        <button class="admin-btn" onclick="showAddForm('ensaladas')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <div class="menu-grid" id="ensaladas"></div>
       <button class="add-item-btn" onclick="showAddForm('ensaladas')">
@@ -401,9 +376,6 @@
       <div class="section-header">
         <span class="category-icon">🥪</span>
         <h2>Bocadillos</h2>
-        <button class="admin-btn" onclick="showAddForm('bocadillos')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <ul id="bocadillos_lista" class="simple-menu-list"></ul>
       <button class="add-item-btn" onclick="showAddForm('bocadillos')">
@@ -416,9 +388,6 @@
       <div class="section-header">
         <span class="category-icon">🍳</span>
         <h2>Sandwiches</h2>
-        <button class="admin-btn" onclick="showAddForm('sandwich')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <div class="menu-grid" id="sandwich"></div>
       <button class="add-item-btn" onclick="showAddForm('sandwich')">
@@ -431,9 +400,6 @@
       <div class="section-header">
         <span class="category-icon">🍳</span>
         <h2>Menú Infantil</h2>
-        <button class="admin-btn" onclick="showAddForm('menu_infantil')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <div class="menu-grid" id="menu_infantil"></div>
       <button class="add-item-btn" onclick="showAddForm('menu_infantil')">
@@ -446,9 +412,6 @@
       <div class="section-header">
         <span class="category-icon">🍕</span>
         <h2>Platos Combinados</h2>
-        <button class="admin-btn" onclick="showAddForm('platos_combinados')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <div class="menu-grid" id="platos_combinados"></div>
       <button class="add-item-btn" onclick="showAddForm('platos_combinados')">
@@ -461,9 +424,6 @@
       <div class="section-header">
         <span class="category-icon">🍰</span>
         <h2>Postres</h2>
-        <button class="admin-btn" onclick="showAddForm('postres')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <div class="menu-grid" id="postres"></div>
       <button class="add-item-btn" onclick="showAddForm('postres')">
@@ -476,9 +436,6 @@
       <div class="section-header">
         <span class="category-icon">🥤</span>
         <h2>Refrescos</h2>
-        <button class="admin-btn" onclick="showAddForm('refrescos')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <ul id="refrescos_lista" class="simple-menu-list"></ul>
       <button class="add-item-btn" onclick="showAddForm('refrescos')">
@@ -491,9 +448,6 @@
       <div class="section-header">
         <span class="category-icon">🍺</span>
         <h2>Cervezas</h2>
-        <button class="admin-btn" onclick="showAddForm('cervezas')">
-          <i class="fas fa-cog"></i>
-        </button>
       </div>
       <ul id="cervezas_lista" class="simple-menu-list"></ul>
       <button class="add-item-btn" onclick="showAddForm('cervezas')">
@@ -506,7 +460,7 @@
   <!-- Formulario de edición -->
   <div class="overlay" id="overlay"></div>
   <div class="edit-form" id="edit-form">
-    <h3>Editar Ítem</h3>
+    <h3 id="form-title">Editar Ítem</h3>
     <form id="item-form">
       <input type="hidden" id="item-id">
       <input type="hidden" id="item-category">
@@ -602,11 +556,8 @@
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
           li.innerHTML = `
-            <span class="item-name">${item.name}</span>
-            <span class="item-price">${item.price}€</span>
-            <button class="edit-btn" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
-              <i class="fas fa-edit" style="color: var(--secondary);"></i>
-            </button>
+            <span class="item-name">${item.nombre}</span>
+            <span class="item-price">${item.precio}€</span>
           `;
           container.appendChild(li);
         });
@@ -639,12 +590,9 @@
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.imagen || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.name}</h3>
-              ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <span class="item-price">${item.price}€</span>
-              <button class="edit-btn" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
-                <i class="fas fa-edit" style="color: var(--secondary);"></i>
-              </button>
+              <h3 class="item-name">${item.nombre}</h3>
+              ${item.descripcion ? `<p class="item-description">${item.descripcion}</p>` : ''}
+              <span class="item-price">${item.precio}€</span>
             </div>
           `;
           container.appendChild(div);
@@ -659,30 +607,43 @@
     function addEditEvents() {
       // Para items de lista simple
       document.querySelectorAll('.simple-menu-list li').forEach(item => {
-        const editBtn = item.querySelector('.edit-btn');
-        editBtn.addEventListener('click', () => {
-          showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
-          });
+        item.addEventListener('click', async () => {
+          try {
+            const response = await fetch(`https://barcastello.onrender.com/${item.dataset.category}/${item.dataset.id}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            
+            if (!response.ok) throw new Error('Error al cargar el ítem');
+            
+            const itemData = await response.json();
+            showEditForm(itemData);
+          } catch (error) {
+            console.error('Error al cargar el ítem:', error);
+            alert('Error al cargar el ítem');
+          }
         });
       });
 
       // Para items de cuadrícula
       document.querySelectorAll('.menu-item').forEach(item => {
-        const editBtn = item.querySelector('.edit-btn');
-        editBtn.addEventListener('click', () => {
-          showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
-            descripcion: item.querySelector('.item-description')?.textContent || '',
-            imagen: item.querySelector('.menu-item-img').style.backgroundImage
-              .replace('url("', '').replace('")', '')
-          });
+        item.addEventListener('click', async () => {
+          try {
+            const response = await fetch(`https://barcastello.onrender.com/${item.dataset.category}/${item.dataset.id}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            
+            if (!response.ok) throw new Error('Error al cargar el ítem');
+            
+            const itemData = await response.json();
+            showEditForm(itemData);
+          } catch (error) {
+            console.error('Error al cargar el ítem:', error);
+            alert('Error al cargar el ítem');
+          }
         });
       });
     }
@@ -693,25 +654,36 @@
       const form = document.getElementById('edit-form');
       const overlay = document.getElementById('overlay');
       
-      // Configurar formulario según el tipo de ítem
-      document.getElementById('item-id').value = item.id;
-      document.getElementById('item-category').value = item.category;
-      document.getElementById('item-name').value = item.name;
-      document.getElementById('item-price').value = item.price;
+      // Configurar título del formulario
+      document.getElementById('form-title').textContent = `Editar ${item.nombre}`;
       
-      // Mostrar/ocultar campos según sea necesario
-      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
+      // Configurar campos del formulario
+      document.getElementById('item-id').value = item.id;
+      document.getElementById('item-category').value = item.category || getCategoryFromEndpoint(item);
+      document.getElementById('item-name').value = item.nombre;
+      document.getElementById('item-price').value = item.precio;
+      
+      // Mostrar/ocultar campos según el tipo de ítem
+      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category || getCategoryFromEndpoint(item));
       document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
       
       if (isGridItem) {
-        document.getElementById('item-description').value = item.description || '';
+        document.getElementById('item-description').value = item.descripcion || '';
         document.getElementById('item-image').value = item.imagen || '';
       }
       
       // Mostrar formulario
       form.style.display = 'block';
       overlay.style.display = 'block';
+    }
+
+    // Función auxiliar para obtener la categoría del endpoint
+    function getCategoryFromEndpoint(item) {
+      if (item.id && item.id.includes('/')) {
+        return item.id.split('/')[0];
+      }
+      return '';
     }
 
     // Mostrar formulario para añadir nuevo ítem
@@ -725,13 +697,13 @@
       document.getElementById('item-id').value = '';
       document.getElementById('item-category').value = category;
       
+      // Configurar título del formulario
+      document.getElementById('form-title').textContent = `Añadir nuevo ítem a ${category}`;
+      
       // Configurar campos según el tipo
       const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(category);
       document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
-      
-      // Cambiar título
-      form.querySelector('h3').textContent = `Añadir nuevo ítem a ${category}`;
       
       // Ocultar botón de eliminar para nuevos ítems
       document.querySelector('.btn-delete').style.display = 'none';
@@ -747,22 +719,24 @@
       
       const id = document.getElementById('item-id').value;
       const category = document.getElementById('item-category').value;
-      const nombre = document.getElementById('item-name').value;
-      const precio = parseFloat(document.getElementById('item-price').value);
-      const descripcion = document.getElementById('item-description')?.value || '';
-      const imagen = document.getElementById('item-image')?.value || '';
-      
-      const itemData = { nombre, precio };
-      if (descripcion) itemData.descripcion = descripcion;
-      if (imagen) itemData.imagen = imagen;
+      const name = document.getElementById('item-name').value;
+      const price = parseFloat(document.getElementById('item-price').value);
+      const description = document.getElementById('item-description')?.value || '';
+      const image = document.getElementById('item-image')?.value || '';
+
+      const itemData = { name, price };
+      if (description) itemData.description = description;
+      if (image) itemData.image = image;
       
       try {
         let response;
+        let method;
         
         if (id) {
-          // Actualizar ítem existente  
-          response = await fetch(`https://barcastello.onrender.com/${category}`, {
-            method: 'PUT',
+          // Actualizar ítem existente
+          method = 'PUT';
+          response = await fetch(`https://barcastello.onrender.com/${category}/${name}`, {
+            method: method,
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
@@ -771,8 +745,9 @@
           });
         } else {
           // Crear nuevo ítem
+          method = 'POST';
           response = await fetch(`https://barcastello.onrender.com/${category}`, {
-            method: 'POST',
+            method: method,
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
@@ -802,12 +777,12 @@
     // Eliminar ítem
     async function deleteItem() {
       if (!confirm('¿Estás seguro de que deseas eliminar este ítem?')) return;
-      
-      const id = document.getElementById('item-id').value;
+
+      const name = document.getElementById('item-name').value;
       const category = document.getElementById('item-category').value;
       
       try {
-        const response = await fetch(`https://barcastello.onrender.com/${category}`, {
+        const response = await fetch(`https://barcastello.onrender.com/${category}/${name}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
