@@ -602,8 +602,8 @@
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
           li.innerHTML = `
-            <span class="item-name">${item.name}</span>
-            <span class="item-price">${item.price}€</span>
+            <span class="item-name">${item.nombre}</span>
+            <span class="item-price">${item.precio}€</span>
             <button class="edit-btn" style="background: none; border: none; cursor: pointer; margin-left: 10px;">
               <i class="fas fa-edit" style="color: var(--secondary);"></i>
             </button>
@@ -639,9 +639,9 @@
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.imagen || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.name}</h3>
-              ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <span class="item-price">${item.price}€</span>
+              <h3 class="item-name">${item.nombre}</h3>
+              ${item.descripcion ? `<p class="item-description">${item.descripcion}</p>` : ''}
+              <span class="item-price">${item.precio}€</span>
               <button class="edit-btn" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
                 <i class="fas fa-edit" style="color: var(--secondary);"></i>
               </button>
@@ -696,8 +696,8 @@
       // Configurar formulario según el tipo de ítem
       document.getElementById('item-id').value = item.id;
       document.getElementById('item-category').value = item.category;
-      document.getElementById('item-name').value = item.name;
-      document.getElementById('item-price').value = item.price;
+      document.getElementById('item-name').value = item.nombre;
+      document.getElementById('item-price').value = item.precio;
       
       // Mostrar/ocultar campos según sea necesario
       const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
@@ -705,7 +705,7 @@
       document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
       
       if (isGridItem) {
-        document.getElementById('item-description').value = item.description || '';
+        document.getElementById('item-description').value = item.descripcion || '';
         document.getElementById('item-image').value = item.imagen || '';
       }
       
@@ -760,8 +760,8 @@
         let response;
         
         if (id) {
-          // Actualizar ítem existente  
-          response = await fetch(`https://barcastello.onrender.com/${category}`, {
+          // Actualizar ítem existente
+          response = await fetch(`https://barcastello.onrender.com/${category}/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -807,7 +807,7 @@
       const category = document.getElementById('item-category').value;
       
       try {
-        const response = await fetch(`https://barcastello.onrender.com/${category}/`, {
+        const response = await fetch(`https://barcastello.onrender.com/${category}/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
