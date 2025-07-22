@@ -609,7 +609,7 @@
       document.querySelectorAll('.simple-menu-list li').forEach(item => {
         item.addEventListener('click', async () => {
           try {
-            const response = await fetch(`https://barcastello.onrender.com/${category}`, {
+            const response = await fetch(`https://barcastello.onrender.com/${category}/${item.id}`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               }
@@ -630,7 +630,7 @@
       document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', async () => {
           try {
-            const response = await fetch(`https://barcastello.onrender.com/${category}`, {
+            const response = await fetch(`https://barcastello.onrender.com/${category}/${item.id}`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               }
