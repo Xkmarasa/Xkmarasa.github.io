@@ -49,7 +49,7 @@ app.post('/usuarios', async (req, res) => {
     }
 
     const user = result.rows[0];
-    const isHashed = user.Contrasena?.startsWith('$2a$');
+    const isHashed = user.contrasena?.startsWith('$2a$');
 
     // Comparación segura para Neon
     let isValid = false;
