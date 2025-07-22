@@ -125,7 +125,7 @@
       const contrasena = e.target.contrasena.value;
 
       try {
-        const res = await fetch('https://barcastello.onrender.com/usuarios', {
+        const res = await fetch('https://barcastello.onrender.com/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ usuario, contrasena })
