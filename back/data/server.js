@@ -54,14 +54,14 @@ app.post('/usuarios', async (req, res) => {
     // Comparación segura para Neon
     let isValid = false;
     if (isHashed) {
-      isValid = await bcrypt.compare(contrasena.trim(), user.Contrasena);
+      isValid = await bcrypt.compare(contrasena.trim(), user.contrasena);
     } else {
       // Modo compatibilidad (solo para desarrollo)
       isValid = contrasena.trim() === user.contrasena;
       if (isValid) {
         const hash = await bcrypt.hash(contrasena.trim(), 10);
         await pool.query(
-          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
+          'UPDATE usuarios SET "contrasena" = $1 WHERE "Usuario" = $2',
           [hash, user.Usuario]
         );
       }
@@ -111,7 +111,7 @@ app.get('/hash-passwords', async (req, res) => {
       if (!user.contrasena.startsWith('$2a$')) {
         const hash = await bcrypt.hash(user.contrasena, 10);
         await pool.query(
-          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
+          'UPDATE usuarios SET "contrasena" = $1 WHERE "Usuario" = $2',
           [hash, user.id]
         );
         updated++;
@@ -352,7 +352,7 @@ app.get('/sandwich', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener sandwich' });
   }
 });
-// Middleware para manejar errores
+// Middleware para manejar erroresS
 app.use((err, req, res, next) => {
   console.error('Error en la aplicación:', err);
   res.status(500).json({ error: 'Error interno del servidor' });
