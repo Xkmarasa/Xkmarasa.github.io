@@ -23,18 +23,6 @@ app.get('/usuarios', async (req, res) => {
   }
 });
 
-require('dotenv').config();
-const express = require('express');
-const pool = require('./db.js');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const JWT_SECRET = process.env.JWT_SECRET || 'clave-secreta-barcastello';
 
 // Endpoint para obtener todos los usuarios
 app.get('/usuarios', async (req, res) => {
