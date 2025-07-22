@@ -399,6 +399,55 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
+const categorias = [
+  'tapas', 'hamburguesas', 'bocadillos', 'cervezas',
+  'ensaladas', 'menu_infantil', 'platos_combinados',
+  'postres', 'refrescos', 'sandwich'
+];
+
+categorias.forEach((categoria) => {
+  // PUT
+  app.put(`/${categoria}/:id`, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { nombre, precio } = req.body;
+      const result = await pool.query(
+        `UPDATE ${categoria} SET nombre = $1, precio = $2 WHERE id = $3 RETURNING *`,
+        [nombre, precio, id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: `${categoria.slice(0, -1)} no encontrado` });
+      }
+
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error(`Error PUT /${categoria}/:id:`, err);
+      res.status(500).json({ error: `Error al actualizar en ${categoria}` });
+    }
+  });
+
+  // DELETE
+  app.delete(`/${categoria}/:name`, async (req, res) => {
+    try {
+      const { name } = req.params;
+      const result = await pool.query(
+        `DELETE FROM ${categoria} WHERE name = $3 RETURNING *`,
+        [name]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: `${categoria.slice(0, -1)} no encontrado` });
+      }
+
+      res.json({ mensaje: `${categoria.slice(0, -1)} eliminado correctamente` });
+    } catch (err) {
+      console.error(`Error DELETE /${categoria}/:name:`, err);
+      res.status(500).json({ error: `Error al eliminar en ${categoria}` });
+    }
+  });
+});
+
 
 
 // Iniciar servidor
