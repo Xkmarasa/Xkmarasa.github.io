@@ -407,13 +407,13 @@ const categorias = [
 
 categorias.forEach((categoria) => {
   // PUT
-  app.put(`/${categoria}/:id`, async (req, res) => {
+  app.put(`/${categoria}/:name`, async (req, res) => {
     try {
-      const { id } = req.params;
+      const { name } = req.params;
       const { nombre, precio } = req.body;
       const result = await pool.query(
-        `UPDATE ${categoria} SET nombre = $1, precio = $2 WHERE id = $3 RETURNING *`,
-        [nombre, precio, id]
+        `UPDATE ${categoria} SET nombre = $1, price = $2 WHERE name = $3 RETURNING *`,
+        [nombre, precio, name]
       );
 
       if (result.rows.length === 0) {
@@ -422,7 +422,7 @@ categorias.forEach((categoria) => {
 
       res.json(result.rows[0]);
     } catch (err) {
-      console.error(`Error PUT /${categoria}/:id:`, err);
+      console.error(`Error PUT /${categoria}/:name:`, err);
       res.status(500).json({ error: `Error al actualizar en ${categoria}` });
     }
   });
