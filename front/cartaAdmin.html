@@ -556,8 +556,8 @@
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
           li.innerHTML = `
-            <span class="item-name">${item.name}</span>
-            <span class="item-price">${item.price}€</span>
+            <span class="item-name">${item.nombre}</span>
+            <span class="item-price">${item.precio}€</span>
           `;
           container.appendChild(li);
         });
@@ -590,9 +590,9 @@
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.imagen || defaultImage}');"></div>
             <div class="menu-item-content">
-              <h3 class="item-name">${item.name}</h3>
-              ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <span class="item-price">${item.price}€</span>
+              <h3 class="item-name">${item.nombre}</h3>
+              ${item.descripcion ? `<p class="item-description">${item.descripcion}</p>` : ''}
+              <span class="item-price">${item.precio}€</span>
             </div>
           `;
           container.appendChild(div);
