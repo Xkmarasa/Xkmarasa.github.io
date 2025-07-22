@@ -12,42 +12,7 @@ app.use(express.json());
 const JWT_SECRET = 'clave-secreta-barcastello';
 
 // Endpoint para el menú completo
-app.get('/menu', async (req, res) => {
-  try {
-    const [
-      tapas, hamburguesas, bocadillos, cervezas,
-      ensaladas, menuInfantil, platosCombinados,
-      postres, refrescos, sandwich
-    ] = await Promise.all([
-      pool.query('SELECT * FROM tapas'),
-      pool.query('SELECT * FROM hamburguesas'),
-      pool.query('SELECT * FROM bocadillos'),
-      pool.query('SELECT * FROM cervezas'),
-      pool.query('SELECT * FROM ensaladas'),
-      pool.query('SELECT * FROM menu_infantil'),
-      pool.query('SELECT * FROM platos_combinados'),
-      pool.query('SELECT * FROM postres'),
-      pool.query('SELECT * FROM refrescos'),
-      pool.query('SELECT * FROM sandwich')
-    ]);
 
-    res.json({
-      tapas: tapas.rows,
-      hamburguesas: hamburguesas.rows,
-      bocadillos: bocadillos.rows,
-      cervezas: cervezas.rows,
-      ensaladas: ensaladas.rows,
-      menu_infantil: menuInfantil.rows,
-      platos_combinados: platosCombinados.rows,
-      postres: postres.rows,
-      refrescos: refrescos.rows,
-      sandwich: sandwich.rows
-    });
-  } catch (err) {
-    console.error('Error en /menu:', err);
-    res.status(500).json({ error: 'Error al cargar el menú' });
-  }
-});
 app.get('/usuarios', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM usuarios');
@@ -65,24 +30,128 @@ app.post('/usuarios', async (req, res) => {
   try {
     const { usuario, contrasena } = req.body;
 
-    if (!usuario || !contrasena) {
+    // Validación mejorada
+    if (!usuario?.trim() || !contrasena?.trim()) {
       return res.status(400).json({ error: 'Usuario y contraseña son requeridos' });
     }
 
-    const hash = await bcrypt.hash(contrasena, 10);
-    await pool.query(
-      'INSERT INTO usuarios ("Usuario", "Contrasena") VALUES ($1, $2)',
-      [usuario.trim(), hash]
+    // Consulta con parámetros para Neon
+    const query = {
+      text: 'SELECT * FROM usuarios WHERE "Usuario" = $1',
+      values: [usuario.trim()],
+      rowMode: 'object'
+    };
+
+    const result = await pool.query(query);
+    
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    const user = result.rows[0];
+    const isHashed = user.Contrasena?.startsWith('$2a$');
+
+    // Comparación segura para Neon
+    let isValid = false;
+    if (isHashed) {
+      isValid = await bcrypt.compare(contrasena.trim(), user.Contrasena);
+    } else {
+      // Modo compatibilidad (solo para desarrollo)
+      isValid = contrasena.trim() === user.Contrasena;
+      if (isValid) {
+        const hash = await bcrypt.hash(contrasena.trim(), 10);
+        await pool.query(
+          'UPDATE usuarios SET "Contrasena" = $1 WHERE "Usuario" = $2',
+          [hash, user.Usuario]
+        );
+      }
+    }
+
+    if (!isValid) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    // Generación de token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        usuario: user.Usuario
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' }
     );
 
-    res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
-  } catch (err) {
-    console.error('Error en POST /registro:', err);
-    res.status(500).json({ error: 'Error al registrar usuario' });
+    res.json({
+      mensaje: 'Login exitoso',
+      token,
+      usuario: user.Usuario
+    });
+
+  } catch (error) {
+    console.error('Error en POST /usuarios:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      // Detalles solo en desarrollo
+      detalle: process.env.NODE_ENV === 'development' ? {
+        message: error.message,
+        stack: error.stack,
+        query: error.query
+      } : null
+    });
   }
 });
 
-// Endpoints básicos para cada categoría (ejemplo con cervezas)
+// Endpoint para hashear contraseñas existentes (ejecutar solo una vez)
+app.get('/hash-passwords', async (req, res) => {
+  try {
+    const users = await pool.query('SELECT * FROM usuarios');
+    let updated = 0;
+    
+    for (const user of users.rows) {
+      if (!user.Contrasena.startsWith('$2a$')) {
+        const hash = await bcrypt.hash(user.Contrasena, 10);
+        await pool.query(
+          'UPDATE usuarios SET "Contrasena" = $1 WHERE id = $2',
+          [hash, user.id]
+        );
+        updated++;
+      }
+    }
+    
+    res.json({ message: `Contraseñas actualizadas: ${updated}` });
+  } catch (error) {
+    console.error('Error al hashear contraseñas:', error);
+    res.status(500).json({ error: 'Error al procesar contraseñas' });
+  }
+});
+
+// Endpoint del menú completo optimizado para Neon
+app.get('/menu', async (req, res) => {
+  try {
+    const queries = [
+      'tapas', 'hamburguesas', 'bocadillos', 'cervezas',
+      'ensaladas', 'menu_infantil', 'platos_combinados',
+      'postres', 'refrescos', 'sandwich'
+    ].map(table => ({
+      text: `SELECT * FROM ${table}`,
+      rowMode: 'object'
+    }));
+
+    const results = await Promise.all(
+      queries.map(q => pool.query(q).catch(e => ({ rows: [], error: e.message })))
+    );
+
+    const response = {};
+    queries.forEach((q, i) => {
+      response[q.text.split(' ')[2]] = results[i].rows;
+    });
+
+    res.json(response);
+  } catch (error) {
+    console.error('Error en GET /menu:', error);
+    res.status(500).json({ error: 'Error al cargar el menú' });
+  }
+});// Endpoints básicos para cada categoría (ejemplo con cervezas)
 app.get('/cervezas', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cervezas');
