@@ -130,3 +130,136 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio de Sesión - Bar Castelló</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8B0000;
+      --secondary: #D4AF37;
+      --light: #F8F4E9;
+      --dark: #1A1A1A;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--light);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      padding: 40px 0;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+      margin-top: -40px;
+    }
+
+    .login-box h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #a30000;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>BAR CASTELLÓ</h1>
+  </div>
+
+  <div class="login-box">
+    <h2>Iniciar Sesión</h2>
+    <form id="login-form">
+      <input type="text" name="usuario" placeholder="Usuario" required />
+      <input type="password" name="contrasena" placeholder="Contraseña" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="error" id="error-msg"></div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const usuario = e.target.usuario.value;
+      const contrasena = e.target.contrasena.value;
+
+      try {
+        const res = await fetch('https://barcastello.onrender.com/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario, contrasena })
+        });
+
+        if (!res.ok) {
+          document.getElementById('error-msg').innerText = "Credenciales inválidas.";
+          return;
+        }
+
+        const data = await res.json();
+        localStorage.setItem('token', data.token);
+        window.location.href = "/cartaDinamica.html";
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('error-msg').innerText = "Error en el servidor.";
+      }
+    });
+  </script>
+
+</body>
+</html>

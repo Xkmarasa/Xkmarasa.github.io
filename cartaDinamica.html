@@ -105,8 +105,10 @@
     }
 
     /* Estilos para la cuadrícula de menú */
+    /* Estilos para la cuadrícula de menú */
     .menu-grid {
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
@@ -133,6 +135,7 @@
     .menu-item-content {
       padding: 15px;
       position: relative;
+      position: relative;
     }
 
     .item-name {
@@ -146,6 +149,7 @@
       color: var(--secondary);
       font-weight: bold;
       font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
     }
 
     .item-description {
@@ -154,6 +158,7 @@
       margin-bottom: 10px;
     }
 
+    /* Estilos para listas simples (Tapas, Bocadillos, Refrescos, Cervezas) */
     /* Estilos para listas simples (Tapas, Bocadillos, Refrescos, Cervezas) */
     .simple-menu-list {
       list-style: none;
@@ -172,6 +177,11 @@
 
     .simple-menu-list li:hover {
       background-color: rgba(139, 0, 0, 0.05);
+      transition: background-color 0.3s ease;
+    }
+
+    .simple-menu-list li:hover {
+      background-color: rgba(139, 0, 0, 0.05);
     }
 
     .simple-menu-list li .item-name {
@@ -179,6 +189,7 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(1rem, 2.8vw, 1.1rem);
       margin: 0;
+      flex: 1;
       flex: 1;
     }
 
@@ -200,10 +211,26 @@
     .footer p {
       margin: 5px 0;
       font-size: clamp(0.8rem, 2vw, 0.9rem);
+      margin-left: 15px;
+    }
+
+    .footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+
+    .footer p {
+      margin: 5px 0;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
     }
 
     /* Media queries para móvil */
+    /* Media queries para móvil */
     @media (max-width: 480px) {
+      /* Estilos para cuadrícula en móvil */
       /* Estilos para cuadrícula en móvil */
       .menu-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -303,11 +330,13 @@
   <div class="container">
 
     <!-- Tapas (ahora como lista simple) -->
+    <!-- Tapas (ahora como lista simple) -->
     <div class="menu-section">
       <div class="section-header">
         <span class="category-icon">🍤</span>
         <h2>Tapas</h2>
       </div>
+      <ul id="tapas_lista" class="simple-menu-list"></ul>
       <ul id="tapas_lista" class="simple-menu-list"></ul>
     </div>
 
@@ -424,7 +453,9 @@
             <div class="menu-item-img" style="background-image: url('${item.image || defaultImage}');"></div>
             <div class="menu-item-content">
               <h3 class="item-name">${item.name}</h3>
+              <h3 class="item-name">${item.name}</h3>
               ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
+              <span class="item-price">${item.price}€</span>
               <span class="item-price">${item.price}€</span>
             </div>
           `;
@@ -438,10 +469,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Cargar secciones con formato de lista simple
       loadMenuSimple('tapas', 'tapas_lista');
+      // Cargar secciones con formato de lista simple
+      loadMenuSimple('tapas', 'tapas_lista');
       loadMenuSimple('cervezas', 'cervezas_lista');
       loadMenuSimple('refrescos', 'refrescos_lista');
       loadMenuSimple('bocadillos', 'bocadillos_lista');
 
+      // Cargar secciones con formato de cuadrícula
       // Cargar secciones con formato de cuadrícula
       loadMenu('ensaladas', 'ensaladas', 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=634&q=80');
       loadMenu('sandwich', 'sandwich', 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
