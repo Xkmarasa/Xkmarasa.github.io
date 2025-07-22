@@ -149,7 +149,7 @@ app.get('/hash-passwords', async (req, res) => {
       if (!user.contrasena.startsWith('$2a$')) {
         const hash = await bcrypt.hash(user.contrasena, 10);
         await pool.query(
-          'UPDATE usuarios SET "contrasena" = $1 WHERE "id" = $2',
+          'UPDATE usuarios SET "contrasena" = $1 WHERE "Usuario" = $2',
           [hash, user.id]
         );
         updated++;
