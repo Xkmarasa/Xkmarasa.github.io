@@ -253,7 +253,7 @@
 
         const data = await res.json();
         localStorage.setItem('token', data.token);
-        window.location.href = "/cartaDinamica.html";
+        window.location.href = "../cartaDinamica.html";
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('error-msg').innerText = "Error en el servidor.";
