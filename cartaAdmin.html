@@ -662,10 +662,10 @@
         const editBtn = item.querySelector('.edit-btn');
         editBtn.addEventListener('click', () => {
           showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
+            id: item.id,
+            category: item.category,
+            name: item.querySelector('.item-name').textContent,
+            price: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
           });
         });
       });
@@ -675,12 +675,12 @@
         const editBtn = item.querySelector('.edit-btn');
         editBtn.addEventListener('click', () => {
           showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
-            descripcion: item.querySelector('.item-description')?.textContent || '',
-            imagen: item.querySelector('.menu-item-img').style.backgroundImage
+            id: item.id,
+            category: item.category,
+            name: item.querySelector('.item-name').textContent,
+            price: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
+            description: item.querySelector('.item-description')?.textContent || '',
+            image: item.querySelector('.menu-item-img').style.backgroundImage
               .replace('url("', '').replace('")', '')
           });
         });
@@ -688,31 +688,38 @@
     }
 
     // Mostrar formulario de edición
-    function showEditForm(item) {
-      currentItem = item;
-      const form = document.getElementById('edit-form');
-      const overlay = document.getElementById('overlay');
-      
-      // Configurar formulario según el tipo de ítem
-      document.getElementById('item-id').value = item.id;
-      document.getElementById('item-category').value = item.category;
-      document.getElementById('item-name').value = item.name;
-      document.getElementById('item-price').value = item.price;
-      
-      // Mostrar/ocultar campos según sea necesario
-      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
-      document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
-      document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
-      
-      if (isGridItem) {
-        document.getElementById('item-description').value = item.descripcion || '';
-        document.getElementById('item-image').value = item.imagen || '';
-      }
-      
-      // Mostrar formulario
-      form.style.display = 'block';
-      overlay.style.display = 'block';
-    }
+   // Reemplaza la función showEditForm con esta versión corregida
+function showEditForm(item) {
+  currentItem = item;
+  const form = document.getElementById('edit-form');
+  const overlay = document.getElementById('overlay');
+  
+  // Configurar campos básicos (id, categoría)
+  document.getElementById('item-id').value = item.id;
+  document.getElementById('item-category').value = item.category;
+  
+  // Rellenar nombre y precio (usando item.name/item.price o item.nombre/item.precio según corresponda)
+  document.getElementById('item-name').value = item.name || item.nombre || '';
+  document.getElementById('item-price').value = item.price || item.precio || '';
+
+  // Mostrar/ocultar campos según el tipo de ítem
+  const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
+  document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
+  document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
+
+  // Rellenar descripción e imagen si es un ítem de cuadrícula
+  if (isGridItem) {
+    document.getElementById('item-description').value = item.description || item.descripcion || '';
+    document.getElementById('item-image').value = item.image || item.imagen || '';
+  }
+
+  // Actualizar título del formulario
+  form.querySelector('h3').textContent = `Editar ${item.name || item.nombre || 'Ítem'}`;
+
+  // Mostrar formulario
+  form.style.display = 'block';
+  overlay.style.display = 'block';
+}
 
     // Mostrar formulario para añadir nuevo ítem
     function showAddForm(category) {
@@ -747,14 +754,14 @@
       
       const id = document.getElementById('item-id').value;
       const category = document.getElementById('item-category').value;
-      const nombre = document.getElementById('item-name').value;
-      const precio = parseFloat(document.getElementById('item-price').value);
-      const descripcion = document.getElementById('item-description')?.value || '';
-      const imagen = document.getElementById('item-image')?.value || '';
+      const name = document.getElementById('item-name').value;
+      const price = parseFloat(document.getElementById('item-price').value);
+      const description = document.getElementById('item-description')?.value || '';
+      const image = document.getElementById('item-image')?.value || '';
       
-      const itemData = { nombre, precio };
-      if (descripcion) itemData.descripcion = descripcion;
-      if (imagen) itemData.imagen = imagen;
+      const itemData = { name, price };
+      if (description) itemData.description = description;
+      if (image) itemData.image = image;
       
       try {
         let response;
