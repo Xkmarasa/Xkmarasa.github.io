@@ -242,10 +242,10 @@ app.post('/bocadillos', async (req, res) => {
 });
 app.post('/ensaladas', async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio, descripcion, imagen } = req.body;
     const result = await pool.query(
-      'INSERT INTO ensaladas (nombre, precio) VALUES ($1, $2) RETURNING *',
-      [nombre, precio]
+      'INSERT INTO ensaladas (nombre, precio, descripcion, imagen) VALUES ($1, $2, $3, $4) RETURNING *',
+      [nombre, precio, descripcion, imagen]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -255,7 +255,7 @@ app.post('/ensaladas', async (req, res) => {
 });
 app.post('/menu_infantil', async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio, imagen} = req.body;
     const result = await pool.query(
       'INSERT INTO menu_infantil (nombre, precio) VALUES ($1, $2) RETURNING *',
       [nombre, precio]
@@ -268,10 +268,10 @@ app.post('/menu_infantil', async (req, res) => {
 });
 app.post('/platos_combinados', async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio, imagen } = req.body;
     const result = await pool.query(
-      'INSERT INTO platos_combinados (nombre, precio) VALUES ($1, $2) RETURNING *',
-      [nombre, precio]
+      'INSERT INTO platos_combinados (nombre, precio, imagen) VALUES ($1, $2, $3) RETURNING *',
+      [nombre, precio, imagen]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -281,10 +281,10 @@ app.post('/platos_combinados', async (req, res) => {
 });
 app.post('/postres', async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio, imagen } = req.body;
     const result = await pool.query(
-      'INSERT INTO postres (nombre, precio) VALUES ($1, $2) RETURNING *',
-      [nombre, precio]
+      'INSERT INTO postres (nombre, precio, imagen) VALUES ($1, $2, $3) RETURNING *',
+      [nombre, precio, imagen]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -307,10 +307,10 @@ app.post('/refrescos', async (req, res) => {
 });
 app.post('/sandwich', async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio, imagen } = req.body;
     const result = await pool.query(
-      'INSERT INTO sandwich (nombre, precio) VALUES ($1, $2) RETURNING *',
-      [nombre, precio]
+      'INSERT INTO sandwich (nombre, precio, imagen) VALUES ($1, $2, $3) RETURNING *',
+      [nombre, precio, imagen]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
