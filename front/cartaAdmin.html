@@ -526,10 +526,14 @@
         <textarea id="item-description"></textarea>
       </div>
       
-      <div class="form-group" id="image-group">
-        <label for="item-image">URL de la imagen:</label>
-        <input type="url" id="item-image">
-      </div>
+     <div class="form-group" id="image-group">
+  <label for="item-image">Imagen:</label>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    <input type="url" id="item-image" placeholder="URL de la imagen" style="flex: 1;">
+    <input type="file" id="item-file" accept="image/*">
+  </div>
+</div>
+
       
       <div class="form-actions">
         <button type="button" class="btn-delete" onclick="deleteItem()">
@@ -708,7 +712,7 @@ function showEditForm(item) {
 
   // Rellenar descripción e imagen si es un ítem de cuadrícula
   if (isGridItem) {
-    document.getElementById('item-description').value = item.description || '';
+    document.getElementById('item-description').value = item.description || 's';
     document.getElementById('item-image').value = item.image || '';
   }
 
@@ -844,6 +848,17 @@ function showEditForm(item) {
       document.getElementById('overlay').style.display = 'none';
       document.querySelector('.btn-delete').style.display = 'block';
     }
+
+     document.getElementById('item-file').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('item-image').value = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 
     // Cerrar formulario al hacer clic en el overlay
     document.getElementById('overlay').addEventListener('click', closeForm);
