@@ -533,10 +533,14 @@
         <textarea id="item-description"></textarea>
       </div>
       
-      <div class="form-group" id="image-group">
-        <label for="item-image">URL de la imagen:</label>
-        <input type="url" id="item-image">
-      </div>
+     <div class="form-group" id="image-group">
+  <label for="item-image">Imagen:</label>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    <input type="url" id="item-image" placeholder="URL de la imagen" style="flex: 1;">
+    <input type="file" id="item-file" accept="image/*">
+  </div>
+</div>
+
       
       <div class="form-actions">
         <button type="button" class="btn-delete" onclick="deleteItem()">
@@ -662,64 +666,70 @@
       }
     }
 
-    // Añadir eventos de edición a los ítems
-    function addEditEvents() {
-      // Para items de lista simple
-      document.querySelectorAll('.simple-menu-list li').forEach(item => {
-        const editBtn = item.querySelector('.edit-btn');
-        editBtn.addEventListener('click', () => {
-          showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
-          });
-        });
+    
+// Reemplaza la función addEditEvents con esta versión corregida
+function addEditEvents() {
+  // Para items de lista simple (solo nombre y precio)
+  document.querySelectorAll('.simple-menu-list li').forEach(item => {
+    const editBtn = item.querySelector('.edit-btn');
+    editBtn.addEventListener('click', () => {
+      showEditForm({
+        id: item.dataset.id, // Usar dataset.id en lugar de item.id
+        category: item.dataset.category, // Usar dataset.category
+        name: item.querySelector('.item-name').textContent,
+        price: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
       });
+    });
+  });
 
-      // Para items de cuadrícula
-      document.querySelectorAll('.menu-item').forEach(item => {
-        const editBtn = item.querySelector('.edit-btn');
-        editBtn.addEventListener('click', () => {
-          showEditForm({
-            id: item.dataset.id,
-            category: item.dataset.category,
-            nombre: item.querySelector('.item-name').textContent,
-            precio: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
-            descripcion: item.querySelector('.item-description')?.textContent || '',
-            imagen: item.querySelector('.menu-item-img').style.backgroundImage
-              .replace('url("', '').replace('")', '')
-          });
-        });
+  // Para items de cuadrícula (con descripción e imagen)
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const editBtn = item.querySelector('.edit-btn');
+    editBtn.addEventListener('click', () => {
+      showEditForm({
+        id: item.dataset.id, // Usar dataset.id
+        category: item.dataset.category, // Usar dataset.category
+        name: item.querySelector('.item-name').textContent,
+        price: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
+        description: item.querySelector('.item-description')?.textContent || '',
+        image: item.querySelector('.menu-item-img').style.backgroundImage
+          .replace('url("', '').replace('")', '')
       });
-    }
+    });
+  });
+}
 
     // Mostrar formulario de edición
-    function showEditForm(item) {
-      currentItem = item;
-      const form = document.getElementById('edit-form');
-      const overlay = document.getElementById('overlay');
-      
-      // Configurar formulario según el tipo de ítem
-      document.getElementById('item-id').value = item.id;
-      document.getElementById('item-category').value = item.category;
-      document.getElementById('item-name').value = item.name;
-      document.getElementById('item-price').value = item.price;
-      
-      // Mostrar/ocultar campos según sea necesario
-      const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
-      document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
-      document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
-      
-      if (isGridItem) {
-        document.getElementById('item-description').value = item.description || '';
-        document.getElementById('item-image').value = item.imagen || '';
-      }
-      
-      // Mostrar formulario
-      form.style.display = 'block';
-      overlay.style.display = 'block';
-    }
+   // Reemplaza la función showEditForm con esta versión corregida
+function showEditForm(item) {
+  currentItem = item;
+  const form = document.getElementById('edit-form');
+  const overlay = document.getElementById('overlay');
+  
+  // Rellenar campos básicos
+  document.getElementById('item-id').value = item.id;
+  document.getElementById('item-category').value = item.category;
+  document.getElementById('item-name').value = item.name || '';
+  document.getElementById('item-price').value = item.price || '';
+
+  // Mostrar u ocultar descripción e imagen según la categoría
+  const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
+  document.getElementById('description-group').style.display = isGridItem ? 'block' : 'none';
+  document.getElementById('image-group').style.display = isGridItem ? 'block' : 'none';
+
+  // Rellenar descripción e imagen si es un ítem de cuadrícula
+  if (isGridItem) {
+    document.getElementById('item-description').value = item.description || 's';
+    document.getElementById('item-image').value = item.image || '';
+  }
+
+  // Actualizar título del formulario
+  form.querySelector('h3').textContent = item.id ? `Editar ${item.name}` : `Añadir ítem`;
+
+  // Mostrar formulario
+  form.style.display = 'block';
+  overlay.style.display = 'block';
+}
 
     // Mostrar formulario para añadir nuevo ítem
     function showAddForm(category) {
@@ -754,14 +764,15 @@
       
       const id = document.getElementById('item-id').value;
       const category = document.getElementById('item-category').value;
-      const nombre = document.getElementById('item-name').value;
-      const precio = parseFloat(document.getElementById('item-price').value);
-      const descripcion = document.getElementById('item-description')?.value || '';
-      const imagen = document.getElementById('item-image')?.value || '';
+      const name = document.getElementById('item-name').value;
+      const price = parseFloat(document.getElementById('item-price').value);
+      const description = document.getElementById('item-description')?.value || '';
+      const image = document.getElementById('item-image')?.value || '';
       
-      const itemData = { nombre, precio };
-      if (descripcion) itemData.descripcion = descripcion;
-      if (imagen) itemData.imagen = imagen;
+      const itemData = { name, price };
+      if (description) itemData.description = description;
+      if (image) itemData.image = image;
+    
       const porUnidad = document.getElementById('item-unit').checked;
       itemData.por_unidad = porUnidad;
       
@@ -847,6 +858,17 @@
       document.getElementById('overlay').style.display = 'none';
       document.querySelector('.btn-delete').style.display = 'block';
     }
+
+     document.getElementById('item-file').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('item-image').value = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 
     // Cerrar formulario al hacer clic en el overlay
     document.getElementById('overlay').addEventListener('click', closeForm);
