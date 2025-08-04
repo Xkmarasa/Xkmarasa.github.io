@@ -516,16 +516,17 @@
         <input type="text" id="item-name" required>
       </div>
       
-      <div class="form-group">
+  <div class="form-group">
   <label for="item-price">Precio (€):</label>
-  <div style="display: flex; align-items: center; gap: 10px;">
+  <div class="price-wrapper">
     <input type="number" id="item-price" step="0.01" min="0" required>
-    <label style="display: flex; align-items: center; gap: 5px;">
-      <input type="checkbox" id="item-unit" />
-      uds
-    </label>
+  <div class="checkbox-wrapper">
+      <input type="checkbox" id="item-unit">
+      <label for="item-unit">uds</label>
+   </div>
   </div>
 </div>
+
 
       
       <div class="form-group" id="description-group">
@@ -612,6 +613,7 @@
           const li = document.createElement('li');
           li.dataset.id = item.id;
           li.dataset.category = endpoint;
+          li.dataset.porUnidad = item.por_unidad;
           li.innerHTML = `
             <span class="item-name">${item.name}</span>
             <span class="item-price">${item.price}€${item.por_unidad ? '/uds' : ''}</span>
@@ -647,12 +649,14 @@
           div.className = 'menu-item';
           div.dataset.id = item.id;
           div.dataset.category = endpoint;
+          div.dataset.porUnidad = item.por_unidad;
           div.innerHTML = `
             <div class="menu-item-img" style="background-image: url('${item.imagen || defaultImage}');"></div>
             <div class="menu-item-content">
               <h3 class="item-name">${item.name}</h3>
               ${item.description ? `<p class="item-description">${item.description}</p>` : ''}
-              <span class="item-price">${item.price}€</span>
+              <span class="item-price">${item.price}€${item.por_unidad ? '/uds' : ''}</span>
+
               <button class="edit-btn" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
                 <i class="fas fa-edit" style="color: var(--secondary);"></i>
               </button>
@@ -677,7 +681,8 @@ function addEditEvents() {
         id: item.dataset.id, // Usar dataset.id en lugar de item.id
         category: item.dataset.category, // Usar dataset.category
         name: item.querySelector('.item-name').textContent,
-        price: parseFloat(item.querySelector('.item-price').textContent.replace('€', ''))
+        price: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
+        por_unidad: item.dataset.porUnidad === 'true'
       });
     });
   });
@@ -693,7 +698,8 @@ function addEditEvents() {
         price: parseFloat(item.querySelector('.item-price').textContent.replace('€', '')),
         description: item.querySelector('.item-description')?.textContent || '',
         image: item.querySelector('.menu-item-img').style.backgroundImage
-          .replace('url("', '').replace('")', '')
+          .replace('url("', '').replace('")', ''),
+          por_unidad: item.dataset.porUnidad === 'true'
       });
     });
   });
@@ -711,6 +717,8 @@ function showEditForm(item) {
   document.getElementById('item-category').value = item.category;
   document.getElementById('item-name').value = item.name || '';
   document.getElementById('item-price').value = item.price || '';
+  document.getElementById('item-unit').checked = item.por_unidad || false;
+
 
   // Mostrar u ocultar descripción e imagen según la categoría
   const isGridItem = ['ensaladas', 'sandwich', 'menu_infantil', 'platos_combinados', 'postres'].includes(item.category);
