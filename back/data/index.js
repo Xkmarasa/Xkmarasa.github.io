@@ -23,7 +23,7 @@ app.post('/data', async (req, res) => {
   const { id, price, description, ubi, baños, tamaño, construido, terraza } = req.body;
   try {
     const { rows } = await pool.query(
-      'INSERT INTO Property (id, price, description, ubi, baños, tamaño, construido, terraza) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      'INSERT INTO property (id, price, description, ubi, baños, tamaño, construido, terraza) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [id, price, description, ubi, baños, tamaño, construido, terraza]
     );
     res.status(201).json(rows[0]);
