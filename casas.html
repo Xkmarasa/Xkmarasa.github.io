@@ -354,6 +354,104 @@
             font-size: 0.8em;
         }
 
+        /* Estilos para la página de detalles */
+        .property-detail-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .property-detail-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .property-detail-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .property-detail-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .property-detail-image:hover {
+            transform: scale(1.02);
+        }
+
+        .property-detail-info {
+            padding: 30px;
+        }
+
+        .property-detail-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: var(--dark-blue);
+        }
+
+        .property-detail-price {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .property-detail-description {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        .property-detail-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--light-blue);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feature-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+
+        .feature-label {
+            font-size: 0.9em;
+            color: var(--text-gray);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: var(--dark-blue);
+        }
+
         /* Media queries para tablets y desktop */
         @media (min-width: 768px) {
             header {
@@ -401,6 +499,11 @@
             .view-details {
                 width: auto;
             }
+
+            /* Detalle responsivo */
+            .property-detail-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            }
         }
     </style>
 </head>
@@ -412,19 +515,20 @@
         </div>
         
         <div class="nav-section">
-            <div class="nav-item">Buy</div>
-            <div class="nav-item">Sell</div>
-            <div class="nav-item">Rent</div>
-            <div class="nav-item">About</div>
-            <div class="nav-item">Contact</div>
+            <div class="nav-item" onclick="window.location.href='home.html'">Home</div>
+             <div class="nav-item" onclick="window.location.href='casas.html'">Buy</div>
+            <div class="nav-item" onclick="window.location.href='Contact.html'">Contact</div>
         </div>
     </header>
     
-    <div class="property-container" id="properties-container">
-        <div class="loading">Loading properties...</div>
+    <div id="app-content">
+        <!-- Contenido principal se cargará aquí dinámicamente -->
+        <div class="property-container" id="properties-container">
+            <div class="loading">Loading properties...</div>
+        </div>
+        
+        <div class="pagination" id="pagination-container"></div>
     </div>
-    
-    <div class="pagination" id="pagination-container"></div>
     
     <footer>
         © 2023 Mediterranean Blue International LLC. All rights reserved.
@@ -436,6 +540,16 @@
             let currentPage = 1;
             const propertiesPerPage = 10;
             
+            // Verificar si estamos en la página de detalles
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('id');
+            
+            if (propertyId) {
+                showPropertyDetail(propertyId);
+                return;
+            }
+            
+            // Cargar propiedades si estamos en la página principal
             fetch('https://xkmarasa-github-io.onrender.com/data')
                 .then(response => {
                 if (!response.ok) {
@@ -477,7 +591,7 @@
                 const endIndex = Math.min(startIndex + propertiesPerPage, allProperties.length);
                 const propertiesToShow = allProperties.slice(startIndex, endIndex);
                 
-                propertiesToShow.forEach(property => {
+                propertiesToShow.forEach((property, index) => {
                     const propertyCard = document.createElement('div');
                     propertyCard.className = 'property-card';
                     
@@ -513,12 +627,12 @@
                         const imagesArray = typeof property.imagenes === 'string' ? 
                             JSON.parse(property.imagenes) : property.imagenes;
                         
-                        imagesHTML = imagesArray.map((img, index) => `
-                            <img src="${img}" class="carousel-image ${index === 0 ? 'active' : ''}" alt="Property image ${index + 1}">
+                        imagesHTML = imagesArray.map((img, idx) => `
+                            <img src="${img}" class="carousel-image ${idx === 0 ? 'active' : ''}" alt="Property image ${idx + 1}">
                         `).join('');
                         
-                        indicatorsHTML = imagesArray.map((img, index) => `
-                            <div class="indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
+                        indicatorsHTML = imagesArray.map((img, idx) => `
+                            <div class="indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
                         `).join('');
                     }
                     
@@ -562,7 +676,7 @@
                                 ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
                             </div>
                             
-                            <a href="#" class="view-details">View Details</a>
+                            <a href="property-detail.html?id=${startIndex + index}" class="view-details">View Details</a>
                         </div>
                     `;
                     
@@ -672,6 +786,130 @@
                 
                 carousel.addEventListener('mouseleave', () => {
                     interval = setInterval(nextImage, 5000);
+                });
+            }
+            
+            function showPropertyDetail(propertyId) {
+                fetch('https://xkmarasa-github-io.onrender.com/data')
+                    .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(properties => {
+                    const property = properties[propertyId];
+                    if (!property) {
+                        document.getElementById('app-content').innerHTML = `
+                            <div class="property-detail-container">
+                                <a href="index.html" class="back-button">← Back to Properties</a>
+                                <div class="property-detail-card">
+                                    <div class="no-image" style="padding: 40px; text-align: center;">
+                                        Property not found
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Manejo de valores nulos
+                    const title = property.description ? 
+                        (property.description.split('\n')[0] || 'Luxury Property') : 
+                        'Luxury Property';
+                        
+                    const location = property.ubi || 'Prime Location';
+                    const price = property.price ? 
+                        `€${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                        'Price upon request';
+                    
+                    const description = property.description ? 
+                        property.description.split('\n').slice(1).join('\n') : 
+                        'Exceptional property with premium features and finishes in a highly desirable location.';
+                    
+                    // Manejo de imágenes
+                    let imagesHTML = '';
+                    let hasImages = false;
+                    
+                    if (property.imagenes && property.imagenes.length > 0) {
+                        hasImages = true;
+                        const imagesArray = typeof property.imagenes === 'string' ? 
+                            JSON.parse(property.imagenes) : property.imagenes;
+                        
+                        imagesHTML = imagesArray.map(img => `
+                            <img src="${img}" class="property-detail-image" alt="Property image">
+                        `).join('');
+                    }
+                    
+                    // Generar HTML de la página de detalles
+                    document.getElementById('app-content').innerHTML = `
+                        <div class="property-detail-container">
+                            <a href="index.html" class="back-button">← Back to Properties</a>
+                            <div class="property-detail-card">
+                                ${hasImages ? `
+                                    <div class="property-detail-gallery">
+                                        ${imagesHTML}
+                                    </div>
+                                ` : '<div class="no-image" style="padding: 40px; text-align: center;">No images available</div>'}
+                                
+                                <div class="property-detail-info">
+                                    <h1 class="property-detail-title">${title}</h1>
+                                    <div class="property-detail-price">${price}</div>
+                                    <div class="property-location">${location}</div>
+                                    
+                                    <p class="property-detail-description">${description.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <div class="property-detail-features">
+                                        <div class="feature-card">
+                                            <div class="feature-value">${property.baños || '3+'}</div>
+                                            <div class="feature-label">Bedrooms</div>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="feature-value">${property.baños || '2+'}</div>
+                                            <div class="feature-label">Bathrooms</div>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="feature-value">${property.tamaño || '250+'}</div>
+                                            <div class="feature-label">Total m²</div>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="feature-value">${property.construido || '180+'}</div>
+                                            <div class="feature-label">Built m²</div>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="feature-value">${property.terraza || '70+'}</div>
+                                            <div class="feature-label">Terraces m²</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Agregar funcionalidad para hacer clic en las imágenes
+                    if (hasImages) {
+                        const images = document.querySelectorAll('.property-detail-image');
+                        images.forEach(img => {
+                            img.addEventListener('click', function() {
+                                // Aquí podrías implementar un lightbox para ver la imagen en grande
+                                window.open(this.src, '_blank');
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading property details:', error);
+                    document.getElementById('app-content').innerHTML = `
+                        <div class="property-detail-container">
+                            <a href="index.html" class="back-button">← Back to Properties</a>
+                            <div class="property-detail-card">
+                                <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
+                                    Error loading property details<br>
+                                    <small>Please try again later or contact us directly</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 });
             }
         });
