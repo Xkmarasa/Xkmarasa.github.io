@@ -19,6 +19,7 @@
             --turquesa: #e0f7fa;
             --turquesa-dark: #00796b;
             --header-bg: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
+            --logo-accent: rgba(0, 121, 107, 0.35); /* tono visible pero suave */
         }
         
         * {
@@ -87,7 +88,7 @@
             left: 0;
             width: 100px;
             height: 50px;
-           border: 5px solid var(--turquesa); /* Color y grosor del borde */
+           border: 5px solid var(--logo-accent); /* Color y grosor del borde */
             border-bottom: none; /* Quitamos el borde inferior para que sea semicirculo */
         background: transparent;
             border-top-left-radius: 100px;
@@ -101,7 +102,7 @@
             left: 100px;
             width: calc(100% - 100px);
             height: 5px; /* mismo grosor que el borde del semicirculo */
-            background-color: var(--turquesa); /* mismo color que el semicirculo */
+            background-color: var(--logo-accent); /* mismo color que el semicirculo */
             border-top-left-radius: 100px;
             border-top-right-radius: 100px;
             z-index: 1;
