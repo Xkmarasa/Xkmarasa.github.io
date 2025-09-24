@@ -18,6 +18,7 @@
             --medium-gray: #e0e0e0;
             --turquesa: #e0f7fa;
             --turquesa-dark: #00796b;
+            --header-bg: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
         }
         
         * {
@@ -40,9 +41,9 @@
             align-items: center;
             justify-content: space-between;
             padding: 15px 20px;
-            background: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
+            background: var(--header-bg);
             box-shadow: none;
-            border-bottom: 1px solid var(--soft-blue);
+            border-bottom: none;
             position: relative;
             z-index: 100;
         }
@@ -69,12 +70,12 @@
             width: 100%;
             max-width: 400px;
             height: 120px;
-            background-color: var(--white);
+            background: transparent; /* igual que header para que no se note */
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0;
-            border-radius: 8px;
+            border-radius: 0;
             box-shadow: none;
             overflow: hidden;
             padding: 10px;
@@ -128,10 +129,10 @@
             justify-content: center;
             width: 100%;
             padding: 10px 15px;
-            background: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
-            border: 1px solid var(--soft-blue);
-            border-radius: 8px;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            background: var(--header-bg);
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
         }
         
         .nav-item {
