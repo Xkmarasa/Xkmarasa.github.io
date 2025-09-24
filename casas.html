@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-  <title>Mediterranean Blue International LLC | Realty</title>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
+    <title>Mediterranean Blue International LLC | Realty</title>
     <style>
         :root {
             --primary-blue: #0066cc;
@@ -17,7 +16,8 @@
             --dark-gray: #333333;
             --text-gray: #555555;
             --medium-gray: #e0e0e0;
-            --turquesa: #e0f7fa
+            --turquesa: #e0f7fa;
+            --turquesa-dark: #00796b;
         }
         
         * {
@@ -27,12 +27,12 @@
             font-family: 'Arial', sans-serif;
         }
         
-      body {
-    background: linear-gradient(to bottom, #e0f7fa 0%, #00796b 100%);
-    color: var(--dark-gray);
-    line-height: 1.6;
-    min-height: 100vh;
-}
+        body {
+            background: linear-gradient(to bottom, var(--turquesa) 0%, var(--turquesa-dark) 100%);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
         
         header {
             display: flex;
@@ -40,95 +40,97 @@
             align-items: center;
             padding: 15px 20px;
             background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid var(--medium-gray);
+            position: relative;
+            z-index: 100;
         }
-        .logo-graphic {
-  position: relative;
-  width: 400px;
-  height: 120px;
-  background-color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 20px auto;
-}
-
-.semicircle {
-  position: absolute;
-  bottom: 40px;
-  left: 0;
-  width: 100px;
-  height: 50px;
-  background-color: var(--turquesa);
-  border-top-left-radius: 100px;
-  border-top-right-radius: 100px;
-}
-
-.horizon-line {
-  position: absolute;
-  bottom: 40px;
-  left: 100px;
-  width: 300px;
-  height: 6px;
-  background-color: var(--turquesa);
-}
-
-.logo-text {
-  position: absolute;
-  bottom: 50px;
-  width: 100%;
-  text-align: center;
-}
-
-.logo-text .logo-main {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: var(--dark-blue);
-}
-
-.logo-text .logo-sub {
-  font-size: 0.8em;
-  color: var(--primary-blue);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-        .logo {
+        
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .logo-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 15px;
-            text-decoration: none;
+            width: 100%;
         }
         
-        .logo-main {
-            font-size: 1.4em;
+        .logo-graphic {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .semicircle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100px;
+            height: 50px;
+            background: linear-gradient(to right, var(--turquesa) 0%, var(--turquesa-dark) 100%);
+            border-top-left-radius: 100px;
+            border-top-right-radius: 100px;
+        }
+        
+        .horizon-line {
+            position: absolute;
+            bottom: 40px;
+            left: 100px;
+            width: calc(100% - 100px);
+            height: 6px;
+            background: linear-gradient(to right, var(--turquesa) 0%, var(--turquesa-dark) 100%);
+        }
+        
+        .logo-text {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .logo-text .logo-main {
+            font-size: 1.2em;
             font-weight: bold;
-            color: var(--turquesa);
-            letter-spacing: 0.5px;
+            color: var(--dark-blue);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         
-        .logo-sub {
+        .logo-text .logo-sub {
             font-size: 0.8em;
             color: var(--primary-blue);
             font-weight: bold;
             letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
-        .logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 0;
-    background-color: var(--bg-blue-1);
-}
         
         .nav-section {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: var(--bg-blue-1);
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
         }
         
         .nav-item {
@@ -139,12 +141,24 @@
             text-transform: uppercase;
             font-size: 0.8em;
             letter-spacing: 1px;
-            padding: 5px 10px;
+            padding: 8px 15px;
             position: relative;
+            text-decoration: none;
+            border-radius: 4px;
+            background-color: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .nav-item:hover {
             color: var(--primary-blue);
+            background-color: var(--light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
         }
         
         .property-container {
@@ -161,6 +175,12 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
         }
         
         .property-image-container {
@@ -336,6 +356,12 @@
             border-radius: 20px;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-item:hover {
+            background-color: var(--soft-blue);
+            transform: scale(1.05);
         }
         
         .view-details {
@@ -482,6 +508,13 @@
             padding: 15px;
             border-radius: 8px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            background-color: var(--soft-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         .feature-value {
@@ -515,28 +548,37 @@
         @media (min-width: 768px) {
             header {
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: center;
                 padding: 15px 40px;
             }
             
-            .logo {
+            .header-content {
                 flex-direction: row;
-                align-items: baseline;
-                margin-bottom: 0;
-                margin-right: 30px;
+                justify-content: space-between;
+                align-items: center;
             }
             
-            .logo-sub {
-                margin-left: 10px;
+            .logo-section {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 0;
+                width: auto;
+            }
+            
+            .logo-graphic {
+                margin: 0 20px 0 0;
+                width: 350px;
             }
             
             .nav-section {
-                gap: 20px;
+                width: auto;
+                padding: 5px 15px;
+                gap: 10px;
             }
             
             .nav-item {
                 font-size: 0.85em;
-                padding: 5px 0;
+                padding: 8px 15px;
             }
             
             .property-card {
@@ -564,29 +606,39 @@
                 grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             }
         }
+        
+        @media (min-width: 1024px) {
+            .logo-graphic {
+                width: 400px;
+            }
+            
+            .nav-section {
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     
     <header>
-        
-<div class="logo-graphic">
-  <div class="semicircle"></div>
-  <div class="horizon-line"></div>
-  <div class="logo-text">
-    <div class="logo-main">Mediterranean Blue International. LLC</div>
-    <div class="logo-sub">REALTY</div>
-  </div>
-</div>
-        
-       
-        
-        <div class="nav-section">
-         <a href="home.html" class="nav-item">Home</a>
-         <a href="casas.html" class="nav-item">Properties</a>
-         <a href="contact.html" class="nav-item">Contact</a>
-</div>
-          
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-graphic">
+                    <div class="semicircle"></div>
+                    <div class="horizon-line"></div>
+                    <div class="logo-text">
+                        <div class="logo-main">Mediterranean Blue International LLC</div>
+                        <div class="logo-sub">REALTY</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <a href="home.html" class="nav-item">Home</a>
+                <a href="casas.html" class="nav-item active">Properties</a>
+                <a href="contact.html" class="nav-item">Contact</a>
+            </div>
+        </div>
     </header>
     
     <div id="app-content">
@@ -634,7 +686,7 @@
                 console.error('Error loading properties:', error);
                 document.getElementById('properties-container').innerHTML = `
                     <div class="property-card">
-                        <div class="no-image" style="color: #e74c3c;">
+                        <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
                             We're currently updating our property listings<br>
                             <small>Please try again later or contact us directly</small>
                         </div>
@@ -649,7 +701,7 @@
                 if (allProperties.length === 0) {
                     container.innerHTML = `
                         <div class="property-card">
-                            <div class="no-image">No properties available at the moment</div>
+                            <div class="no-image" style="padding: 40px; text-align: center;">No properties available at the moment</div>
                         </div>
                     `;
                     return;
@@ -710,7 +762,7 @@
                             <div class="image-carousel">
                                 ${hasImages ? 
                                     imagesHTML : 
-                                    '<div class="no-image">Property Image Coming Soon</div>'
+                                    '<div class="no-image" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%); color: var(--text-gray);">Property Image Coming Soon</div>'
                                 }
                                 ${hasImages ? `
                                     <div class="carousel-nav">
@@ -983,13 +1035,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
