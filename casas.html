@@ -41,7 +41,57 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             border-bottom: 1px solid var(--medium-gray);
         }
-        
+        .logo-graphic {
+  position: relative;
+  width: 400px;
+  height: 120px;
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.semicircle {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 100px;
+  height: 50px;
+  background-color: var(--primary-blue);
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+}
+
+.horizon-line {
+  position: absolute;
+  bottom: 40px;
+  left: 100px;
+  width: 300px;
+  height: 6px;
+  background-color: var(--primary-blue);
+}
+
+.logo-text {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo-text .logo-main {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--dark-blue);
+}
+
+.logo-text .logo-sub {
+  font-size: 0.8em;
+  color: var(--primary-blue);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
         .logo {
             display: flex;
             flex-direction: column;
@@ -517,23 +567,16 @@
 <body>
     
     <header>
-         <div class="logo-container">
-        <svg width="200" height="120" viewBox="0 0 200 120">
-            <!-- Semicírculo -->
-            <path d="M 0 60 A 60 60 0 0 1 60 0" fill="var(--primary-blue)" />
-
-            <!-- Línea horizontal larga -->
-            <line x1="0" y1="60" x2="200" y2="60" stroke="var(--dark-blue)" stroke-width="4" />
-
-            <!-- Línea horizontal corta debajo -->
-            <line x1="0" y1="80" x2="60" y2="80" stroke="var(--soft-blue)" stroke-width="4" />
-
-            <!-- Texto MBIR encima de la línea -->
-            <text x="100" y="45" text-anchor="middle" font-size="24" fill="var(--dark-blue)" font-weight="bold">
-                MBIR
-            </text>
-        </svg>
-    </div>
+        
+<div class="logo-graphic">
+  <div class="semicircle"></div>
+  <div class="horizon-line"></div>
+  <div class="logo-text">
+    <div class="logo-main">Mediterranean Blue International. LLC</div>
+    <div class="logo-sub">REALTY</div>
+  </div>
+</div>
+        
         <div class="logo">
             <span class="logo-main">Mediterranean Blue International</span>
             <span class="logo-sub">LLC REALTY</span>
@@ -943,6 +986,7 @@
 </body>
 
 </html>
+
 
 
 
