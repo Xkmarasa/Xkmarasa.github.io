@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Mediterranean Blue International</title>
+    <style>
+        :root {
+            --primary-blue: #0066cc;
+            --dark-blue: #1a2a4a;
+            --light-blue: #e6f2ff;
+            --soft-blue: #b3d9ff;
+            --bg-blue-1: #f5f9ff;
+            --bg-blue-2: #e6f0fa;
+            --white: #ffffff;
+            --dark-gray: #333333;
+            --text-gray: #555555;
+            --medium-gray: #e0e0e0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--white) 0%, var(--dark-blue) 100%);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            text-decoration: none;
+        }
+        
+        .logo-main {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--dark-blue);
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-sub {
+            font-size: 0.8em;
+            color: var(--primary-blue);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .nav-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-item {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            color: var(--primary-blue);
+        }
+        
+        .contact-hero {
+            background: linear-gradient(rgba(26, 42, 74, 0.8), rgba(26, 42, 74, 0.8)), 
+                        url('https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .contact-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: var(--dark-blue);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-blue);
+        }
+        
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .contact-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .contact-name {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .contact-position {
+            color: var(--primary-blue);
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 1em;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+        
+        .contact-icon {
+            color: var(--primary-blue);
+            font-size: 1.2em;
+        }
+        
+        .contact-link {
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-link:hover {
+            color: var(--primary-blue);
+        }
+        
+        .email-item {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+        
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.8em;
+        }
+
+        /* Media queries para tablets y desktop */
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px 40px;
+            }
+            
+            .logo {
+                flex-direction: row;
+                align-items: baseline;
+                margin-bottom: 0;
+                margin-right: 30px;
+            }
+            
+            .logo-sub {
+                margin-left: 10px;
+            }
+            
+            .nav-section {
+                gap: 20px;
+            }
+            
+            .nav-item {
+                font-size: 0.85em;
+                padding: 5px 0;
+            }
+            
+            .hero-title {
+                font-size: 3.5em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.4em;
+            }
+            
+            .contact-cards {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .contact-card {
+                flex: 1;
+                min-width: 300px;
+                max-width: 48%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-main">Mediterranean Blue International</span>
+            <span class="logo-sub">LLC REALTY</span>
+        </div>
+        
+        <div class="nav-section">
+            <a href="home.html" class="nav-item">Home</a>
+            <a href="casas.html" class="nav-item">Properties</a>
+            <a href="Contact.html" class="nav-item">Contact</a>
+        </div>
+    </header>
+    
+    <section class="contact-hero">
+        <h1 class="hero-title">Contact Our Team</h1>
+        <p class="hero-subtitle">Get in touch with our experts for personalized assistance with your luxury real estate needs in Spain's Costa Blanca.</p>
+    </section>
+    
+    <section class="contact-container">
+        <h2 class="section-title">Our Contacts</h2>
+        
+        <div class="contact-cards">
+            <!-- Tarjeta de Kristine -->
+            <div class="contact-card">
+                <h3 class="contact-name">Kristine</h3>
+                <p class="contact-position">Executive Director</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <a href="tel:+19145239318" class="contact-link">+1 914-523-9318</a>
+                    </div>
+                    
+                    <div class="contact-item email-item">
+                        <span class="contact-icon">✉️</span>
+                        <a href="mailto:mblueinter@gmail.com" class="contact-link">mblueinter@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta de Rafael -->
+            <div class="contact-card">
+                <h3 class="contact-name">Rafael</h3>
+                <p class="contact-position">Attorney and Director</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <a href="tel:+34686801230" class="contact-link">+34 686 80 1230</a>
+                    </div>
+                    
+                    <div class="contact-item email-item">
+                        <span class="contact-icon">✉️</span>
+                        <a href="mailto:mblueinter@gmail.com" class="contact-link">mblueinter@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        © 2023 Mediterranean Blue International LLC. All rights reserved.
+    </footer>
+</body>
+</html>

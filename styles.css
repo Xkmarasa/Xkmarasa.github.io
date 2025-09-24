@@ -1,0 +1,58 @@
+/* Estilos base (iguales a tu ejemplo) */
+body { font-family: 'Roboto', sans-serif; }
+h1 { font-family: 'Playfair Display', serif; }
+
+/* Colores de categorías */
+#tapas-container h2 { color: #5a2d07; }
+#hamburguesas-container h2 { color: #7b4f2c; }
+#bebidas-container h2 { color: #d4af37; }
+
+/* Responsive: 2 columnas en pantallas grandes */
+@media (min-width: 768px) {
+    .category-container { 
+        width: 48%; 
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+.simple-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.simple-menu-list li {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.simple-menu-list li:last-child {
+  border-bottom: none;
+}
+
+.simple-menu-list .item-name {
+  font-weight: 500;
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+.simple-menu-list .item-price {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--secondary);
+}
+
+.simple-menu-list .item-separator {
+  flex: 1;
+  border-bottom: 1px dotted rgba(0,0,0,0.3);
+  margin: 0 10px;
+}
