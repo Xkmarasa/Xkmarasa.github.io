@@ -799,7 +799,7 @@
                                 ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
                             </div>
                             
-                            <a href="property-detail.html?id=${startIndex + index}" class="view-details">View Details</a>
+                            <a href="casas.html?id=${startIndex + index}" class="view-details">View Details</a>
                         </div>
                     `;
                     
@@ -925,7 +925,7 @@
                     if (!property) {
                         document.getElementById('app-content').innerHTML = `
                             <div class="property-detail-container">
-                                <a href="index.html" class="back-button">← Back to Properties</a>
+                                <a href="casas.html" class="back-button">← Back to Properties</a>
                                 <div class="property-detail-card">
                                     <div class="no-image" style="padding: 40px; text-align: center;">
                                         Property not found
@@ -967,7 +967,7 @@
                     // Generar HTML de la página de detalles
                     document.getElementById('app-content').innerHTML = `
                         <div class="property-detail-container">
-                            <a href="index.html" class="back-button">← Back to Properties</a>
+                            <a href="casas.html" class="back-button">← Back to Properties</a>
                             <div class="property-detail-card">
                                 ${hasImages ? `
                                     <div class="property-detail-gallery">
