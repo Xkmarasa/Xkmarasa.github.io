@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Mediterranean Blue International LLC | Realty</title>
+    <style>
+        :root {
+            --primary-blue: #0066cc;
+            --dark-blue: #1a2a4a;
+            --light-blue: #e6f2ff;
+            --soft-blue: #b3d9ff;
+            --bg-blue-1: #f5f9ff;
+            --bg-blue-2: #e6f0fa;
+            --white: #ffffff;
+            --dark-gray: #333333;
+            --text-gray: #555555;
+            --medium-gray: #e0e0e0;
+            --turquesa: #e0f7fa;
+            --turquesa-dark: #00796b;
+            --header-bg: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
+            --logo-accent: rgba(0, 121, 107, 0.35);
+            --admin-red: #dc3545;
+            --admin-green: #28a745;
+            --admin-orange: #fd7e14;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--turquesa) 0%, var(--turquesa-dark) 100%);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: var(--header-bg);
+            box-shadow: none;
+            border-bottom: none;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: none;
+        }
+        
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 0;
+            width: auto;
+        }
+        
+        .logo-graphic {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            padding: 10px;
+        }
+        
+        .semicircle {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100px;
+            height: 50px;
+           border: 5px solid var(--logo-accent);
+            border-bottom: none;
+        background: transparent;
+            border-top-left-radius: 100px;
+            border-top-right-radius: 100px;
+            z-index: 1;
+        }
+        
+        .horizon-line {
+            position: absolute;
+            bottom: 40px;
+            left: 100px;
+            width: calc(100% - 100px);
+            height: 5px;
+            background-color: var(--logo-accent);
+            border-top-left-radius: 100px;
+            border-top-right-radius: 100px;
+            z-index: 1;
+        }
+        
+        .logo-text { position: relative; z-index: 2; }
+        .logo-text .logo-main {
+            width: 100%;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--dark-blue);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            margin-top: 6px;
+        }
+        
+        .nav-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 15px;
+            background: var(--header-bg);
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        
+        .nav-item {
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+            padding: 8px 15px;
+            position: relative;
+            text-decoration: none;
+            border-radius: 4px;
+            background-color: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-item:hover {
+            color: var(--primary-blue);
+            background-color: var(--light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        /* Admin Panel Styles */
+        .admin-header {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .admin-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--white);
+            margin: 0 15px 20px 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .admin-btn.settings {
+            background-color: var(--admin-orange);
+            color: var(--white);
+        }
+
+        .admin-btn.settings:hover {
+            background-color: #e86d0a;
+            transform: translateY(-2px);
+        }
+
+        .admin-btn.add {
+            background-color: var(--admin-green);
+            color: var(--white);
+        }
+
+        .admin-btn.add:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .admin-btn.edit {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 8px 12px;
+            font-size: 0.8em;
+        }
+
+        .admin-btn.edit:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-1px);
+        }
+
+        .admin-btn.delete {
+            background-color: var(--admin-red);
+            color: var(--white);
+            padding: 8px 12px;
+            font-size: 0.8em;
+        }
+
+        .admin-btn.delete:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+        
+        .property-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        
+        .property-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .property-actions {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            gap: 8px;
+            z-index: 20;
+        }
+        
+        .property-image-container {
+            position: relative;
+            height: 250px;
+        }
+        
+        .property-details-container {
+            padding: 25px;
+        }
+        
+        .image-carousel {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+        }
+        
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .carousel-image.active {
+            opacity: 1;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 10px;
+            z-index: 10;
+        }
+        
+        .carousel-btn {
+            background: rgba(0, 102, 204, 0.8);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        
+        .carousel-btn:hover {
+            background: var(--primary-blue);
+            transform: scale(1.1);
+        }
+        
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator.active {
+            background-color: var(--white);
+            transform: scale(1.2);
+        }
+        
+        .property-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: var(--dark-blue);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .property-location {
+            font-size: 1em;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+        }
+        
+        .property-location:before {
+            content: '📍';
+            margin-right: 8px;
+            font-size: 0.9em;
+        }
+        
+        .property-description {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: var(--text-gray);
+            font-size: 0.95em;
+        }
+        
+        .property-features {
+            margin-bottom: 20px;
+            padding-left: 15px;
+        }
+        
+        .property-features li {
+            margin-bottom: 10px;
+            list-style-type: none;
+            position: relative;
+            padding-left: 20px;
+            color: var(--dark-gray);
+            line-height: 1.4;
+            font-size: 0.9em;
+        }
+        
+        .property-features li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-size: 1.5em;
+            line-height: 0;
+        }
+        
+        .property-price {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+        }
+        
+        .property-price:before {
+            content: '€';
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        
+        .property-details {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 0.8em;
+        }
+        
+        .detail-item {
+            font-weight: bold;
+            color: var(--dark-blue);
+            background-color: var(--light-blue);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-item:hover {
+            background-color: var(--soft-blue);
+            transform: scale(1.05);
+        }
+        
+        .view-details {
+            display: inline-block;
+            text-align: center;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8em;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .view-details:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-blue);
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin: 0;
+        }
+
+        .close {
+            color: var(--text-gray);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--admin-red);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark-blue);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--light-blue);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            color: var(--dark-gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-gray);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background-color: var(--admin-red);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1em;
+            color: var(--text-gray);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            background-color: var(--white);
+            color: var(--dark-blue);
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .page-btn:hover {
+            background-color: var(--light-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+        }
+
+        /* Media queries para tablets y desktop */
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px 40px;
+            }
+            
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .logo-section {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 0;
+                width: auto;
+            }
+            
+            .logo-graphic {
+                margin: 0 20px 0 0;
+                width: 350px;
+            }
+            
+            .nav-section {
+                width: auto;
+                padding: 8px 18px;
+                gap: 10px;
+            }
+            
+            .nav-item {
+                font-size: 0.85em;
+                padding: 8px 15px;
+            }
+            
+            .property-card {
+                flex-direction: row;
+                min-height: 400px;
+            }
+            
+            .property-image-container {
+                flex: 1;
+                height: auto;
+                min-width: 50%;
+            }
+            
+            .property-details-container {
+                flex: 1;
+                padding: 30px;
+            }
+            
+            .view-details {
+                width: auto;
+            }
+
+            .admin-controls {
+                margin: 0 auto 20px auto;
+                max-width: 1200px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .logo-graphic {
+                width: 400px;
+            }
+            
+            .nav-section {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-graphic">
+                    <div class="semicircle"></div>
+                    <div class="horizon-line"></div>
+                    <div class="logo-text">
+                        <div class="logo-main">Mediterranean Blue International LLC | Realty</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <a href="home.html" class="nav-item">Home</a>
+                <a href="casas.html" class="nav-item">Properties</a>
+                <a href="Contact.html" class="nav-item">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-header">
+        <h1>Admin Panel - Property Management</h1>
+        <p>Manage your property listings</p>
+    </div>
+    
+    <div class="admin-controls">
+        <button class="admin-btn settings" onclick="openSettingsModal()">
+            <span>⚙️</span>
+            Settings
+        </button>
+        
+        <div style="flex: 1;"></div>
+        
+        <button class="admin-btn add" onclick="openPropertyModal()">
+            <span>➕</span>
+            Add New Property
+        </button>
+    </div>
+    
+    <div id="app-content">
+        <div class="property-container" id="properties-container">
+            <div class="loading">Loading properties...</div>
+        </div>
+        
+        <div class="pagination" id="pagination-container"></div>
+    </div>
+
+    <!-- Property Form Modal -->
+    <div id="propertyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="propertyModalTitle">Add New Property</h2>
+                <span class="close" onclick="closeModal('propertyModal')">&times;</span>
+            </div>
+            
+            <form id="propertyForm">
+                <div class="form-group">
+                    <label for="propertyName">Property Name:</label>
+                    <input type="text" id="propertyName" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyDescription">Description:</label>
+                    <textarea id="propertyDescription" name="description" placeholder="Enter property description (first line will be used as title)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyUbi">Location (Ubi):</label>
+                    <input type="text" id="propertyUbi" name="ubi" placeholder="Property location">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyPrice">Price (€):</label>
+                    <input type="number" id="propertyPrice" name="price" placeholder="Property price in euros">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyBanos">Bedrooms:</label>
+                    <input type="number" id="propertyBanos" name="baños" placeholder="Number of bedrooms">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyBathrooms">Bathrooms:</label>
+                    <input type="number" id="propertyBathrooms" name="bathrooms" placeholder="Number of bathrooms">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyTamano">Total Size (m²):</label>
+                    <input type="number" id="propertyTamano" name="tamaño" placeholder="Total property size">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyConstruido">Built Size (m²):</label>
+                    <input type="number" id="propertyConstruido" name="construido" placeholder="Built area size">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyTerraza">Terrace Size (m²):</label>
+                    <input type="number" id="propertyTerraza" name="terraza" placeholder="Terrace area size">
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyImages">Images (one URL per line):</label>
+                    <textarea id="propertyImages" name="images" placeholder="Enter image URLs, one per line"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('propertyModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Property</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Admin Settings</h2>
+                <span class="close" onclick="closeModal('settingsModal')">&times;</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Database Actions:</label>
+                <div style="display: flex; gap: 15px; margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="exportData()">Export Properties</button>
+                    <button class="btn btn-secondary" onclick="importData()">Import Properties</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>System Information:</label>
+                <div style="background-color: var(--light-blue); padding: 15px; border-radius: 6px; margin-top: 10px;">
+                    <p><strong>Total Properties:</strong> <span id="totalProperties">-</span></p>
+                    <p><strong>Last Updated:</strong> <span id="lastUpdated">-</span></p>
+                    <p><strong>API Endpoint:</strong> https://xkmarasa-github-io.onrender.com/data</p>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('settingsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        © 2023 Mediterranean Blue International LLC. All rights reserved.
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let allProperties = [];
+            let currentPage = 1;
+            const propertiesPerPage = 10;
+            let editingPropertyIndex = null;
+            
+            // Load properties
+            loadProperties();
+            
+            // Form submission
+            document.getElementById('propertyForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProperty();
+            });
+            
+            function loadProperties() {
+                fetch('https://xkmarasa-github-io.onrender.com/data')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(properties => {
+                        allProperties = properties;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        updateSystemInfo();
+                    })
+                    .catch(error => {
+                        console.error('Error loading properties:', error);
+                        document.getElementById('properties-container').innerHTML = `
+                            <div class="property-card">
+                                <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
+                                    Error loading properties<br>
+                                    <small>Please try again later or contact support</small>
+                                </div>
+                            </div>
+                        `;
+                    });
+            }
+            
+            function updatePropertiesDisplay() {
+                const container = document.getElementById('properties-container');
+                container.innerHTML = '';
+                
+                if (allProperties.length === 0) {
+                    container.innerHTML = `
+                        <div class="property-card">
+                            <div class="no-image" style="padding: 40px; text-align: center;">No properties available</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const startIndex = (currentPage - 1) * propertiesPerPage;
+                const endIndex = Math.min(startIndex + propertiesPerPage, allProperties.length);
+                const propertiesToShow = allProperties.slice(startIndex, endIndex);
+                
+                propertiesToShow.forEach((property, index) => {
+                    const globalIndex = startIndex + index;
+                    const propertyCard = document.createElement('div');
+                    propertyCard.className = 'property-card';
+                    
+                    const title = property.description ? 
+                        (property.description.split('\n')[0] || 'Luxury Property') : 
+                        'Luxury Property';
+                        
+                    const name = property.name || 'Luxury Property';
+                    const location = property.ubi || 'Prime Location';
+                    const price = property.price ? 
+                        `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                        'Price upon request';
+                    
+                    const description = property.description ? 
+                        property.description.split('\n').slice(1).join('\n') : 
+                        'Exceptional property with premium features and finishes in a highly desirable location.';
+                        
+                    const features = property.description ? 
+                        property.description.split('\n').slice(1, 4) : [
+                            'Premium quality construction and materials',
+                            'Excellent location with convenient access',
+                            'Thoughtfully designed living spaces'
+                        ];
+                    
+                    let imagesHTML = '';
+                    let indicatorsHTML = '';
+                    let hasImages = false;
+                    
+                    if (property.imagenes && property.imagenes.length > 0) {
+                        hasImages = true;
+                        const imagesArray = typeof property.imagenes === 'string' ? 
+                            JSON.parse(property.imagenes) : property.imagenes;
+                        
+                        imagesHTML = imagesArray.map((img, idx) => `
+                            <img src="${img}" class="carousel-image ${idx === 0 ? 'active' : ''}" alt="Property image ${idx + 1}">
+                        `).join('');
+                        
+                        indicatorsHTML = imagesArray.map((img, idx) => `
+                            <div class="indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
+                        `).join('');
+                    }
+                    
+                    propertyCard.innerHTML = `
+                        <div class="property-actions">
+                            <button class="admin-btn edit" onclick="editProperty(${globalIndex})" title="Edit Property">
+                                <span>✏️</span>
+                            </button>
+                            <button class="admin-btn delete" onclick="deleteProperty(${globalIndex})" title="Delete Property">
+                                <span>🗑️</span>
+                            </button>
+                        </div>
+                        
+                        <div class="property-image-container">
+                            <div class="image-carousel">
+                                ${hasImages ? 
+                                    imagesHTML : 
+                                    '<div class="no-image" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%); color: var(--text-gray);">Property Image Coming Soon</div>'
+                                }
+                                ${hasImages ? `
+                                    <div class="carousel-nav">
+                                        <button class="carousel-btn prev">‹</button>
+                                        <button class="carousel-btn next">›</button>
+                                    </div>
+                                    <div class="carousel-indicators">
+                                        ${indicatorsHTML}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="property-details-container">
+                            <h1 class="property-title">${title}</h1>
+                            
+                            <p class="property-description">${name}</p>
+                            <p class="property-summary">${description.replace(/\n/g, '<br>')}</p>
+                            <div class="property-location">${location}</div>
+                            
+                            <ul class="property-features">
+                                ${features.map(feature => `<li>${feature}</li>`).join('')}
+                            </ul>
+                            
+                            <div class="property-price">${price}</div>
+                            
+                            <div class="property-details">
+                                ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
+                                ${property.baños ? `<span class="detail-item">${property.baños} Baths</span>` : '<span class="detail-item">2+ Baths</span>'}
+                                ${property.tamaño ? `<span class="detail-item">${property.tamaño} m² Total</span>` : '<span class="detail-item">250+ m² Total</span>'}
+                                ${property.construido ? `<span class="detail-item">${property.construido} m² Built</span>` : '<span class="detail-item">180+ m² Built</span>'}
+                                ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
+                            </div>
+                            
+                            <a href="casas.html?id=${globalIndex}" class="view-details">View Details</a>
+                        </div>
+                    `;
+                    
+                    container.appendChild(propertyCard);
+                    
+                    if (hasImages) {
+                        initCarousel(propertyCard);
+                    }
+                });
+            }
+            
+            function setupPagination() {
+                const totalPages = Math.ceil(allProperties.length / propertiesPerPage);
+                const paginationContainer = document.getElementById('pagination-container');
+                paginationContainer.innerHTML = '';
+                
+                if (totalPages <= 1) return;
+                
+                const prevBtn = document.createElement('button');
+                prevBtn.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
+                prevBtn.textContent = 'Previous';
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+                paginationContainer.appendChild(prevBtn);
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    });
+                    paginationContainer.appendChild(pageBtn);
+                }
+                
+                const nextBtn = document.createElement('button');
+                nextBtn.className = `page-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+                nextBtn.textContent = 'Next';
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+                paginationContainer.appendChild(nextBtn);
+            }
+            
+            function initCarousel(propertyCard) {
+                const carousel = propertyCard.querySelector('.image-carousel');
+                const images = carousel.querySelectorAll('.carousel-image');
+                const prevBtn = carousel.querySelector('.prev');
+                const nextBtn = carousel.querySelector('.next');
+                const indicators = carousel.querySelectorAll('.indicator');
+                
+                let currentIndex = 0;
+                
+                function showImage(index) {
+                    images.forEach(img => img.classList.remove('active'));
+                    indicators.forEach(ind => ind.classList.remove('active'));
+                    
+                    images[index].classList.add('active');
+                    indicators[index].classList.add('active');
+                    currentIndex = index;
+                }
+                
+                function nextImage() {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    showImage(currentIndex);
+                }
+                
+                function prevImage() {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    showImage(currentIndex);
+                }
+                
+                if (nextBtn) nextBtn.addEventListener('click', nextImage);
+                if (prevBtn) prevBtn.addEventListener('click', prevImage);
+                
+                indicators.forEach(indicator => {
+                    indicator.addEventListener('click', () => {
+                        showImage(parseInt(indicator.dataset.index));
+                    });
+                });
+                
+                let interval = setInterval(nextImage, 5000);
+                
+                carousel.addEventListener('mouseenter', () => {
+                    clearInterval(interval);
+                });
+                
+                carousel.addEventListener('mouseleave', () => {
+                    interval = setInterval(nextImage, 5000);
+                });
+            }
+            
+            function updateSystemInfo() {
+                document.getElementById('totalProperties').textContent = allProperties.length;
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+            }
+            
+            // Modal functions
+            window.openPropertyModal = function() {
+                editingPropertyIndex = null;
+                document.getElementById('propertyModalTitle').textContent = 'Add New Property';
+                document.getElementById('propertyForm').reset();
+                document.getElementById('propertyModal').style.display = 'block';
+            };
+            
+            window.editProperty = function(index) {
+                editingPropertyIndex = index;
+                const property = allProperties[index];
+                
+                document.getElementById('propertyModalTitle').textContent = 'Edit Property';
+                document.getElementById('propertyName').value = property.name || '';
+                document.getElementById('propertyDescription').value = property.description || '';
+                document.getElementById('propertyUbi').value = property.ubi || '';
+                document.getElementById('propertyPrice').value = property.price || '';
+                document.getElementById('propertyBanos').value = property.baños || '';
+                document.getElementById('propertyBathrooms').value = property.bathrooms || '';
+                document.getElementById('propertyTamano').value = property.tamaño || '';
+                document.getElementById('propertyConstruido').value = property.construido || '';
+                document.getElementById('propertyTerraza').value = property.terraza || '';
+                
+                if (property.imagenes) {
+                    const imagesArray = typeof property.imagenes === 'string' ? 
+                        JSON.parse(property.imagenes) : property.imagenes;
+                    document.getElementById('propertyImages').value = imagesArray.join('\n');
+                }
+                
+                document.getElementById('propertyModal').style.display = 'block';
+            };
+            
+            window.deleteProperty = function(index) {
+                if (confirm('Are you sure you want to delete this property?')) {
+                    allProperties.splice(index, 1);
+                    updatePropertiesDisplay();
+                    setupPagination();
+                    updateSystemInfo();
+                    alert('Property deleted successfully!');
+                }
+            };
+            
+            window.openSettingsModal = function() {
+                document.getElementById('settingsModal').style.display = 'block';
+            };
+            
+            window.closeModal = function(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+            };
+            
+            window.exportData = function() {
+                const dataStr = JSON.stringify(allProperties, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'properties-backup.json';
+                link.click();
+                URL.revokeObjectURL(url);
+            };
+            
+            window.importData = function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            try {
+                                const importedData = JSON.parse(e.target.result);
+                                allProperties = importedData;
+                                updatePropertiesDisplay();
+                                setupPagination();
+                                updateSystemInfo();
+                                alert('Properties imported successfully!');
+                            } catch (error) {
+                                alert('Error importing data: ' + error.message);
+                            }
+                        };
+                        reader.readAsText(file);
+                    }
+                };
+                input.click();
+            };
+            
+            function saveProperty() {
+                const formData = new FormData(document.getElementById('propertyForm'));
+                const propertyData = {
+                    name: formData.get('name'),
+                    description: formData.get('description'),
+                    ubi: formData.get('ubi'),
+                    price: parseFloat(formData.get('price')) || null,
+                    baños: parseInt(formData.get('baños')) || null,
+                    bathrooms: parseInt(formData.get('bathrooms')) || null,
+                    tamaño: parseInt(formData.get('tamaño')) || null,
+                    construido: parseInt(formData.get('construido')) || null,
+                    terraza: parseInt(formData.get('terraza')) || null,
+                    imagenes: []
+                };
+                
+                const imagesText = formData.get('images');
+                if (imagesText) {
+                    propertyData.imagenes = imagesText.split('\n')
+                        .map(url => url.trim())
+                        .filter(url => url.length > 0);
+                }
+                
+                if (editingPropertyIndex !== null) {
+                    allProperties[editingPropertyIndex] = propertyData;
+                    alert('Property updated successfully!');
+                } else {
+                    allProperties.push(propertyData);
+                    alert('Property added successfully!');
+                }
+                
+                updatePropertiesDisplay();
+                setupPagination();
+                updateSystemInfo();
+                closeModal('propertyModal');
+            }
+            
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            };
+        });
+    </script>
+</body>
+</html>
