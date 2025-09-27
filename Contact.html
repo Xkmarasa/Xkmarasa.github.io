@@ -6,20 +6,37 @@
     <title>Contact Us | Mediterranean Blue International</title>
     <style>
         :root {
-            --primary-blue: #0066cc;
-            --dark-blue: #1a2a4a;
-            --light-blue: #e6f2ff;
-            --soft-blue: #b3d9ff;
-            --bg-blue-1: #f5f9ff;
-            --bg-blue-2: #e6f0fa;
-            --white: #ffffff;
-            --dark-gray: #333333;
-            --text-gray: #555555;
-            --medium-gray: #e0e0e0;
-            --turquesa: #e0f7fa;
-            --turquesa-dark: #00796b;
-            --header-bg: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
-            --logo-accent: rgba(0, 121, 107, 0.35);
+            /* Elegant Turquoise Palette */
+            --primary-turquoise: #20B2AA;
+            --dark-turquoise: #008B8B;
+            --light-turquoise: #E0FFFF;
+            --soft-turquoise: #B0E0E6;
+            --pale-turquoise: #F0FFFF;
+            --medium-turquoise: #48CAE4;
+            --deep-turquoise: #007F7F;
+            
+            /* Complementary Colors */
+            --white: #FFFFFF;
+            --cream: #FDFDFD;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E9ECEF;
+            --text-gray: #495057;
+            --dark-gray: #212529;
+            --charcoal: #343A40;
+            
+            /* Accent Colors */
+            --gold-accent: #D4AF37;
+            --silver-accent: #C0C0C0;
+            --pearl-accent: #F8F8FF;
+            
+            /* Background Gradients */
+            --header-bg: linear-gradient(135deg, var(--pale-turquoise) 0%, var(--light-turquoise) 50%, var(--soft-turquoise) 100%);
+            --body-bg: linear-gradient(180deg, var(--pale-turquoise) 0%, var(--light-turquoise) 100%);
+            --card-bg: var(--white);
+            --hover-bg: var(--light-gray);
+            
+            /* Logo Accent */
+            --logo-accent: var(--primary-turquoise);
         }
         
         * {
@@ -30,10 +47,11 @@
         }
         
         body {
-            background: linear-gradient(to bottom, var(--turquesa) 0%, var(--turquesa-dark) 100%);
-            color: var(--dark-gray);
-            line-height: 1.6;
+            background: var(--body-bg);
+            color: var(--text-gray);
+            line-height: 1.7;
             min-height: 100vh;
+            font-weight: 400;
         }
         
         header {
@@ -161,13 +179,14 @@
         }
         
         .contact-hero {
-            background: linear-gradient(rgba(26, 42, 74, 0.8), rgba(26, 42, 74, 0.8)), 
+            background: linear-gradient(rgba(0, 139, 139, 0.85), rgba(0, 127, 127, 0.85)), 
                         url('https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             color: var(--white);
             padding: 80px 20px;
             text-align: center;
+            box-shadow: 0 4px 20px rgba(32, 178, 170, 0.2);
         }
         
         .hero-title {
@@ -191,12 +210,14 @@
         }
         
         .section-title {
-            font-size: 2em;
-            color: var(--dark-blue);
+            font-size: 2.2em;
+            color: var(--dark-turquoise);
             margin-bottom: 30px;
             text-align: center;
             position: relative;
             padding-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .section-title:after {
@@ -205,9 +226,10 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary-blue);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-turquoise) 0%, var(--medium-turquoise) 100%);
+            border-radius: 2px;
         }
         
         .contact-cards {
@@ -218,27 +240,38 @@
         }
         
         .contact-card {
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(32, 178, 170, 0.08);
             padding: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            border: 1px solid var(--light-gray);
+            transition: all 0.4s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 35px rgba(32, 178, 170, 0.15);
+            border-color: var(--primary-turquoise);
         }
         
         .contact-name {
-            font-size: 1.8em;
-            color: var(--dark-blue);
-            margin-bottom: 10px;
+            font-size: 1.9em;
+            color: var(--dark-turquoise);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .contact-position {
-            color: var(--primary-blue);
-            font-weight: bold;
+            color: var(--primary-turquoise);
+            font-weight: 600;
             margin-bottom: 25px;
-            font-size: 1em;
+            font-size: 1.1em;
+            text-shadow: 0 1px 2px rgba(32, 178, 170, 0.1);
         }
         
         .contact-info {
@@ -257,8 +290,8 @@
         }
         
         .contact-icon {
-            color: var(--primary-blue);
-            font-size: 1.2em;
+            color: var(--primary-turquoise);
+            font-size: 1.3em;
         }
         
         .contact-link {
@@ -268,7 +301,8 @@
         }
         
         .contact-link:hover {
-            color: var(--primary-blue);
+            color: var(--primary-turquoise);
+            text-shadow: 0 1px 2px rgba(32, 178, 170, 0.2);
         }
         
         .email-item {

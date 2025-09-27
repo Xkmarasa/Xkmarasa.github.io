@@ -6,23 +6,42 @@
     <title>Admin Panel | Mediterranean Blue International LLC | Realty</title>
     <style>
         :root {
-            --primary-blue: #0066cc;
-            --dark-blue: #1a2a4a;
-            --light-blue: #e6f2ff;
-            --soft-blue: #b3d9ff;
-            --bg-blue-1: #f5f9ff;
-            --bg-blue-2: #e6f0fa;
-            --white: #ffffff;
-            --dark-gray: #333333;
-            --text-gray: #555555;
-            --medium-gray: #e0e0e0;
-            --turquesa: #e0f7fa;
-            --turquesa-dark: #00796b;
-            --header-bg: linear-gradient(90deg, var(--turquesa) 0%, var(--bg-blue-2) 100%);
-            --logo-accent: rgba(0, 121, 107, 0.35);
-            --admin-red: #dc3545;
-            --admin-green: #28a745;
-            --admin-orange: #fd7e14;
+            /* Elegant Turquoise Palette */
+            --primary-turquoise: #20B2AA;
+            --dark-turquoise: #008B8B;
+            --light-turquoise: #E0FFFF;
+            --soft-turquoise: #B0E0E6;
+            --pale-turquoise: #F0FFFF;
+            --medium-turquoise: #48CAE4;
+            --deep-turquoise: #007F7F;
+            
+            /* Complementary Colors */
+            --white: #FFFFFF;
+            --cream: #FDFDFD;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E9ECEF;
+            --text-gray: #495057;
+            --dark-gray: #212529;
+            --charcoal: #343A40;
+            
+            /* Accent Colors */
+            --gold-accent: #D4AF37;
+            --silver-accent: #C0C0C0;
+            --pearl-accent: #F8F8FF;
+            
+            /* Admin Colors */
+            --admin-red: #E74C3C;
+            --admin-green: #27AE60;
+            --admin-orange: #F39C12;
+            
+            /* Background Gradients */
+            --header-bg: linear-gradient(135deg, var(--pale-turquoise) 0%, var(--light-turquoise) 50%, var(--soft-turquoise) 100%);
+            --body-bg: linear-gradient(180deg, var(--pale-turquoise) 0%, var(--light-turquoise) 100%);
+            --card-bg: var(--white);
+            --hover-bg: var(--light-gray);
+            
+            /* Logo Accent */
+            --logo-accent: var(--primary-turquoise);
         }
         
         * {
@@ -33,10 +52,11 @@
         }
         
         body {
-            background: linear-gradient(to bottom, var(--turquesa) 0%, var(--turquesa-dark) 100%);
-            color: var(--dark-gray);
-            line-height: 1.6;
+            background: var(--body-bg);
+            color: var(--text-gray);
+            line-height: 1.7;
             min-height: 100vh;
+            font-weight: 400;
         }
         
         header {
@@ -165,11 +185,12 @@
 
         /* Admin Panel Styles */
         .admin-header {
-            background-color: var(--dark-blue);
+            background: linear-gradient(135deg, var(--dark-turquoise) 0%, var(--deep-turquoise) 100%);
             color: var(--white);
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(32, 178, 170, 0.2);
         }
 
         .admin-header h1 {
@@ -203,47 +224,55 @@
         }
 
         .admin-btn.settings {
-            background-color: var(--admin-orange);
+            background: linear-gradient(135deg, var(--admin-orange) 0%, #E67E22 100%);
             color: var(--white);
+            box-shadow: 0 3px 12px rgba(243, 156, 18, 0.3);
         }
 
         .admin-btn.settings:hover {
-            background-color: #e86d0a;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 18px rgba(243, 156, 18, 0.4);
         }
 
         .admin-btn.add {
-            background-color: var(--admin-green);
+            background: linear-gradient(135deg, var(--admin-green) 0%, #229954 100%);
             color: var(--white);
+            box-shadow: 0 3px 12px rgba(39, 174, 96, 0.3);
         }
 
         .admin-btn.add:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #229954 0%, #1E8449 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 18px rgba(39, 174, 96, 0.4);
         }
 
         .admin-btn.edit {
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--medium-turquoise) 100%);
             color: var(--white);
             padding: 8px 12px;
             font-size: 0.8em;
+            box-shadow: 0 2px 8px rgba(32, 178, 170, 0.3);
         }
 
         .admin-btn.edit:hover {
-            background-color: var(--dark-blue);
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, var(--dark-turquoise) 0%, var(--deep-turquoise) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.4);
         }
 
         .admin-btn.delete {
-            background-color: var(--admin-red);
+            background: linear-gradient(135deg, var(--admin-red) 0%, #C0392B 100%);
             color: var(--white);
             padding: 8px 12px;
             font-size: 0.8em;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
         }
 
         .admin-btn.delete:hover {
-            background-color: #c82333;
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #C0392B 0%, #A93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
         }
         
         .property-container {
