@@ -710,6 +710,68 @@
             font-size: 0.8em;
         }
 
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            header { padding: 12px 14px; }
+
+            .logo-graphic {
+                height: 90px;
+                max-width: 260px;
+                padding: 6px;
+            }
+
+            .semicircle {
+                bottom: 28px;
+                width: 70px;
+                height: 35px;
+                border-width: 4px;
+            }
+
+            .horizon-line {
+                bottom: 28px;
+                left: 70px;
+                width: calc(100% - 70px);
+                height: 4px;
+            }
+
+            .logo-text { margin-left: 78px; }
+            .logo-main { font-size: 0.95em; }
+
+            .nav-section { gap: 8px; padding: 8px 10px; }
+            .nav-item { font-size: 0.8em; padding: 8px 12px; }
+
+            .admin-header { padding: 22px; }
+            .admin-header h1 { font-size: 1.6em; }
+
+            .admin-controls { padding: 14px; margin: 0 10px 16px 10px; }
+            .admin-btn { padding: 10px 14px; font-size: 0.85em; }
+            .admin-btn.edit, .admin-btn.delete { padding: 6px 10px; font-size: 0.75em; }
+
+            .property-container { padding: 0 10px; }
+            .property-card { margin-bottom: 20px; }
+            .property-image-container { height: 200px; }
+            .carousel-btn { width: 32px; height: 32px; font-size: 0.95em; }
+            .indicator { width: 8px; height: 8px; }
+
+            .property-details-container { padding: 18px; }
+            .property-title { font-size: 1.25em; }
+            .property-description, .property-summary { font-size: 0.9em; }
+            .property-location { font-size: 0.9em; margin-bottom: 12px; }
+            .property-features li { font-size: 0.9em; }
+            .property-price { font-size: 1.5em; margin-bottom: 14px; }
+            .property-details { gap: 8px; font-size: 0.85em; }
+            .detail-item { padding: 6px 12px; font-size: 0.8em; }
+            .view-details { padding: 10px 16px; font-size: 0.85em; }
+
+            .pagination { gap: 8px; margin: 24px 0; }
+            .page-btn { padding: 8px 12px; font-size: 0.85em; }
+
+            /* Modal spacing on small screens */
+            .modal-content { margin: 8% auto; padding: 20px; width: 92%; }
+            .modal-title { font-size: 1.4em; }
+            .form-actions { gap: 10px; }
+        }
+
         /* Media queries para tablets y desktop */
         @media (min-width: 768px) {
             header {

@@ -486,6 +486,69 @@
             font-size: 0.8em;
         }
 
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            header {
+                padding: 12px 14px;
+            }
+
+            .logo-graphic {
+                height: 90px;
+                max-width: 260px;
+                padding: 6px;
+            }
+
+            .semicircle {
+                bottom: 28px;
+                width: 70px;
+                height: 35px;
+                border-width: 4px;
+            }
+
+            .horizon-line {
+                bottom: 28px;
+                left: 70px;
+                width: calc(100% - 70px);
+                height: 4px;
+            }
+
+            .logo-text { margin-left: 78px; }
+            .logo-main { font-size: 0.95em; }
+
+            .nav-section { gap: 8px; padding: 8px 10px; }
+            .nav-item { font-size: 0.8em; padding: 8px 12px; }
+
+            .property-container { padding: 0 10px; }
+            .property-card { margin-bottom: 20px; }
+            .property-image-container { height: 200px; }
+            .carousel-btn { width: 34px; height: 34px; font-size: 1em; }
+            .indicator { width: 8px; height: 8px; }
+
+            .property-details-container { padding: 18px; }
+            .property-title { font-size: 1.3em; }
+            .property-description { font-size: 0.9em; }
+            .property-summary { font-size: 0.9em; }
+            .property-location { font-size: 0.9em; margin-bottom: 12px; }
+            .property-features li { font-size: 0.9em; }
+            .property-price { font-size: 1.6em; margin-bottom: 14px; }
+            .property-details { gap: 8px; font-size: 0.85em; }
+            .detail-item { padding: 6px 12px; font-size: 0.8em; }
+            .view-details { padding: 10px 16px; font-size: 0.85em; }
+
+            .pagination { gap: 8px; margin: 24px 0; }
+            .page-btn { padding: 8px 12px; font-size: 0.85em; }
+
+            /* Property detail page */
+            .property-detail-container { padding: 0 10px; }
+            .property-detail-gallery { grid-template-columns: 1fr; gap: 10px; }
+            .property-detail-image { height: 220px; }
+            .property-detail-info { padding: 20px; }
+            .property-detail-title { font-size: 1.6em; }
+            .property-detail-price { font-size: 1.8em; }
+            .property-detail-features { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .feature-value { font-size: 1.3em; }
+        }
+
         /* Estilos para la página de detalles */
         .property-detail-container {
             max-width: 1200px;

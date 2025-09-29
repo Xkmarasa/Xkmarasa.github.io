@@ -329,6 +329,32 @@
             font-size: 0.8em;
         }
 
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            header { padding: 12px 14px; }
+            .logo-graphic { height: 90px; max-width: 260px; padding: 6px; }
+            .semicircle { bottom: 28px; width: 70px; height: 35px; border-width: 4px; }
+            .horizon-line { bottom: 28px; left: 70px; width: calc(100% - 70px); height: 4px; }
+            .logo-text { margin-left: 78px; }
+            .logo-main { font-size: 0.95em; }
+            .nav-section { gap: 8px; padding: 8px 10px; }
+            .nav-item { font-size: 0.8em; padding: 8px 12px; }
+
+            .contact-hero { padding: 60px 16px; }
+            .hero-title { font-size: 2em; }
+            .hero-subtitle { font-size: 1em; }
+
+            .contact-container { margin: 36px auto; padding: 0 14px; }
+            .section-title { font-size: 1.8em; margin-bottom: 22px; }
+
+            .contact-cards { gap: 18px; }
+            .contact-card { padding: 24px; }
+            .contact-name { font-size: 1.5em; }
+            .contact-position { font-size: 1em; margin-bottom: 18px; }
+            .contact-info { gap: 12px; }
+            .contact-item { font-size: 1em; }
+        }
+
         /* Media queries para tablets y desktop */
         @media (min-width: 768px) {
             header {
