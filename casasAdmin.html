@@ -668,32 +668,38 @@
         .pagination {
             display: flex;
             justify-content: center;
-            margin: 30px 0;
+            margin: 24px 0;
             gap: 10px;
             flex-wrap: wrap;
         }
         
         .page-btn {
-            padding: 8px 15px;
-            background-color: var(--white);
-            color: var(--dark-blue);
-            border: 1px solid var(--medium-gray);
-            border-radius: 4px;
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--dark-turquoise);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 0.9em;
+            box-shadow: 0 1px 3px rgba(32, 178, 170, 0.08);
+            backdrop-filter: saturate(120%);
         }
         
         .page-btn:hover {
-            background-color: var(--light-blue);
-            border-color: var(--primary-blue);
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--medium-turquoise) 100%);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.25);
+            transform: translateY(-1px);
         }
         
         .page-btn.active {
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
             color: var(--white);
-            border-color: var(--primary-blue);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.25);
         }
         
         .page-btn.disabled {
