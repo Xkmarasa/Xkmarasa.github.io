@@ -1306,27 +1306,33 @@
             
             window.deleteProperty = async function(index) {
                 if (confirm('Are you sure you want to delete this property?')) {
-                    const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${propertyId}`, {
-            method: 'DELETE',
-            headers: { 
-                'Content-Type': 'application/json' 
-            }
-        });
+                    try {
+                        const property = allProperties[index];
+                        const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${property.id}`, {
+                            method: 'DELETE',
+                            headers: { 
+                                'Content-Type': 'application/json' 
+                            }
+                        });
 
-        console.log('📡 Status de respuesta DELETE:', response.status);
+                        console.log('📡 Status de respuesta DELETE:', response.status);
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
-        }
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`HTTP ${response.status}: ${errorText}`);
+                        }
 
-        const result = await response.json();
-        console.log('✅ Propiedad eliminada:', result);
-                    allProperties.splice(index, 1);
-                    updatePropertiesDisplay();
-                    setupPagination();
-                    updateSystemInfo();
-                    alert('Property deleted successfully!');
+                        const result = await response.json();
+                        console.log('✅ Propiedad eliminada:', result);
+                        allProperties.splice(index, 1);
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        updateSystemInfo();
+                        alert('Property deleted successfully!');
+                    } catch (err) {
+                        console.error('Error deleting property:', err);
+                        alert('Error deleting property: ' + err.message);
+                    }
                 }
             };
             
