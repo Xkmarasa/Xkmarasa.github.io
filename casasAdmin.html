@@ -1280,7 +1280,7 @@
                 document.getElementById('propertyModal').style.display = 'block';
             };
             
-            window.editProperty = function(index) {
+            window.editProperty = async function(index) {
                 editingPropertyIndex = index;
                 const property = allProperties[index];
                 
@@ -1294,7 +1294,27 @@
                 document.getElementById('propertyTamano').value = property.tamaño || '';
                 document.getElementById('propertyConstruido').value = property.construido || '';
                 document.getElementById('propertyTerraza').value = property.terraza || '';
-                
+                 try {
+        console.log('✏️ Editando propiedad ID:', propertyId);
+        console.log('📝 Datos actualizados:', property);
+        
+        const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${property.id}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(property)
+        });
+
+        console.log('📡 Status de respuesta PUT:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const updatedProperty = await response.json();
+        console.log('✅ Propiedad actualizada:', updatedProperty);
                 if (property.imagenes) {
                     const imagesArray = typeof property.imagenes === 'string' ? 
                         JSON.parse(property.imagenes) : property.imagenes;
@@ -1302,7 +1322,11 @@
                 }
                 
                 document.getElementById('propertyModal').style.display = 'block';
-            };
+            } catch (err) {
+                console.error('Error updating property:', err);
+                alert('Error updating property: ' + err.message);
+            }
+        };
             
             window.deleteProperty = async function(index) {
                 if (confirm('Are you sure you want to delete this property?')) {
