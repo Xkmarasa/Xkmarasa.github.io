@@ -1362,7 +1362,7 @@
             async function saveProperty() {
                 const formData = new FormData(document.getElementById('propertyForm'));
                 const propertyData = {
-                    id: Date.now(),
+                    id: Math.floor(Math.random() * 1000000),
                     name: formData.get('name'),
                     description: formData.get('description'),
                     ubi: formData.get('ubi'),
