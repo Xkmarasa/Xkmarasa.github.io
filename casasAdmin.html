@@ -1304,8 +1304,24 @@
                 document.getElementById('propertyModal').style.display = 'block';
             };
             
-            window.deleteProperty = function(index) {
+            window.deleteProperty = async function(index) {
                 if (confirm('Are you sure you want to delete this property?')) {
+                    const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${propertyId}`, {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json' 
+            }
+        });
+
+        console.log('📡 Status de respuesta DELETE:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log('✅ Propiedad eliminada:', result);
                     allProperties.splice(index, 1);
                     updatePropertiesDisplay();
                     setupPagination();
