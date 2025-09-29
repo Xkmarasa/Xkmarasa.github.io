@@ -1,0 +1,15 @@
+POST http://localhost:3000/data
+Content-Type: application/json
+
+{
+  "id": 102,
+  "price": 180000,
+  "description": "Prueba con archivo .http",
+  "ubi": "Valencia, España",
+  "baños": 1,
+  "tamaño": 70,
+  "construido": 65,
+  "terraza": 5,
+  "imagenes": ["valencia1.jpg"],
+  "name": "Test HTTP File"
+}
