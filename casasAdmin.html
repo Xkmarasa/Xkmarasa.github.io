@@ -159,8 +159,8 @@
             justify-content: center;
             width: 100%;
             padding: 10px 15px;
-            background: var(--header-bg);
-            border: none;
+            background: transparent;
+            border: none !important;
             border-radius: 0;
             box-shadow: none;
         }
@@ -631,11 +631,15 @@
         .btn-primary {
             background-color: var(--primary-blue);
             color: var(--white);
+            font-size: 1rem;
+            padding: 14px 28px;
+            box-shadow: 0 6px 18px rgba(32, 178, 170, 0.25);
         }
 
         .btn-primary:hover {
             background-color: var(--dark-blue);
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(32, 178, 170, 0.35);
         }
 
         .btn-secondary {
@@ -961,8 +965,8 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('propertyModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Property</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('propertyModal')">Cancelar</button>
+                    <button type="submit" id="acceptButton" class="btn btn-primary">Aceptar</button>
                 </div>
             </form>
         </div>
@@ -1013,10 +1017,10 @@
             // Load properties
             loadProperties();
             
-            // Form submission
-            document.getElementById('propertyForm').addEventListener('submit', function(e) {
+            // Form submission -> POST to backend
+            document.getElementById('propertyForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                saveProperty();
+                await saveProperty();
             });
             
             function loadProperties() {
@@ -1355,9 +1359,10 @@
                 input.click();
             };
             
-            function saveProperty() {
+            async function saveProperty() {
                 const formData = new FormData(document.getElementById('propertyForm'));
                 const propertyData = {
+                    id: Date.now(),
                     name: formData.get('name'),
                     description: formData.get('description'),
                     ubi: formData.get('ubi'),
@@ -1368,6 +1373,8 @@
                     construido: parseInt(formData.get('construido')) || null,
                     terraza: parseInt(formData.get('terraza')) || null,
                     imagenes: []
+                    
+
                 };
                 
                 const imagesText = formData.get('images');
@@ -1376,19 +1383,35 @@
                         .map(url => url.trim())
                         .filter(url => url.length > 0);
                 }
-                
-                if (editingPropertyIndex !== null) {
-                    allProperties[editingPropertyIndex] = propertyData;
-                    alert('Property updated successfully!');
-                } else {
-                    allProperties.push(propertyData);
+                try {
+                    const response = await fetch('https://xkmarasa-github-io.onrender.com/data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: propertyData.id,
+                            price: propertyData.price,
+                            description: propertyData.description,
+                            ubi: propertyData.ubi,
+                            baños: propertyData.baños,
+                            tamaño: propertyData.tamaño,
+                            construido: propertyData.construido,
+                            terraza: propertyData.terraza
+                        })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to save property');
+                    }
+                    const saved = await response.json();
+                    allProperties.push(saved);
                     alert('Property added successfully!');
+                    updatePropertiesDisplay();
+                    setupPagination();
+                    updateSystemInfo();
+                    closeModal('propertyModal');
+                } catch (err) {
+                    console.error(err);
+                    alert('Error saving property: ' + err.message);
                 }
-                
-                updatePropertiesDisplay();
-                setupPagination();
-                updateSystemInfo();
-                closeModal('propertyModal');
             }
             
             // Close modal when clicking outside
