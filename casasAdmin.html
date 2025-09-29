@@ -1295,7 +1295,7 @@
                 document.getElementById('propertyConstruido').value = property.construido || '';
                 document.getElementById('propertyTerraza').value = property.terraza || '';
                  try {
-        console.log('✏️ Editando propiedad ID:', propertyId);
+        console.log('✏️ Editando propiedad ID:', property.id);
         console.log('📝 Datos actualizados:', property);
         
         const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${property.id}`, {
