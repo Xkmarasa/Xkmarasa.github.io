@@ -122,12 +122,22 @@
         .horizon-line {
             position: absolute;
             bottom: 40px;
-            left: 100px;
-            width: calc(100% - 100px);
+            left: 0;
+            width: 100%;
             height: 5px;
             background-color: var(--logo-accent);
             border-top-left-radius: 100px;
             border-top-right-radius: 100px;
+            z-index: 1;
+        }
+        .semicircle-underline {
+            position: absolute;
+            bottom: 24px;
+            left: 8px;
+            width: 85px;
+            height: 5px;
+            background-color: var(--logo-accent);
+            border-radius: 4px;
             z-index: 1;
         }
         
@@ -754,7 +764,7 @@
             .horizon-line {
                 bottom: 28px;
                 left: 70px;
-                width: calc(100% - 70px);
+                width: calc(100% - 60px);
                 height: 4px;
             }
 
@@ -763,6 +773,8 @@
 
             .nav-section { gap: 8px; padding: 8px 10px; }
             .nav-item { font-size: 0.8em; padding: 8px 12px; }
+
+            .semicircle-underline { bottom: 20px; left: 6px; width: 60px; height: 4px; }
 
             .admin-header { padding: 22px; }
             .admin-header h1 { font-size: 1.6em; }
@@ -877,6 +889,7 @@
             <div class="logo-section">
                 <div class="logo-graphic">
                     <div class="semicircle"></div>
+                    <div class="semicircle-underline"></div>
                     <div class="horizon-line"></div>
                     <div class="logo-text">
                         <div class="logo-main">Mediterranean Blue International LLC Realty</div>
