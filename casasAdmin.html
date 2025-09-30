@@ -629,28 +629,42 @@
         }
 
         .btn-primary {
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--admin-green) 0%, #229954 100%);
             color: var(--white);
-            font-size: 1rem;
-            padding: 14px 28px;
-            box-shadow: 0 6px 18px rgba(32, 178, 170, 0.25);
+            font-size: 1.05rem;
+            padding: 14px 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 22px rgba(39, 174, 96, 0.28);
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
         .btn-primary:hover {
-            background-color: var(--dark-blue);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(32, 178, 170, 0.35);
+            background: linear-gradient(135deg, #229954 0%, #1E8449 100%);
+            box-shadow: 0 10px 26px rgba(39, 174, 96, 0.38);
         }
 
         .btn-secondary {
-            background-color: var(--medium-gray);
+            background: linear-gradient(135deg, var(--medium-gray) 0%, #D0D4D9 100%);
             color: var(--dark-gray);
+            font-size: 1.05rem;
+            padding: 14px 26px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
         .btn-secondary:hover {
-            background-color: var(--text-gray);
+            background: linear-gradient(135deg, var(--text-gray) 0%, #2F3A44 100%);
             color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.18);
         }
+
+        /* Form action emphasis */
+        .btn-confirm { font-weight: 800; }
+        .btn-cancel { font-weight: 700; }
 
         .btn-danger {
             background-color: var(--admin-red);
@@ -965,8 +979,8 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('propertyModal')">Cancelar</button>
-                    <button type="submit" id="acceptButton" class="btn btn-primary">Aceptar</button>
+                    <button type="button" class="btn btn-secondary btn-cancel" onclick="closeModal('propertyModal')">Cancelar</button>
+                    <button type="submit" id="acceptButton" class="btn btn-primary btn-confirm">Añadir</button>
                 </div>
             </form>
         </div>
@@ -1274,6 +1288,7 @@
                 editingPropertyIndex = null;
                 document.getElementById('propertyModalTitle').textContent = 'Add New Property';
                 document.getElementById('propertyForm').reset();
+                document.getElementById('acceptButton').textContent = 'Añadir';
                 document.getElementById('propertyModal').style.display = 'block';
             };
             
@@ -1282,6 +1297,7 @@
                 const property = allProperties[index];
                 
                 document.getElementById('propertyModalTitle').textContent = 'Edit Property';
+                document.getElementById('acceptButton').textContent = 'Guardar';
                 document.getElementById('propertyName').value = property.name || '';
                 document.getElementById('propertyDescription').value = property.description || '';
                 document.getElementById('propertyUbi').value = property.ubi || '';
