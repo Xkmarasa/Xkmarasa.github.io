@@ -1051,8 +1051,8 @@
                     }
                     
                     // Manejo de valores nulos
-                    const title = property.description ? 
-                        (property.description.split('\n')[0] || 'Luxury Property') : 
+                    const title = property.name ? 
+                        (property.name.split('\n')[0] || 'Luxury Property') : 
                         'Luxury Property';
                     const name = property.name || 'Luxury Property';
                         
@@ -1061,7 +1061,7 @@
                         `€${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
                         'Price upon request';
                     
-                    const description = property.description ? 
+                    const descriptionText = property.description ? 
                         property.description.split('\n').slice(1).join('\n') : 
                         'Exceptional property with premium features and finishes in a highly desirable location.';
                     
@@ -1090,12 +1090,12 @@
                                     </div>
                                 ` : '<div class="no-image" style="padding: 40px; text-align: center;">No images available</div>'}
                                 
-                                <div class="property-detail-info">
-                                    <h1 class="property-detail-title">${title}</h1>
-                                    <div class="property-detail-price">${price}</div>
-                                    <p class="property-description">${name}</p>
-                                    <p class="property-detail-description">${description.replace(/\n/g, '<br>')}</p>
-                                    <div class="property-location">${location}</div>
+                        <div class="property-detail-info">
+                            <h1 class="property-detail-title">${title}</h1>
+                            <div class="property-detail-price">${price}</div>
+                            <p class="property-description">${name}</p>
+                            <p class="property-detail-description">${descriptionText.replace(/\n/g, '<br>')}</p>
+                            <div class="property-location">${location}</div>
                                     
                                     <div class="property-detail-features">
                                         <div class="feature-card">
