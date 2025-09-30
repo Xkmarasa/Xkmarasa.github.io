@@ -1206,13 +1206,26 @@
             } else if (opts.address) {
                 const geocoder = new google.maps.Geocoder();
                 const cityQuery = (opts.address.split(',')[0] || opts.address).trim();
-                geocoder.geocode({ address: cityQuery }, (results, status) => {
-                    if (status === 'OK' && results[0]) {
-                        const pos = results[0].geometry.location;
-                        map.setCenter(pos);
-                        addMarker(pos, cityQuery);
-                    }
+                console.log('[Map] Geocoding city:', cityQuery, 'from address:', opts.address);
+                const tryGeocode = (query, label) => new Promise(resolve => {
+                    geocoder.geocode({ address: query, region: 'ES' }, (results, status) => {
+                        console.log('[Map] Geocode status', status, 'for', query);
+                        if (status === 'OK' && results && results[0]) {
+                            const pos = results[0].geometry.location;
+                            map.setCenter(pos);
+                            addMarker(pos, label || query);
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    });
                 });
+
+                // Secuencia de intentos: ciudad -> dirección completa -> ciudad + país
+                tryGeocode(cityQuery, cityQuery)
+                    .then(ok => ok ? true : tryGeocode(opts.address, cityQuery))
+                    .then(ok => ok ? true : tryGeocode(`${cityQuery}, España`, cityQuery))
+                    .catch(() => {});
             }
         }
     </script>
