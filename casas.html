@@ -1189,19 +1189,28 @@
             const fallback = { lat: 43.2630, lng: -2.9350 }; // Bilbao
             const map = new google.maps.Map(mapEl, { center: fallback, zoom: 14 });
 
-            const addMarker = (pos) => new google.maps.Marker({ position: pos, map, title: opts.title || 'Property' });
+            const addMarker = (pos, titleText) => {
+                const marker = new google.maps.Marker({ position: pos, map, title: titleText || opts.title || 'Property' });
+                if (titleText) {
+                    const info = new google.maps.InfoWindow({ content: `<strong>${titleText}</strong>` });
+                    info.open({ map, anchor: marker });
+                }
+                return marker;
+            };
 
             if (typeof opts.lat === 'number' && typeof opts.lng === 'number') {
                 const pos = { lat: opts.lat, lng: opts.lng };
                 map.setCenter(pos);
-                addMarker(pos);
+                const cityTitle = (opts.address || '').split(',')[0].trim() || opts.address || 'Location';
+                addMarker(pos, cityTitle);
             } else if (opts.address) {
                 const geocoder = new google.maps.Geocoder();
-                geocoder.geocode({ address: opts.address }, (results, status) => {
+                const cityQuery = (opts.address.split(',')[0] || opts.address).trim();
+                geocoder.geocode({ address: cityQuery }, (results, status) => {
                     if (status === 'OK' && results[0]) {
                         const pos = results[0].geometry.location;
                         map.setCenter(pos);
-                        addMarker(pos);
+                        addMarker(pos, cityQuery);
                     }
                 });
             }
