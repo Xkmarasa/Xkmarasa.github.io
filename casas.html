@@ -1284,6 +1284,9 @@
 
             // Buscar 3-4 POIs cercanos por categoría usando Places
             function addNearbyPOIs(map, center) {
+                if (!google.maps.places || !google.maps.places.PlacesService) {
+                    return; // Places library not loaded; skip POIs to avoid crashing
+                }
                 const service = new google.maps.places.PlacesService(map);
                 const categories = [
                     { key: 'sanidad', types: ['hospital'] },
@@ -1387,7 +1390,7 @@
             });
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0&libraries=places"></script>
 </body>
 </html>
 
