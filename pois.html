@@ -20,34 +20,78 @@
         .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
         h1 { color: var(--dark-turquoise); margin-bottom: 12px; }
         p.lead { margin-bottom: 18px; }
-        .pois-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-        .card { background: var(--white); border: 1px solid #e9ecef; border-radius: 10px; padding: 16px; box-shadow: 0 4px 18px rgba(32,178,170,0.08); }
-        .card h3 { color: var(--dark-turquoise); margin-bottom: 8px; }
-        .tag { display: inline-block; padding: 6px 10px; border-radius: 20px; background: #dff7f7; color: var(--dark-turquoise); font-weight: 700; font-size: 12px; margin-right: 6px; }
+        #map { width: 100%; height: 70vh; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 4px 18px rgba(32,178,170,0.08); }
+        .legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0 0; }
+        .legend-item { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: #edf9f9; border: 1px solid #e1f3f3; font-weight: 700; font-size: 12px; color: var(--dark-turquoise); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
         footer { text-align: center; padding: 20px 0; color: #666; }
         @media (max-width: 767px) { .nav { flex-wrap: wrap; } }
     </style>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const pois = [
-                { name: 'International School', type: 'Education', distance: '1.2 km', desc: 'Top-rated international curriculum.' },
-                { name: 'Private Hospital', type: 'Health', distance: '2.4 km', desc: '24/7 emergency and specialists.' },
-                { name: 'Marina & Beach Club', type: 'Lifestyle', distance: '800 m', desc: 'Premium leisure and nautical services.' },
-                { name: 'Golf Course', type: 'Sports', distance: '5.1 km', desc: '18-hole championship course.' }
-            ];
+        // Configuración: cambia este centro por el de tus propiedades
+        const MAP_CENTER = { lat: 43.2630, lng: -2.9350 }; // Bilbao por defecto
 
-            const grid = document.getElementById('poisGrid');
-            grid.innerHTML = pois.map(p => `
-                <div class="card">
-                    <h3>${p.name}</h3>
-                    <div style="margin-bottom:8px;">
-                        <span class="tag">${p.type}</span>
-                        <span class="tag">${p.distance}</span>
-                    </div>
-                    <p>${p.desc}</p>
-                </div>
+        // POIs de ejemplo: añade lat/lng reales
+        const POIS = [
+            { name: 'Hospital de Basurto', type: 'hospital', lat: 43.2649, lng: -2.9575 },
+            { name: 'Colegio Internacional', type: 'school', lat: 43.2706, lng: -2.9389 },
+            { name: 'Supermercado Central', type: 'supermarket', lat: 43.2622, lng: -2.9305 },
+            { name: 'Marina & Beach Club', type: 'leisure', lat: 43.2682, lng: -2.9222 }
+        ];
+
+        const CATEGORY_STYLES = {
+            hospital: { color: '#e74c3c', label: 'H' },
+            school: { color: '#2e86de', label: 'S' },
+            supermarket: { color: '#27ae60', label: 'M' },
+            leisure: { color: '#8e44ad', label: 'L' }
+        };
+
+        function svgMarker(color) {
+            return {
+                path: 'M12 2C7.03 2 3 6.03 3 11c0 6.08 8.02 11.54 8.36 11.77.39.26.9.26 1.28 0C12.98 22.54 21 17.08 21 11c0-4.97-4.03-9-9-9z',
+                fillColor: color,
+                fillOpacity: 1,
+                strokeWeight: 1.2,
+                strokeColor: '#ffffff',
+                scale: 1.2,
+                anchor: new google.maps.Point(12, 22)
+            };
+        }
+
+        window.initMap = function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: MAP_CENTER,
+                zoom: 13,
+                mapId: 'POIS_MAP',
+            });
+
+            const bounds = new google.maps.LatLngBounds();
+
+            POIS.forEach(p => {
+                const style = CATEGORY_STYLES[p.type] || CATEGORY_STYLES.leisure;
+                const marker = new google.maps.Marker({
+                    position: { lat: p.lat, lng: p.lng },
+                    map,
+                    title: p.name,
+                    icon: svgMarker(style.color),
+                    label: { text: style.label, color: '#fff', fontWeight: '700' }
+                });
+
+                const info = new google.maps.InfoWindow({
+                    content: `<strong>${p.name}</strong><br><small>${p.type.toUpperCase()}</small>`
+                });
+                marker.addListener('click', () => info.open({ map, anchor: marker }));
+                bounds.extend(marker.getPosition());
+            });
+
+            if (POIS.length > 1) map.fitBounds(bounds);
+
+            // Leyenda
+            const legend = document.getElementById('legend');
+            legend.innerHTML = Object.entries(CATEGORY_STYLES).map(([key, val]) => `
+                <span class="legend-item"><span class="dot" style="background:${val.color}"></span>${key}</span>
             `).join('');
-        });
+        }
     </script>
 </head>
 <body>
@@ -63,12 +107,14 @@
     <main class="container">
         <h1>Nearby Points of Interest</h1>
         <p class="lead">Explore key amenities and lifestyle points around our featured properties.</p>
-        <div id="poisGrid" class="pois-grid"></div>
+        <div id="map"></div>
+        <div id="legend" class="legend"></div>
     </main>
 
     <footer>
         © 2023 Mediterranean Blue International LLC. All rights reserved.
     </footer>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0&callback=initMap" async defer></script>
 </body>
 </html>
 
