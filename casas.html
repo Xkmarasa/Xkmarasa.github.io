@@ -646,6 +646,44 @@
             color: var(--dark-blue);
         }
 
+         /* Overview section */
+         .overview-section {
+             margin-top: 12px;
+             margin-bottom: 16px;
+         }
+         .overview-title {
+             font-size: 1.2em;
+             font-weight: 800;
+             color: var(--dark-turquoise);
+             margin: 6px 0 14px 0;
+         }
+         .overview-grid {
+             display: grid;
+             grid-template-columns: repeat(3, 1fr);
+             gap: 18px;
+         }
+         .overview-group {
+             background: var(--white);
+             border: 1px solid var(--medium-gray);
+             border-radius: 8px;
+             padding: 12px 14px;
+         }
+         .overview-group h4 {
+             margin: 0 0 10px 0;
+             font-size: 0.95em;
+             color: var(--charcoal);
+         }
+         .overview-row {
+             display: flex;
+             justify-content: space-between;
+             padding: 6px 0;
+             border-bottom: 1px dashed var(--medium-gray);
+             font-size: 0.92em;
+         }
+         .overview-row:last-child { border-bottom: none; }
+         .overview-key { color: var(--text-gray); }
+         .overview-val { color: var(--dark-turquoise); font-weight: 700; }
+
         .property-detail-price {
             font-size: 2.2em;
             margin-bottom: 20px;
@@ -769,7 +807,12 @@
              /* Detalle responsivo */
              .detail-hero { height: 440px; }
              .detail-media { margin-bottom: 20px; }
+             .overview-grid { grid-template-columns: repeat(3, 1fr); }
         }
+
+         @media (max-width: 767px) {
+             .overview-grid { grid-template-columns: 1fr; }
+         }
         
         @media (min-width: 1024px) {
             .logo-graphic {
@@ -1153,12 +1196,28 @@
                             <div class="property-location">${location}</div>
                             <div class="property-detail-price">${price}</div>
                                     
-                                     <div class="property-detail-features">
-                                        <span class="feature-item"><span class="label">Bedrooms:</span> ${property.baños || '3+'}</span>
-                                        <span class="feature-item"><span class="label">Bathrooms:</span> ${property.baños || '2+'}</span>
-                                        <span class="feature-item"><span class="label">Total m²:</span> ${property.tamaño || '250+'}</span>
-                                        <span class="feature-item"><span class="label">Built m²:</span> ${property.construido || '180+'}</span>
-                                        <span class="feature-item"><span class="label">Terraces m²:</span> ${property.terraza || '70+'}</span>
+                                    <div class="overview-section">
+                                        <div class="overview-title">Overview</div>
+                                        <div class="overview-grid">
+                                            <div class="overview-group">
+                                                <h4>Details</h4>
+                                                <div class="overview-row"><span class="overview-key">Bedrooms</span><span class="overview-val">${property.baños || '3'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Bathrooms</span><span class="overview-val">${property.baños || '2'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Guest Toilets</span><span class="overview-val">${property.aseos || '1'}</span></div>
+                                            </div>
+                                            <div class="overview-group">
+                                                <h4>Measurements</h4>
+                                                <div class="overview-row"><span class="overview-key">Total m²</span><span class="overview-val">${property.tamaño || '—'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Built m²</span><span class="overview-val">${property.construido || '—'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Terraces m²</span><span class="overview-val">${property.terraza || '—'}</span></div>
+                                            </div>
+                                            <div class="overview-group">
+                                                <h4>Features</h4>
+                                                <div class="overview-row"><span class="overview-key">Pool</span><span class="overview-val">${property.pool || '—'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Garden</span><span class="overview-val">${property.garden || '—'}</span></div>
+                                                <div class="overview-row"><span class="overview-key">Orientation</span><span class="overview-val">${property.orientation || '—'}</span></div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div id="property-map"></div>
                                 </div>
