@@ -1155,14 +1155,15 @@
                     // Manejo de imágenes
                     let imagesHTML = '';
                     let hasImages = false;
+                    let imagesArray = [];
                     
                     if (property.imagenes && property.imagenes.length > 0) {
-                        hasImages = true;
-                        const imagesArray = typeof property.imagenes === 'string' ? 
+                        imagesArray = typeof property.imagenes === 'string' ? 
                             JSON.parse(property.imagenes) : property.imagenes;
+                        hasImages = imagesArray.length > 0;
                         
-                        imagesHTML = imagesArray.map(img => `
-                            <img src="${img}" class="property-detail-image" alt="Property image">
+                        imagesHTML = imagesArray.map((img, _idx) => `
+                            <img src="${img}" class="property-detail-image ${_idx === 0 ? 'active' : ''}" alt="Property image">
                         `).join('');
                     }
                     
