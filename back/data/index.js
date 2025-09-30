@@ -10,10 +10,10 @@ app.use(express.json());
 app.get('/data', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT * FROM property');
-    res.setHeader('Content-Type', 'application/json');
-    res.json(rows);
+    return res.json(rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (res.headersSent) return;
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -50,9 +50,10 @@ app.post('/data', async (req, res) => {
       'INSERT INTO property (id, price, description, ubi, "baños", "tamaño", construido, terraza, imagenes, name) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *';
 
     const { rows } = await pool.query(insertSql, values);
-    res.status(201).json(rows[0]);
+    return res.status(201).json(rows[0]);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (res.headersSent) return;
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -71,9 +72,10 @@ app.delete('/data/:id', async (req, res) => {
     if (rowCount === 0) {
       return res.status(404).json({ error: 'Propiedad no encontrada' });
     } 
-    res.status(200).json({ message: 'Propiedad eliminada correctamente' });
+    return res.status(200).json({ message: 'Propiedad eliminada correctamente' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (res.headersSent) return;
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -125,10 +127,11 @@ app.put('/data/:id', async (req, res) => {
       }
 
       console.log('✅ Propiedad actualizada:', rows[0]);
-      res.json(rows[0]);
+      return res.json(rows[0]);
   } catch (err) {
       console.error('❌ Error en PUT:', err);
-      res.status(500).json({ error: err.message });
+      if (res.headersSent) return;
+      return res.status(500).json({ error: err.message });
   }
 });
 // Iniciar servidor
