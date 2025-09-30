@@ -1166,22 +1166,8 @@
         });
     </script>
     <script>
-        // Lazy-load Google Maps and render a marker for the property
-        function loadGoogleMaps(apiKey, callbackName) {
-            return new Promise((resolve) => {
-                if (window.google && window.google.maps) { resolve(); return; }
-                const script = document.createElement('script');
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}`;
-                script.async = true;
-                script.defer = true;
-                window[callbackName] = () => resolve();
-                document.body.appendChild(script);
-            });
-        }
-
+        // Render a marker for the property (Maps is loaded statically)
         async function renderPropertyMap(opts) {
-            const apiKey = 'AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0';
-            await loadGoogleMaps(apiKey, 'initPropertyMapLib');
 
             const mapEl = document.getElementById('property-map');
             if (!mapEl) return;
@@ -1229,6 +1215,7 @@
             }
         }
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0"></script>
 </body>
 </html>
 
