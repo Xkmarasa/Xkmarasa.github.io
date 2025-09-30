@@ -76,6 +76,61 @@ app.delete('/data/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Ruta PUT (actualizar datos) - AÑADE ESTO
+app.put('/data/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const {
+          price,
+          description,
+          ubi,
+          baños,
+          tamaño,
+          construido,
+          terraza,
+          imagenes,
+          name,
+      } = req.body;
+
+      console.log('📝 Actualizando propiedad ID:', id);
+      console.log('📦 Datos recibidos:', req.body);
+
+      const values = [
+          price,
+          description,
+          ubi,
+          baños,
+          tamaño,
+          construido,
+          terraza,
+          JSON.stringify(imagenes || []),
+          name || null,
+          parseInt(id)  // Asegurar que sea número
+      ];
+
+      const updateSql = `
+          UPDATE property 
+          SET price = $1, description = $2, ubi = $3, "baños" = $4, 
+              "tamaño" = $5, construido = $6, terraza = $7, 
+              imagenes = $8, name = $9 
+          WHERE id = $10 
+          RETURNING *
+      `;
+
+      const { rows } = await pool.query(updateSql, values);
+      
+      if (rows.length === 0) {
+          return res.status(404).json({ error: 'Propiedad no encontrada' });
+      }
+
+      console.log('✅ Propiedad actualizada:', rows[0]);
+      res.json(rows[0]);
+  } catch (err) {
+      console.error('❌ Error en PUT:', err);
+      res.status(500).json({ error: err.message });
+  }
+});
 // Iniciar servidor
 const PORT = 3000;
 app.listen(PORT, () => {
