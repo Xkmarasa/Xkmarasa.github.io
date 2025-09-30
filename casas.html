@@ -1193,21 +1193,52 @@
             };
             const iconFor = (type) => ({ url: ICONS[type] || ICONS.transporte, scaledSize: new google.maps.Size(36, 36), anchor: new google.maps.Point(18, 34) });
 
-            // Example POIs (same as pois.html, Bilbao area)
-            const EXTRA_POIS = [
-                { name: 'Hospital de Basurto', type: 'sanidad', lat: 43.2649, lng: -2.9575 },
-                { name: 'Colegio Internacional', type: 'educacion', lat: 43.2706, lng: -2.9389 },
-                { name: 'Supermercado Central', type: 'comida', lat: 43.2622, lng: -2.9305 },
-                { name: 'Estación de Autobuses', type: 'transporte', lat: 43.2576, lng: -2.9496 }
-            ];
+            // Buscar 3-4 POIs cercanos por categoría usando Places
+            function addNearbyPOIs(map, center) {
+                const service = new google.maps.places.PlacesService(map);
+                const categories = [
+                    { key: 'sanidad', types: ['hospital'] },
+                    { key: 'educacion', types: ['school'] },
+                    { key: 'comida', types: ['supermarket', 'grocery_or_supermarket'] },
+                    { key: 'transporte', types: ['transit_station', 'bus_station', 'train_station', 'subway_station'] }
+                ];
+
+                categories.forEach(cat => {
+                    let collected = 0;
+                    const maxResults = 4;
+                    const seen = new Set();
+                    const doSearch = (placeType) => new Promise(resolve => {
+                        service.nearbySearch({ location: center, radius: 3000, type: placeType }, (results, status) => {
+                            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                                for (const r of results) {
+                                    if (collected >= maxResults) break;
+                                    if (seen.has(r.place_id)) continue;
+                                    seen.add(r.place_id);
+                                    const pos = r.geometry && r.geometry.location;
+                                    if (!pos) continue;
+                                    new google.maps.Marker({ position: pos, map, title: r.name, icon: iconFor(cat.key) });
+                                    collected++;
+                                }
+                            }
+                            resolve();
+                        });
+                    });
+                    // encadenar búsquedas por los tipos listados hasta alcanzar 3-4
+                    (async () => {
+                        for (const t of cat.types) {
+                            if (collected >= maxResults) break;
+                            await doSearch(t);
+                        }
+                    })();
+                });
+            }
 
             if (typeof opts.lat === 'number' && typeof opts.lng === 'number') {
                 const pos = { lat: opts.lat, lng: opts.lng };
                 map.setCenter(pos);
                 const cityTitle = (opts.address || '').split(',')[0].trim() || opts.address || 'Location';
                 addMarker(pos, cityTitle);
-                // Draw category POIs
-                EXTRA_POIS.forEach(p => new google.maps.Marker({ position: {lat: p.lat, lng: p.lng}, map, title: p.name, icon: iconFor(p.type) }));
+                addNearbyPOIs(map, pos);
             } else if (opts.address) {
                 const geocoder = new google.maps.Geocoder();
                 const cityQuery = (opts.address.split(',')[0] || opts.address).trim();
@@ -1219,8 +1250,7 @@
                             const pos = results[0].geometry.location;
                             map.setCenter(pos);
                             addMarker(pos, label || query);
-                            // Draw category POIs (no proximity search; same demo set)
-                            EXTRA_POIS.forEach(p => new google.maps.Marker({ position: {lat: p.lat, lng: p.lng}, map, title: p.name, icon: iconFor(p.type) }));
+                            addNearbyPOIs(map, pos);
                             resolve(true);
                         } else {
                             resolve(false);
