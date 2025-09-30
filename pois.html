@@ -23,7 +23,7 @@
         #map { width: 100%; height: 70vh; border-radius: 12px; border: 1px solid #e9ecef; box-shadow: 0 4px 18px rgba(32,178,170,0.08); }
         .legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0 0; }
         .legend-item { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: #edf9f9; border: 1px solid #e1f3f3; font-weight: 700; font-size: 12px; color: var(--dark-turquoise); }
-        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .legend-item img { width: 18px; height: 18px; display: inline-block; }
         footer { text-align: center; padding: 20px 0; color: #666; }
         @media (max-width: 767px) { .nav { flex-wrap: wrap; } }
     </style>
@@ -33,28 +33,26 @@
 
         // POIs de ejemplo: añade lat/lng reales
         const POIS = [
-            { name: 'Hospital de Basurto', type: 'hospital', lat: 43.2649, lng: -2.9575 },
-            { name: 'Colegio Internacional', type: 'school', lat: 43.2706, lng: -2.9389 },
-            { name: 'Supermercado Central', type: 'supermarket', lat: 43.2622, lng: -2.9305 },
-            { name: 'Marina & Beach Club', type: 'leisure', lat: 43.2682, lng: -2.9222 }
+            { name: 'Hospital de Basurto', type: 'sanidad', lat: 43.2649, lng: -2.9575 },
+            { name: 'Colegio Internacional', type: 'educacion', lat: 43.2706, lng: -2.9389 },
+            { name: 'Supermercado Central', type: 'comida', lat: 43.2622, lng: -2.9305 },
+            { name: 'Estación de Autobuses', type: 'transporte', lat: 43.2576, lng: -2.9496 }
         ];
 
-        const CATEGORY_STYLES = {
-            hospital: { color: '#e74c3c', label: 'H' },
-            school: { color: '#2e86de', label: 'S' },
-            supermarket: { color: '#27ae60', label: 'M' },
-            leisure: { color: '#8e44ad', label: 'L' }
+        // Iconos SVG embebidos por categoría (data URI)
+        const ICONS = {
+            sanidad: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path d="M24 3c-9.94 0-18 8.06-18 18 0 12.21 15.08 22.16 17.02 23.41.6.39 1.36.39 1.96 0C26.92 43.16 42 33.21 42 21 42 11.06 33.94 3 24 3z" fill="#e74c3c"/><path d="M27 14h-6v7h-7v6h7v7h6v-7h7v-6h-7z" fill="#fff"/></g></svg>`),
+            educacion: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path d="M24 3c-9.94 0-18 8.06-18 18 0 12.21 15.08 22.16 17.02 23.41.6.39 1.36.39 1.96 0C26.92 43.16 42 33.21 42 21 42 11.06 33.94 3 24 3z" fill="#2e86de"/><path d="M24 13l14 6-14 6-14-6 14-6zm-9 9v5l9 4 9-4v-5l-9 4-9-4z" fill="#fff"/></g></svg>`),
+            comida: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path d="M24 3c-9.94 0-18 8.06-18 18 0 12.21 15.08 22.16 17.02 23.41.6.39 1.36.39 1.96 0C26.92 43.16 42 33.21 42 21 42 11.06 33.94 3 24 3z" fill="#27ae60"/><path d="M18 14h2v10h-2V14zm10 0c2.21 0 4 1.79 4 4v6h-2v-6c0-1.1-.9-2-2-2h-2v8h-2V14h4z" fill="#fff"/></g></svg>`),
+            transporte: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path d="M24 3c-9.94 0-18 8.06-18 18 0 12.21 15.08 22.16 17.02 23.41.6.39 1.36.39 1.96 0C26.92 43.16 42 33.21 42 21 42 11.06 33.94 3 24 3z" fill="#8e44ad"/><path d="M16 16c0-2.21 1.79-4 4-4h8c2.21 0 4 1.79 4 4v9c0 1.66-1.34 3-3 3h-10c-1.66 0-3-1.34-3-3v-9zm2 1h12v6H18v-6zm0 9h2v2h-2v-2zm10 0h2v2h-2v-2z" fill="#fff"/></g></svg>`)
         };
 
-        function svgMarker(color) {
+        function iconFor(type) {
+            const url = ICONS[type] || ICONS.transporte;
             return {
-                path: 'M12 2C7.03 2 3 6.03 3 11c0 6.08 8.02 11.54 8.36 11.77.39.26.9.26 1.28 0C12.98 22.54 21 17.08 21 11c0-4.97-4.03-9-9-9z',
-                fillColor: color,
-                fillOpacity: 1,
-                strokeWeight: 1.2,
-                strokeColor: '#ffffff',
-                scale: 1.2,
-                anchor: new google.maps.Point(12, 22)
+                url,
+                scaledSize: new google.maps.Size(36, 36),
+                anchor: new google.maps.Point(18, 34)
             };
         }
 
@@ -68,13 +66,11 @@
             const bounds = new google.maps.LatLngBounds();
 
             POIS.forEach(p => {
-                const style = CATEGORY_STYLES[p.type] || CATEGORY_STYLES.leisure;
                 const marker = new google.maps.Marker({
                     position: { lat: p.lat, lng: p.lng },
                     map,
                     title: p.name,
-                    icon: svgMarker(style.color),
-                    label: { text: style.label, color: '#fff', fontWeight: '700' }
+                    icon: iconFor(p.type)
                 });
 
                 const info = new google.maps.InfoWindow({
@@ -88,8 +84,14 @@
 
             // Leyenda
             const legend = document.getElementById('legend');
-            legend.innerHTML = Object.entries(CATEGORY_STYLES).map(([key, val]) => `
-                <span class="legend-item"><span class="dot" style="background:${val.color}"></span>${key}</span>
+            const entries = [
+                ['sanidad', ICONS.sanidad],
+                ['educacion', ICONS.educacion],
+                ['comida', ICONS.comida],
+                ['transporte', ICONS.transporte]
+            ];
+            legend.innerHTML = entries.map(([key, uri]) => `
+                <span class="legend-item"><img src="${uri}" alt="${key}">${key}</span>
             `).join('');
         }
     </script>
