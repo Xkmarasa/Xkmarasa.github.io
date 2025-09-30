@@ -831,18 +831,17 @@
                     propertyCard.className = 'property-card';
                     
                     // Manejo de valores nulos
-                    const title = property.description ? 
-                        (property.description.split('\n')[0] || 'Luxury Property') : 
+                    const title = property.name ? 
+                        (property.name.split('\n')[0] || 'Luxury Property') : 
                         'Luxury Property';
-                    const name = property.name || 'Luxury Property';
                         
                     const location = property.ubi || 'Prime Location';
                     const price = property.price ? 
                         `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
                         'Price upon request';
                     
-                    const description = property.description ? 
-                        property.description.split('\n').slice(1).join('\n') : 
+                    const descriptionText = property.description ? 
+                        property.description : 
                         'Exceptional property with premium features and finishes in a highly desirable location.';
                         
                     const features = property.description ? 
@@ -894,16 +893,13 @@
                         
                         <div class="property-details-container">
                             <h1 class="property-title">${title}</h1>
-                            
-                            <p class="property-description">${description.replace(/\n/g, '<br>')}</p>
-                            <p class="property-summary">${name}</p>
+                            <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
+                            <div class="property-price">${price}</div>
                             <div class="property-location">${location}</div>
                             
                             <ul class="property-features">
                                 ${features.map(feature => `<li>${feature}</li>`).join('')}
                             </ul>
-                            
-                            <div class="property-price">${price}</div>
                             
                             <div class="property-details">
                                 ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
