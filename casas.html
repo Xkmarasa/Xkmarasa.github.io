@@ -570,25 +570,71 @@
             overflow: hidden;
         }
 
-        .property-detail-gallery {
+        /* Media carousel */
+        .detail-media {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
         }
-
-        .property-detail-image {
+        .detail-hero {
+            position: relative;
             width: 100%;
-            height: 250px;
-            object-fit: cover;
+            height: 360px;
             border-radius: 8px;
+            overflow: hidden;
+            background: var(--light-turquoise);
+        }
+        .detail-hero img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .detail-hero img.active { opacity: 1; }
+        .detail-ctrl {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(32,178,170,0.9);
+            color: #fff;
+            display: grid;
+            place-items: center;
             cursor: pointer;
-            transition: transform 0.3s ease;
         }
-
-        .property-detail-image:hover {
-            transform: scale(1.02);
+        .detail-ctrl.prev { left: 10px; }
+        .detail-ctrl.next { right: 10px; }
+        .detail-thumbs {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
         }
+        .thumb-strip {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .thumb {
+            width: 84px;
+            height: 64px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex: 0 0 auto;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .thumb.active { border-color: var(--primary-turquoise); }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .thumb-count { justify-self: end; color: var(--text-gray); font-size: 0.85em; }
 
         .property-detail-info {
             padding: 30px;
@@ -606,7 +652,7 @@
             color: var(--primary-blue);
         }
 
-        .property-detail-description {
+         .property-detail-description {
             margin-bottom: 30px;
             line-height: 1.8;
             color: var(--text-gray);
@@ -664,7 +710,7 @@
         }
 
         /* Media queries para tablets y desktop */
-        @media (min-width: 768px) {
+         @media (min-width: 768px) {
             header {
                 flex-direction: row;
                 justify-content: space-between;
@@ -720,10 +766,9 @@
                 width: auto;
             }
 
-            /* Detalle responsivo */
-            .property-detail-gallery {
-                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            }
+             /* Detalle responsivo */
+             .detail-hero { height: 440px; }
+             .detail-media { margin-bottom: 20px; }
         }
         
         @media (min-width: 1024px) {
@@ -1084,8 +1129,21 @@
                             <a href="casas.html" class="back-button">← Back to Properties</a>
                             <div class="property-detail-card">
                                 ${hasImages ? `
-                                    <div class="property-detail-gallery">
-                                        ${imagesHTML}
+                                    <div class="detail-media">
+                                        <div class="detail-hero">
+                                            ${imagesHTML}
+                                            <button class="detail-ctrl prev">‹</button>
+                                            <button class="detail-ctrl next">›</button>
+                                        </div>
+                                        <div class="detail-thumbs">
+                                            <div class="thumb-strip">
+                                                ${imagesArray.map((img, i) => `
+                                                    <div class="thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+                                                        <img src="${img}" alt="thumb ${i+1}">
+                                                    </div>`).join('')}
+                                            </div>
+                                            <span class="thumb-count">${imagesArray.length} Photos</span>
+                                        </div>
                                     </div>
                                 ` : '<div class="no-image" style="padding: 40px; text-align: center;">No images available</div>'}
                                 
@@ -1095,7 +1153,7 @@
                             <div class="property-location">${location}</div>
                             <div class="property-detail-price">${price}</div>
                                     
-                                    <div class="property-detail-features">
+                                     <div class="property-detail-features">
                                         <span class="feature-item"><span class="label">Bedrooms:</span> ${property.baños || '3+'}</span>
                                         <span class="feature-item"><span class="label">Bathrooms:</span> ${property.baños || '2+'}</span>
                                         <span class="feature-item"><span class="label">Total m²:</span> ${property.tamaño || '250+'}</span>
@@ -1110,13 +1168,7 @@
                     
                     // Agregar funcionalidad para hacer clic en las imágenes
                     if (hasImages) {
-                        const images = document.querySelectorAll('.property-detail-image');
-                        images.forEach(img => {
-                            img.addEventListener('click', function() {
-                                // Aquí podrías implementar un lightbox para ver la imagen en grande
-                                window.open(this.src, '_blank');
-                            });
-                        });
+                        initDetailMediaCarousel();
                     }
                     // Render map below features
                     renderPropertyMap({
@@ -1242,6 +1294,38 @@
                     .then(ok => ok ? true : tryGeocode(`${cityQuery}, España`, cityQuery))
                     .catch(() => {});
             }
+        }
+        // Initialize detail media carousel and thumbnails
+        function initDetailMediaCarousel() {
+            const hero = document.querySelector('.detail-hero');
+            if (!hero) return;
+            const slides = Array.from(hero.querySelectorAll('img'));
+            const prev = hero.querySelector('.detail-ctrl.prev');
+            const next = hero.querySelector('.detail-ctrl.next');
+            const thumbs = Array.from(document.querySelectorAll('.thumb'));
+            let index = slides.findIndex(img => img.classList.contains('active'));
+            if (index < 0) index = 0;
+
+            function show(i) {
+                slides.forEach(s => s.classList.remove('active'));
+                thumbs.forEach(t => t.classList.remove('active'));
+                slides[i].classList.add('active');
+                if (thumbs[i]) thumbs[i].classList.add('active');
+                index = i;
+            }
+
+            function nextImg() { show((index + 1) % slides.length); }
+            function prevImg() { show((index - 1 + slides.length) % slides.length); }
+
+            if (next) next.addEventListener('click', nextImg);
+            if (prev) prev.addEventListener('click', prevImg);
+            thumbs.forEach(t => t.addEventListener('click', () => show(parseInt(t.dataset.index))));
+
+            // Keyboard support
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextImg();
+                if (e.key === 'ArrowLeft') prevImg();
+            });
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0"></script>
