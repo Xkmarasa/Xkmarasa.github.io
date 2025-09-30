@@ -551,8 +551,8 @@
             .property-detail-info { padding: 20px; }
             .property-detail-title { font-size: 1.6em; }
             .property-detail-price { font-size: 1.8em; }
-            .property-detail-features { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .feature-value { font-size: 1.3em; }
+            .property-detail-features { gap: 6px; }
+            .feature-item { padding: 6px 8px; font-size: 0.85em; border-radius: 14px; }
         }
 
         /* Estilos para la página de detalles */
@@ -613,36 +613,29 @@
         }
 
         .property-detail-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
-        .feature-card {
-            background-color: var(--light-blue);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            background-color: var(--soft-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--dark-blue);
-            margin-bottom: 5px;
-        }
-
-        .feature-label {
+        .feature-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            background: var(--light-turquoise);
+            border: 1px solid var(--medium-turquoise);
+            border-radius: 16px;
+            color: var(--dark-turquoise);
+            font-weight: 600;
             font-size: 0.9em;
-            color: var(--text-gray);
+            line-height: 1;
+        }
+
+        .feature-item .label {
+            color: var(--dark-turquoise);
+            font-weight: 700;
         }
 
         .back-button {
@@ -1103,26 +1096,11 @@
                             <div class="property-detail-price">${price}</div>
                                     
                                     <div class="property-detail-features">
-                                        <div class="feature-card">
-                                            <div class="feature-value">${property.baños || '3+'}</div>
-                                            <div class="feature-label">Bedrooms</div>
-                                        </div>
-                                        <div class="feature-card">
-                                            <div class="feature-value">${property.baños || '2+'}</div>
-                                            <div class="feature-label">Bathrooms</div>
-                                        </div>
-                                        <div class="feature-card">
-                                            <div class="feature-value">${property.tamaño || '250+'}</div>
-                                            <div class="feature-label">Total m²</div>
-                                        </div>
-                                        <div class="feature-card">
-                                            <div class="feature-value">${property.construido || '180+'}</div>
-                                            <div class="feature-label">Built m²</div>
-                                        </div>
-                                        <div class="feature-card">
-                                            <div class="feature-value">${property.terraza || '70+'}</div>
-                                            <div class="feature-label">Terraces m²</div>
-                                        </div>
+                                        <span class="feature-item"><span class="label">Bedrooms:</span> ${property.baños || '3+'}</span>
+                                        <span class="feature-item"><span class="label">Bathrooms:</span> ${property.baños || '2+'}</span>
+                                        <span class="feature-item"><span class="label">Total m²:</span> ${property.tamaño || '250+'}</span>
+                                        <span class="feature-item"><span class="label">Built m²:</span> ${property.construido || '180+'}</span>
+                                        <span class="feature-item"><span class="label">Terraces m²:</span> ${property.terraza || '70+'}</span>
                                     </div>
                                     <div id="property-map"></div>
                                 </div>
