@@ -1142,14 +1142,12 @@
                         <div class="property-details-container">
                             <h1 class="property-title">${name}</h1>
                             <p class="property-description">${description.replace(/\n/g, '<br>')}</p>
-                            <div class="property-price">${price}</div>
                             <div class="property-location">${location}</div>
+                            <div class="property-price">${price}</div>
                             
                             <ul class="property-features">
                                 ${features.map(feature => `<li>${feature}</li>`).join('')}
                             </ul>
-                            
-                            <div class="property-price">${price}</div>
                             
                             <div class="property-details">
                                 ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
