@@ -660,6 +660,16 @@
             background-color: var(--dark-blue);
         }
 
+        /* Map in property detail */
+        #property-map {
+            width: 100%;
+            height: 60vh;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 18px rgba(32, 178, 170, 0.08);
+            margin-top: 20px;
+        }
+
         /* Media queries para tablets y desktop */
         @media (min-width: 768px) {
             header {
@@ -1114,6 +1124,7 @@
                                             <div class="feature-label">Terraces m²</div>
                                         </div>
                                     </div>
+                                    <div id="property-map"></div>
                                 </div>
                             </div>
                         </div>
@@ -1129,6 +1140,13 @@
                             });
                         });
                     }
+                    // Render map below features
+                    renderPropertyMap({
+                        address: property.ubi || '',
+                        lat: property.lat,
+                        lng: property.lng,
+                        title: title
+                    });
                 })
                 .catch(error => {
                     console.error('Error loading property details:', error);
@@ -1146,6 +1164,48 @@
                 });
             }
         });
+    </script>
+    <script>
+        // Lazy-load Google Maps and render a marker for the property
+        function loadGoogleMaps(apiKey, callbackName) {
+            return new Promise((resolve) => {
+                if (window.google && window.google.maps) { resolve(); return; }
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}`;
+                script.async = true;
+                script.defer = true;
+                window[callbackName] = () => resolve();
+                document.body.appendChild(script);
+            });
+        }
+
+        async function renderPropertyMap(opts) {
+            const apiKey = 'AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0';
+            await loadGoogleMaps(apiKey, 'initPropertyMapLib');
+
+            const mapEl = document.getElementById('property-map');
+            if (!mapEl) return;
+
+            const fallback = { lat: 43.2630, lng: -2.9350 }; // Bilbao
+            const map = new google.maps.Map(mapEl, { center: fallback, zoom: 14 });
+
+            const addMarker = (pos) => new google.maps.Marker({ position: pos, map, title: opts.title || 'Property' });
+
+            if (typeof opts.lat === 'number' && typeof opts.lng === 'number') {
+                const pos = { lat: opts.lat, lng: opts.lng };
+                map.setCenter(pos);
+                addMarker(pos);
+            } else if (opts.address) {
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ address: opts.address }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        const pos = results[0].geometry.location;
+                        map.setCenter(pos);
+                        addMarker(pos);
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
