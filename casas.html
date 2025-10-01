@@ -255,9 +255,6 @@
             font-weight: 700;
             color: var(--dark-turquoise);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
         /* Búsqueda de ubicación */
@@ -1177,7 +1174,7 @@
             <!-- Panel de filtros izquierdo -->
             <div class="filters-panel">
                 <div class="filter-section">
-                    <h3>📍 Ubicación</h3>
+                    <h3>Ubicación</h3>
                     <div class="search-container">
                         <input type="text" id="location-search" placeholder="Buscar ubicación..." autocomplete="off">
                         <div id="location-suggestions" class="suggestions-dropdown"></div>
@@ -1185,7 +1182,7 @@
                 </div>
                 
                 <div class="filter-section">
-                    <h3>🏠 Tipo de Propiedad</h3>
+                    <h3>Tipo de Propiedad</h3>
                     <div class="property-type-selector">
                         <label class="type-option">
                             <input type="radio" name="property-type" value="casa" checked>
@@ -1199,7 +1196,7 @@
                 </div>
                 
                 <div class="filter-section">
-                    <h3>🤖 Requisitos del Cliente</h3>
+                    <h3>Requisitos del Cliente</h3>
                     <div class="requirements-container">
                         <textarea id="client-requirements" placeholder="Describe tus requisitos específicos...&#10;Ejemplo: Necesito una casa con jardín, piscina, cerca del mar, con 3 dormitorios, presupuesto máximo 500.000€"></textarea>
                         <button id="analyze-requirements" class="analyze-btn">Analizar con IA</button>
@@ -1349,6 +1346,9 @@
                     const analysis = analyzeRequirementsWithAI(requirements);
                     displayAIAnalysis(analysis);
                     
+                    // Guardar requisitos en filtros
+                    currentFilters.requirements = requirements;
+                    
                     this.disabled = false;
                     this.textContent = 'Analizar con IA';
                 }, 2000);
@@ -1472,14 +1472,211 @@
         }
         
         function applyFilters() {
-            // Aquí implementarías la lógica de filtrado real
             console.log('Aplicando filtros:', currentFilters);
             
-            // Por ahora, solo mostramos un mensaje
-            alert('Filtros aplicados:\n' + 
-                  'Ubicación: ' + (currentFilters.location || 'Cualquiera') + '\n' +
-                  'Tipo: ' + currentFilters.propertyType + '\n' +
-                  'Requisitos: ' + (currentFilters.requirements || 'Ninguno'));
+            // Filtrar propiedades basándose en los criterios
+            const filteredProperties = filterProperties(allProperties, currentFilters);
+            
+            // Actualizar la visualización con las propiedades filtradas
+            displayFilteredProperties(filteredProperties);
+            
+            // Mostrar mensaje de resultados
+            const resultsCount = filteredProperties.length;
+            const totalCount = allProperties.length;
+            
+            if (resultsCount === 0) {
+                alert('No se encontraron propiedades que coincidan con los criterios seleccionados.');
+            } else {
+                alert(`Se encontraron ${resultsCount} propiedades de ${totalCount} totales.`);
+            }
+        }
+        
+        function filterProperties(properties, filters) {
+            return properties.filter(property => {
+                // Filtro por ubicación
+                if (filters.location && !property.ubi?.toLowerCase().includes(filters.location.toLowerCase())) {
+                    return false;
+                }
+                
+                // Filtro por tipo de propiedad (basado en el nombre o descripción)
+                if (filters.propertyType) {
+                    const propertyText = (property.name + ' ' + property.description).toLowerCase();
+                    if (filters.propertyType === 'casa' && propertyText.includes('apartamento')) {
+                        return false;
+                    }
+                    if (filters.propertyType === 'apartamento' && propertyText.includes('casa')) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por análisis de IA
+                if (filters.aiAnalysis) {
+                    const analysis = filters.aiAnalysis;
+                    
+                    // Filtro por presupuesto
+                    if (analysis.budget && property.price && property.price > analysis.budget) {
+                        return false;
+                    }
+                    
+                    // Filtro por dormitorios
+                    if (analysis.bedrooms && property.baños && property.baños < analysis.bedrooms) {
+                        return false;
+                    }
+                    
+                    // Filtro por baños
+                    if (analysis.bathrooms && property.baños && property.baños < analysis.bathrooms) {
+                        return false;
+                    }
+                    
+                    // Filtro por características
+                    if (analysis.features.length > 0) {
+                        const propertyText = (property.name + ' ' + property.description).toLowerCase();
+                        const hasRequiredFeatures = analysis.features.some(feature => {
+                            const featureMap = {
+                                'pool': ['piscina', 'pool'],
+                                'garden': ['jardín', 'garden', 'jardin'],
+                                'terrace': ['terraza', 'terrace'],
+                                'garage': ['garaje', 'garage'],
+                                'elevator': ['ascensor', 'elevator'],
+                                'sea view': ['vista al mar', 'sea view', 'vista mar'],
+                                'near sea': ['cerca del mar', 'near sea', 'cerca mar'],
+                                'city center': ['centro', 'city center', 'centro ciudad'],
+                                'quiet': ['tranquilo', 'quiet', 'tranquila']
+                            };
+                            
+                            const keywords = featureMap[feature] || [feature];
+                            return keywords.some(keyword => propertyText.includes(keyword));
+                        });
+                        
+                        if (!hasRequiredFeatures) {
+                            return false;
+                        }
+                    }
+                    
+                    // Filtro por ubicación preferida
+                    if (analysis.location && property.ubi && !property.ubi.toLowerCase().includes(analysis.location.toLowerCase())) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+        }
+        
+        function displayFilteredProperties(properties) {
+            const container = document.getElementById('properties-container');
+            container.innerHTML = '';
+            
+            if (properties.length === 0) {
+                container.innerHTML = `
+                    <div class="property-card">
+                        <div class="no-image" style="padding: 40px; text-align: center;">
+                            No se encontraron propiedades que coincidan con los criterios seleccionados
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Mostrar las propiedades filtradas (máximo 10 por página)
+            const startIndex = 0;
+            const endIndex = Math.min(10, properties.length);
+            const propertiesToShow = properties.slice(startIndex, endIndex);
+            
+            propertiesToShow.forEach((property, index) => {
+                const propertyCard = document.createElement('div');
+                propertyCard.className = 'property-card';
+                
+                // Manejo de valores nulos
+                const title = property.name ? 
+                    (property.name.split('\n')[0] || 'Luxury Property') : 
+                    'Luxury Property';
+                    
+                const location = property.ubi || 'Prime Location';
+                const price = property.price ? 
+                    `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                    'Price upon request';
+                
+                const descriptionText = property.description ? 
+                    property.description : 
+                    'Exceptional property with premium features and finishes in a highly desirable location.';
+                    
+                const features = property.description ? 
+                    property.description.split('\n').slice(1, 4) : [
+                        'Premium quality construction and materials',
+                        'Excellent location with convenient access',
+                        'Thoughtfully designed living spaces'
+                    ];
+                
+                // Manejo de imágenes desde el array JSON
+                let imagesHTML = '';
+                let indicatorsHTML = '';
+                let hasImages = false;
+                
+                if (property.imagenes && property.imagenes.length > 0) {
+                    hasImages = true;
+                    // Convertir string JSON a array si es necesario
+                    const imagesArray = typeof property.imagenes === 'string' ? 
+                        JSON.parse(property.imagenes) : property.imagenes;
+                    
+                    imagesHTML = imagesArray.map((img, idx) => `
+                        <img src="${img}" class="carousel-image ${idx === 0 ? 'active' : ''}" alt="Property image ${idx + 1}">
+                    `).join('');
+                    
+                    indicatorsHTML = imagesArray.map((img, idx) => `
+                        <div class="indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
+                    `).join('');
+                }
+                
+                // Generar HTML de la propiedad
+                propertyCard.innerHTML = `
+                    <div class="property-image-container">
+                        <div class="image-carousel">
+                            ${hasImages ? 
+                                imagesHTML : 
+                                '<div class="no-image" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%); color: var(--text-gray);">Property Image Coming Soon</div>'
+                            }
+                            ${hasImages ? `
+                                <div class="carousel-nav">
+                                    <button class="carousel-btn prev">‹</button>
+                                    <button class="carousel-btn next">›</button>
+                                </div>
+                                <div class="carousel-indicators">
+                                    ${indicatorsHTML}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="property-details-container">
+                        <h1 class="property-title">${title}</h1>
+                        <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
+                        <div class="property-price">${price}</div>
+                        <div class="property-location">${location}</div>
+                        
+                        <ul class="property-features">
+                            ${features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                        
+                        <div class="property-details">
+                            ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
+                            ${property.baños ? `<span class="detail-item">${property.baños} Baths</span>` : '<span class="detail-item">2+ Baths</span>'}
+                            ${property.tamaño ? `<span class="detail-item">${property.tamaño} m² Total</span>` : '<span class="detail-item">250+ m² Total</span>'}
+                            ${property.construido ? `<span class="detail-item">${property.construido} m² Built</span>` : '<span class="detail-item">180+ m² Built</span>'}
+                            ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
+                        </div>
+                        
+                        <a href="casas.html?id=${index}" class="view-details">View Details</a>
+                    </div>
+                `;
+                
+                container.appendChild(propertyCard);
+                
+                // Inicializar carrusel si hay imágenes
+                if (hasImages) {
+                    initCarousel(propertyCard);
+                }
+            });
         }
         
         function clearFilters() {
@@ -1496,6 +1693,9 @@
                 requirements: '',
                 aiAnalysis: null
             };
+            
+            // Restaurar visualización original de todas las propiedades
+            updatePropertiesDisplay();
         }
         
         // Inicializar todas las funcionalidades
