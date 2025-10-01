@@ -497,8 +497,9 @@
         }
         
         .property-details-container {
-            padding: 25px;
+            padding: 28px; /* más aire para evitar tocar bordes */
         }
+        .property-details-container * { max-width: 100%; }
         
         .image-carousel {
             position: relative;
@@ -606,10 +607,13 @@
         }
         
         .property-description {
-            margin-bottom: 15px;
+            margin: 12px 0 16px 0;
             line-height: 1.6;
             color: var(--text-gray);
             font-size: 0.95em;
+            overflow-wrap: anywhere; /* evita overflow en palabras largas */
+            word-break: break-word;
+            hyphens: auto;
         }
         
         .property-features {
