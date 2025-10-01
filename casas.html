@@ -1730,14 +1730,11 @@
                         
                         <div class="property-details-container">
                             <h1 class="property-title">${title}</h1>
-                            <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
-                            <div class="property-price">${price}</div>
                             <div class="property-location">${location}</div>
-                            
+                            <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
                             <ul class="property-features">
                                 ${features.map(feature => `<li>${feature}</li>`).join('')}
                             </ul>
-                            
                             <div class="property-details">
                                 ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
                                 ${property.baños ? `<span class="detail-item">${property.baños} Baths</span>` : '<span class="detail-item">2+ Baths</span>'}
@@ -1745,8 +1742,10 @@
                                 ${property.construido ? `<span class="detail-item">${property.construido} m² Built</span>` : '<span class="detail-item">180+ m² Built</span>'}
                                 ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
                             </div>
-                            
-                            <a href="casas.html?id=${startIndex + index}" class="view-details">View Details</a>
+                            <div class="bottom-row">
+                                <div class="property-price">${price}</div>
+                                <a href="casas.html?id=${startIndex + index}" class="view-details" style="width:auto;">View Details</a>
+                            </div>
                         </div>
                     `;
                     
