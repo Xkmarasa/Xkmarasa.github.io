@@ -256,6 +256,10 @@
             color: var(--dark-turquoise);
             margin-bottom: 15px;
         }
+        .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .range-row input { width: 100%; padding: 10px 12px; border: 2px solid var(--light-gray); border-radius: 8px; font-size: 0.95em; }
+        .range-row input:focus { outline: none; border-color: var(--primary-turquoise); box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1); }
+        .select-field { width: 100%; padding: 12px 15px; border: 2px solid var(--light-gray); border-radius: 8px; font-size: 0.95em; background: var(--white); }
         
         /* Búsqueda de ubicación */
         .search-container {
@@ -798,8 +802,9 @@
                 padding: 12px 14px;
             }
 
+            .logo-graphic { transform: scale(0.85); transform-origin: left center; }
             .nav-section { gap: 8px; padding: 8px 10px; }
-            .nav-item { font-size: 0.8em; padding: 8px 12px; }
+            .nav-item { font-size: 0.75em; padding: 6px 10px; }
 
             .property-container { padding: 0 10px; }
             .property-card { margin-bottom: 20px; }
@@ -1148,6 +1153,27 @@
                     </div>
                 </div>
                 
+                <div class="filter-section">
+                    <h3>Precio (€)</h3>
+                    <div class="range-row">
+                        <input type="number" id="price-min" placeholder="Mínimo">
+                        <input type="number" id="price-max" placeholder="Máximo">
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Tipo de Propiedad</h3>
+                    <select id="property-type" class="select-field">
+                        <option value="">Todos</option>
+                        <option value="house">Casa / Villa</option>
+                        <option value="apartment">Apartamento / Piso</option>
+                        <option value="townhouse">Adosado</option>
+                        <option value="plot">Parcela</option>
+                        <option value="commercial">Comercial</option>
+                        <option value="other">Otros</option>
+                    </select>
+                </div>
+                
                 
                 
                 <div class="filter-section">
@@ -1184,6 +1210,9 @@
         // Variables globales para filtros
         let currentFilters = {
             location: '',
+            priceMin: null,
+            priceMax: null,
+            propertyType: '',
             requirements: '',
             aiAnalysis: null
         };
@@ -1347,6 +1376,15 @@
             const clearBtn = document.getElementById('clear-filters');
             
             applyBtn.addEventListener('click', function() {
+                // Leer valores de precio y tipo
+                const minEl = document.getElementById('price-min');
+                const maxEl = document.getElementById('price-max');
+                const typeEl = document.getElementById('property-type');
+                const minVal = parseFloat(minEl && minEl.value);
+                const maxVal = parseFloat(maxEl && maxEl.value);
+                currentFilters.priceMin = Number.isFinite(minVal) ? minVal : null;
+                currentFilters.priceMax = Number.isFinite(maxVal) ? maxVal : null;
+                currentFilters.propertyType = typeEl ? (typeEl.value || '').trim() : '';
                 applyFilters();
             });
             
@@ -1381,58 +1419,33 @@
                 if (filters.location && !property.ubi?.toLowerCase().includes(filters.location.toLowerCase())) {
                     return false;
                 }
-                
-                // (Eliminado) Filtro por tipo de propiedad
-                
-                // Filtro por análisis de IA
-                if (filters.aiAnalysis) {
-                    const analysis = filters.aiAnalysis;
-                    
-                    // Filtro por presupuesto
-                    if (analysis.budget && property.price && property.price > analysis.budget) {
-                        return false;
-                    }
-                    
-                    // Filtro por dormitorios
-                    if (analysis.bedrooms && property.baños && property.baños < analysis.bedrooms) {
-                        return false;
-                    }
-                    
-                    // Filtro por baños
-                    if (analysis.bathrooms && property.baños && property.baños < analysis.bathrooms) {
-                        return false;
-                    }
-                    
-                    // Filtro por características
-                    if (analysis.features.length > 0) {
-                        const propertyText = (property.name + ' ' + property.description).toLowerCase();
-                        const hasRequiredFeatures = analysis.features.some(feature => {
-                            const featureMap = {
-                                'pool': ['piscina', 'pool'],
-                                'garden': ['jardín', 'garden', 'jardin'],
-                                'terrace': ['terraza', 'terrace'],
-                                'garage': ['garaje', 'garage'],
-                                'elevator': ['ascensor', 'elevator'],
-                                'sea view': ['vista al mar', 'sea view', 'vista mar'],
-                                'near sea': ['cerca del mar', 'near sea', 'cerca mar'],
-                                'city center': ['centro', 'city center', 'centro ciudad'],
-                                'quiet': ['tranquilo', 'quiet', 'tranquila']
-                            };
-                            
-                            const keywords = featureMap[feature] || [feature];
-                            return keywords.some(keyword => propertyText.includes(keyword));
-                        });
-                        
-                        if (!hasRequiredFeatures) {
-                            return false;
-                        }
-                    }
-                    
-                    // Filtro por ubicación preferida
-                    if (analysis.location && property.ubi && !property.ubi.toLowerCase().includes(analysis.location.toLowerCase())) {
+                // Filtro por precio mínimo / máximo
+                if (filters.priceMin !== null && property.price && property.price < filters.priceMin) {
+                    return false;
+                }
+                if (filters.priceMax !== null && property.price && property.price > filters.priceMax) {
+                    return false;
+                }
+                // Filtro por tipo de propiedad (heurístico)
+                if (filters.propertyType) {
+                    const text = ((property.name || '') + ' ' + (property.description || '')).toLowerCase();
+                    const matches = {
+                        house: ['casa', 'villa', 'chalet', 'house', 'villa'],
+                        apartment: ['apartamento', 'piso', 'apartment', 'flat'],
+                        townhouse: ['adosado', 'townhouse'],
+                        plot: ['parcela', 'solar', 'plot', 'land'],
+                        commercial: ['local', 'comercial', 'oficina', 'office', 'commercial'],
+                        other: []
+                    };
+                    const keywords = matches[filters.propertyType] || [];
+                    if (keywords.length && !keywords.some(k => text.includes(k))) {
                         return false;
                     }
                 }
+                
+                // (Eliminado) Filtro por tipo de propiedad
+                
+                // Filtro por análisis de IA (deshabilitado temporalmente a petición)
                 
                 return true;
             });
@@ -1559,10 +1572,19 @@
             document.getElementById('location-search').value = '';
             document.getElementById('client-requirements').value = '';
             document.getElementById('ai-analysis').classList.remove('show');
+            const minEl = document.getElementById('price-min');
+            const maxEl = document.getElementById('price-max');
+            const typeEl = document.getElementById('property-type');
+            if (minEl) minEl.value = '';
+            if (maxEl) maxEl.value = '';
+            if (typeEl) typeEl.value = '';
             
             // Resetear filtros
             currentFilters = {
                 location: '',
+                priceMin: null,
+                priceMax: null,
+                propertyType: '',
                 requirements: '',
                 aiAnalysis: null
             };
