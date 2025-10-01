@@ -1216,6 +1216,8 @@
             requirements: '',
             aiAnalysis: null
         };
+        // Fuente de datos de propiedades (debe ser global para filtros)
+        let allProperties = [];
         
         // Búsqueda de ubicación con Google Places Autocomplete (ciudades, regiones y países)
         function initLocationSearch() {
@@ -1605,7 +1607,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar sistema de filtros
             initFilterSystem();
-            let allProperties = [];
+            allProperties = [];
             let currentPage = 1;
             const propertiesPerPage = 10;
             
