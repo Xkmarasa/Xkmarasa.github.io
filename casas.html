@@ -206,10 +206,270 @@
             box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
         }
         
-        .property-container {
-            max-width: 1200px;
+        /* Layout principal con panel de filtros */
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
             margin: 20px auto;
             padding: 0 15px;
+        }
+        
+        .filters-panel {
+            width: 350px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(32, 178, 170, 0.08);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .property-container {
+            max-width: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Estilos para las secciones de filtros */
+        .filter-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .filter-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .filter-section h3 {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--dark-turquoise);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Búsqueda de ubicación */
+        .search-container {
+            position: relative;
+        }
+        
+        #location-search {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        #location-search:focus {
+            outline: none;
+            border-color: var(--primary-turquoise);
+            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+        }
+        
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .suggestion-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--light-gray);
+            transition: background-color 0.2s ease;
+            font-size: 0.9em;
+        }
+        
+        .suggestion-item:hover {
+            background: var(--light-turquoise);
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Selector de tipo de propiedad */
+        .property-type-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .type-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        .type-option:hover {
+            border-color: var(--primary-turquoise);
+            background: var(--light-turquoise);
+        }
+        
+        .type-option input[type="radio"] {
+            display: none;
+        }
+        
+        .type-option input[type="radio"]:checked + .type-label {
+            color: var(--white);
+        }
+        
+        .type-option input[type="radio"]:checked {
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
+        }
+        
+        .type-option:has(input:checked) {
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
+            border-color: var(--primary-turquoise);
+            color: var(--white);
+        }
+        
+        .type-label {
+            font-weight: 600;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        /* Contenedor de requisitos */
+        .requirements-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        #client-requirements {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        #client-requirements:focus {
+            outline: none;
+            border-color: var(--primary-turquoise);
+            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+        }
+        
+        .analyze-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .ai-analysis-result {
+            background: var(--light-turquoise);
+            border: 1px solid var(--medium-turquoise);
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        .ai-analysis-result.show {
+            display: block;
+        }
+        
+        .ai-analysis-result .analysis-title {
+            font-weight: 700;
+            color: var(--dark-turquoise);
+            margin-bottom: 8px;
+        }
+        
+        .ai-analysis-result .analysis-content {
+            color: var(--text-gray);
+        }
+        
+        /* Botones de acción */
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .apply-filters-btn, .clear-filters-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .apply-filters-btn {
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
+            color: var(--white);
+        }
+        
+        .apply-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
+        }
+        
+        .clear-filters-btn {
+            background: var(--white);
+            color: var(--text-gray);
+            border: 2px solid var(--light-gray);
+        }
+        
+        .clear-filters-btn:hover {
+            background: var(--light-gray);
+            border-color: var(--medium-gray);
         }
         
         .property-card {
@@ -505,6 +765,47 @@
 
         /* Mobile adjustments */
         @media (max-width: 767px) {
+            .main-layout {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .filters-panel {
+                width: 100%;
+                position: static;
+                order: 2;
+            }
+            
+            .content-area {
+                order: 1;
+            }
+            
+            .filter-section h3 {
+                font-size: 1em;
+            }
+            
+            .property-type-selector {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .type-option {
+                padding: 10px;
+            }
+            
+            #client-requirements {
+                min-height: 80px;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .apply-filters-btn, .clear-filters-btn {
+                padding: 10px 15px;
+            }
+            
             header {
                 padding: 12px 14px;
             }
@@ -872,12 +1173,55 @@
     </header>
     
     <div id="app-content">
-        <!-- Contenido principal se cargará aquí dinámicamente -->
-        <div class="property-container" id="properties-container">
-            <div class="loading">Loading properties...</div>
+        <div class="main-layout">
+            <!-- Panel de filtros izquierdo -->
+            <div class="filters-panel">
+                <div class="filter-section">
+                    <h3>📍 Ubicación</h3>
+                    <div class="search-container">
+                        <input type="text" id="location-search" placeholder="Buscar ubicación..." autocomplete="off">
+                        <div id="location-suggestions" class="suggestions-dropdown"></div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>🏠 Tipo de Propiedad</h3>
+                    <div class="property-type-selector">
+                        <label class="type-option">
+                            <input type="radio" name="property-type" value="casa" checked>
+                            <span class="type-label">Casa</span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="property-type" value="apartamento">
+                            <span class="type-label">Apartamento</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>🤖 Requisitos del Cliente</h3>
+                    <div class="requirements-container">
+                        <textarea id="client-requirements" placeholder="Describe tus requisitos específicos...&#10;Ejemplo: Necesito una casa con jardín, piscina, cerca del mar, con 3 dormitorios, presupuesto máximo 500.000€"></textarea>
+                        <button id="analyze-requirements" class="analyze-btn">Analizar con IA</button>
+                        <div id="ai-analysis" class="ai-analysis-result"></div>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button id="apply-filters" class="apply-filters-btn">Aplicar Filtros</button>
+                    <button id="clear-filters" class="clear-filters-btn">Limpiar</button>
+                </div>
+            </div>
+            
+            <!-- Contenido principal -->
+            <div class="content-area">
+                <div class="property-container" id="properties-container">
+                    <div class="loading">Loading properties...</div>
+                </div>
+                
+                <div class="pagination" id="pagination-container"></div>
+            </div>
         </div>
-        
-        <div class="pagination" id="pagination-container"></div>
     </div>
     
     <footer>
@@ -885,7 +1229,286 @@
     </footer>
     
     <script>
+        // Variables globales para filtros
+        let currentFilters = {
+            location: '',
+            propertyType: 'casa',
+            requirements: '',
+            aiAnalysis: null
+        };
+        
+        // Funcionalidad de búsqueda de ubicación con geocoding
+        function initLocationSearch() {
+            const searchInput = document.getElementById('location-search');
+            const suggestionsContainer = document.getElementById('location-suggestions');
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    suggestionsContainer.style.display = 'none';
+                    return;
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    searchLocations(query);
+                }, 300);
+            });
+            
+            // Ocultar sugerencias al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    suggestionsContainer.style.display = 'none';
+                }
+            });
+        }
+        
+        function searchLocations(query) {
+            const suggestionsContainer = document.getElementById('location-suggestions');
+            
+            // Simulación de búsqueda de ubicaciones (en producción usarías una API real)
+            const mockLocations = [
+                'Bilbao, España',
+                'San Sebastián, España', 
+                'Vitoria-Gasteiz, España',
+                'Santander, España',
+                'Burgos, España',
+                'León, España',
+                'Pamplona, España',
+                'Logroño, España',
+                'Zaragoza, España',
+                'Madrid, España',
+                'Barcelona, España',
+                'Valencia, España',
+                'Sevilla, España',
+                'Málaga, España',
+                'Cádiz, España',
+                'Huelva, España',
+                'Córdoba, España',
+                'Granada, España',
+                'Murcia, España',
+                'Alicante, España'
+            ];
+            
+            const filteredLocations = mockLocations.filter(location => 
+                location.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+            
+            if (filteredLocations.length > 0) {
+                suggestionsContainer.innerHTML = filteredLocations.map(location => 
+                    `<div class="suggestion-item" data-location="${location}">${location}</div>`
+                ).join('');
+                suggestionsContainer.style.display = 'block';
+                
+                // Añadir event listeners a las sugerencias
+                suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        searchInput.value = this.dataset.location;
+                        currentFilters.location = this.dataset.location;
+                        suggestionsContainer.style.display = 'none';
+                    });
+                });
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        }
+        
+        // Funcionalidad del selector de tipo de propiedad
+        function initPropertyTypeSelector() {
+            const typeOptions = document.querySelectorAll('input[name="property-type"]');
+            
+            typeOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    currentFilters.propertyType = this.value;
+                });
+            });
+        }
+        
+        // Funcionalidad de análisis de requisitos con IA
+        function initRequirementsAnalysis() {
+            const analyzeBtn = document.getElementById('analyze-requirements');
+            const requirementsTextarea = document.getElementById('client-requirements');
+            const analysisResult = document.getElementById('ai-analysis');
+            
+            analyzeBtn.addEventListener('click', function() {
+                const requirements = requirementsTextarea.value.trim();
+                
+                if (!requirements) {
+                    alert('Por favor, describe tus requisitos antes de analizar.');
+                    return;
+                }
+                
+                this.disabled = true;
+                this.textContent = 'Analizando...';
+                
+                // Simulación de análisis con IA
+                setTimeout(() => {
+                    const analysis = analyzeRequirementsWithAI(requirements);
+                    displayAIAnalysis(analysis);
+                    
+                    this.disabled = false;
+                    this.textContent = 'Analizar con IA';
+                }, 2000);
+            });
+        }
+        
+        function analyzeRequirementsWithAI(requirements) {
+            // Simulación de análisis de IA
+            const keywords = requirements.toLowerCase();
+            const analysis = {
+                budget: extractBudget(requirements),
+                bedrooms: extractBedrooms(requirements),
+                bathrooms: extractBathrooms(requirements),
+                features: extractFeatures(requirements),
+                location: extractLocation(requirements),
+                propertyType: extractPropertyType(requirements)
+            };
+            
+            return analysis;
+        }
+        
+        function extractBudget(text) {
+            const budgetMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:€|euros?|euro)/i);
+            return budgetMatch ? parseFloat(budgetMatch[1]) : null;
+        }
+        
+        function extractBedrooms(text) {
+            const bedroomMatch = text.match(/(\d+)\s*(?:dormitorios?|habitaciones?|bedrooms?)/i);
+            return bedroomMatch ? parseInt(bedroomMatch[1]) : null;
+        }
+        
+        function extractBathrooms(text) {
+            const bathroomMatch = text.match(/(\d+)\s*(?:baños?|bathrooms?)/i);
+            return bathroomMatch ? parseInt(bathroomMatch[1]) : null;
+        }
+        
+        function extractFeatures(text) {
+            const features = [];
+            const featureKeywords = {
+                'piscina': 'pool',
+                'jardín': 'garden',
+                'terraza': 'terrace',
+                'garaje': 'garage',
+                'ascensor': 'elevator',
+                'vista al mar': 'sea view',
+                'cerca del mar': 'near sea',
+                'centro': 'city center',
+                'tranquilo': 'quiet'
+            };
+            
+            Object.keys(featureKeywords).forEach(keyword => {
+                if (text.includes(keyword)) {
+                    features.push(featureKeywords[keyword]);
+                }
+            });
+            
+            return features;
+        }
+        
+        function extractLocation(text) {
+            const locationMatch = text.match(/(?:en|cerca de|en)\s+([A-Za-z\s]+)/i);
+            return locationMatch ? locationMatch[1].trim() : null;
+        }
+        
+        function extractPropertyType(text) {
+            if (text.includes('casa') || text.includes('house')) return 'casa';
+            if (text.includes('apartamento') || text.includes('apartment')) return 'apartamento';
+            return null;
+        }
+        
+        function displayAIAnalysis(analysis) {
+            const analysisResult = document.getElementById('ai-analysis');
+            
+            let analysisHTML = '<div class="analysis-title">🤖 Análisis de IA</div><div class="analysis-content">';
+            
+            if (analysis.budget) {
+                analysisHTML += `<p><strong>💰 Presupuesto:</strong> ${analysis.budget.toLocaleString()}€</p>`;
+            }
+            
+            if (analysis.bedrooms) {
+                analysisHTML += `<p><strong>🛏️ Dormitorios:</strong> ${analysis.bedrooms}</p>`;
+            }
+            
+            if (analysis.bathrooms) {
+                analysisHTML += `<p><strong>🚿 Baños:</strong> ${analysis.bathrooms}</p>`;
+            }
+            
+            if (analysis.features.length > 0) {
+                analysisHTML += `<p><strong>✨ Características:</strong> ${analysis.features.join(', ')}</p>`;
+            }
+            
+            if (analysis.location) {
+                analysisHTML += `<p><strong>📍 Ubicación preferida:</strong> ${analysis.location}</p>`;
+            }
+            
+            if (analysis.propertyType) {
+                analysisHTML += `<p><strong>🏠 Tipo:</strong> ${analysis.propertyType}</p>`;
+            }
+            
+            analysisHTML += '</div>';
+            
+            analysisResult.innerHTML = analysisHTML;
+            analysisResult.classList.add('show');
+            
+            // Guardar análisis en filtros
+            currentFilters.aiAnalysis = analysis;
+        }
+        
+        // Funcionalidad de aplicación de filtros
+        function initFilterActions() {
+            const applyBtn = document.getElementById('apply-filters');
+            const clearBtn = document.getElementById('clear-filters');
+            
+            applyBtn.addEventListener('click', function() {
+                applyFilters();
+            });
+            
+            clearBtn.addEventListener('click', function() {
+                clearFilters();
+            });
+        }
+        
+        function applyFilters() {
+            // Aquí implementarías la lógica de filtrado real
+            console.log('Aplicando filtros:', currentFilters);
+            
+            // Por ahora, solo mostramos un mensaje
+            alert('Filtros aplicados:\n' + 
+                  'Ubicación: ' + (currentFilters.location || 'Cualquiera') + '\n' +
+                  'Tipo: ' + currentFilters.propertyType + '\n' +
+                  'Requisitos: ' + (currentFilters.requirements || 'Ninguno'));
+        }
+        
+        function clearFilters() {
+            // Limpiar campos
+            document.getElementById('location-search').value = '';
+            document.getElementById('client-requirements').value = '';
+            document.querySelector('input[name="property-type"][value="casa"]').checked = true;
+            document.getElementById('ai-analysis').classList.remove('show');
+            
+            // Resetear filtros
+            currentFilters = {
+                location: '',
+                propertyType: 'casa',
+                requirements: '',
+                aiAnalysis: null
+            };
+        }
+        
+        // Inicializar todas las funcionalidades
+        function initFilterSystem() {
+            initLocationSearch();
+            initPropertyTypeSelector();
+            initRequirementsAnalysis();
+            initFilterActions();
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar sistema de filtros
+            initFilterSystem();
             let allProperties = [];
             let currentPage = 1;
             const propertiesPerPage = 10;
