@@ -770,24 +770,15 @@
             .filters-panel {
                 width: 100%;
                 position: static;
-                order: 2;
+                order: 1;
             }
             
             .content-area {
-                order: 1;
+                order: 2;
             }
             
             .filter-section h3 {
                 font-size: 1em;
-            }
-            
-            .property-type-selector {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .type-option {
-                padding: 10px;
             }
             
             #client-requirements {
@@ -806,30 +797,6 @@
             header {
                 padding: 12px 14px;
             }
-
-            .logo-graphic {
-                height: 90px;
-                max-width: 260px;
-                padding: 6px;
-            }
-
-            .semicircle {
-                bottom: 28px;
-                width: 70px;
-                height: 35px;
-                border-width: 4px;
-            }
-
-            .horizon-line {
-                bottom: 28px;
-                left: 70px;
-                width: calc(100% - 60px); /* un poco más larga que el arco en móvil */
-                height: 4px;
-            }
-
-            .semicircle-underline { bottom: 20px; left: 6px; width: 60px; height: 4px; }
-            .logo-text { margin-left: 78px; }
-            .logo-main { font-size: 0.95em; }
 
             .nav-section { gap: 8px; padding: 8px 10px; }
             .nav-item { font-size: 0.8em; padding: 8px 12px; }
@@ -1181,19 +1148,7 @@
                     </div>
                 </div>
                 
-                <div class="filter-section">
-                    <h3>Tipo de Propiedad</h3>
-                    <div class="property-type-selector">
-                        <label class="type-option">
-                            <input type="radio" name="property-type" value="casa" checked>
-                            <span class="type-label">Casa</span>
-                        </label>
-                        <label class="type-option">
-                            <input type="radio" name="property-type" value="apartamento">
-                            <span class="type-label">Apartamento</span>
-                        </label>
-                    </div>
-                </div>
+                
                 
                 <div class="filter-section">
                     <h3>Requisitos del Cliente</h3>
@@ -1229,100 +1184,29 @@
         // Variables globales para filtros
         let currentFilters = {
             location: '',
-            propertyType: 'casa',
             requirements: '',
             aiAnalysis: null
         };
         
-        // Funcionalidad de búsqueda de ubicación con geocoding
+        // Búsqueda de ubicación con Google Places Autocomplete (ciudades, regiones y países)
         function initLocationSearch() {
             const searchInput = document.getElementById('location-search');
-            const suggestionsContainer = document.getElementById('location-suggestions');
-            let searchTimeout;
-            
-            searchInput.addEventListener('input', function() {
-                const query = this.value.trim();
-                
-                clearTimeout(searchTimeout);
-                
-                if (query.length < 2) {
-                    suggestionsContainer.style.display = 'none';
-                    return;
-                }
-                
-                searchTimeout = setTimeout(() => {
-                    searchLocations(query);
-                }, 300);
-            });
-            
-            // Ocultar sugerencias al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                    suggestionsContainer.style.display = 'none';
-                }
-            });
-        }
-        
-        function searchLocations(query) {
-            const suggestionsContainer = document.getElementById('location-suggestions');
-            
-            // Simulación de búsqueda de ubicaciones (en producción usarías una API real)
-            const mockLocations = [
-                'Bilbao, España',
-                'San Sebastián, España', 
-                'Vitoria-Gasteiz, España',
-                'Santander, España',
-                'Burgos, España',
-                'León, España',
-                'Pamplona, España',
-                'Logroño, España',
-                'Zaragoza, España',
-                'Madrid, España',
-                'Barcelona, España',
-                'Valencia, España',
-                'Sevilla, España',
-                'Málaga, España',
-                'Cádiz, España',
-                'Huelva, España',
-                'Córdoba, España',
-                'Granada, España',
-                'Murcia, España',
-                'Alicante, España'
-            ];
-            
-            const filteredLocations = mockLocations.filter(location => 
-                location.toLowerCase().includes(query.toLowerCase())
-            ).slice(0, 5);
-            
-            if (filteredLocations.length > 0) {
-                suggestionsContainer.innerHTML = filteredLocations.map(location => 
-                    `<div class="suggestion-item" data-location="${location}">${location}</div>`
-                ).join('');
-                suggestionsContainer.style.display = 'block';
-                
-                // Añadir event listeners a las sugerencias
-                suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
-                    item.addEventListener('click', function() {
-                        searchInput.value = this.dataset.location;
-                        currentFilters.location = this.dataset.location;
-                        suggestionsContainer.style.display = 'none';
-                    });
-                });
-            } else {
-                suggestionsContainer.style.display = 'none';
+            if (!window.google || !google.maps || !google.maps.places) {
+                return; // Si la librería no está cargada, no romper la página
             }
-        }
-        
-        // Funcionalidad del selector de tipo de propiedad
-        function initPropertyTypeSelector() {
-            const typeOptions = document.querySelectorAll('input[name="property-type"]');
-            
-            typeOptions.forEach(option => {
-                option.addEventListener('change', function() {
-                    currentFilters.propertyType = this.value;
-                });
+            const autocomplete = new google.maps.places.Autocomplete(searchInput, {
+                types: ['(regions)'], // incluye países, regiones y localidades
+                fields: ['name', 'formatted_address', 'address_components', 'geometry']
+            });
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                const value = place.formatted_address || place.name || searchInput.value;
+                searchInput.value = value; // autocompletar en el input
+                currentFilters.location = value; // guardar en filtros
             });
         }
+        
+        // (Eliminado) Selector de tipo de propiedad
         
         // Funcionalidad de análisis de requisitos con IA
         function initRequirementsAnalysis() {
@@ -1498,16 +1382,7 @@
                     return false;
                 }
                 
-                // Filtro por tipo de propiedad (basado en el nombre o descripción)
-                if (filters.propertyType) {
-                    const propertyText = (property.name + ' ' + property.description).toLowerCase();
-                    if (filters.propertyType === 'casa' && propertyText.includes('apartamento')) {
-                        return false;
-                    }
-                    if (filters.propertyType === 'apartamento' && propertyText.includes('casa')) {
-                        return false;
-                    }
-                }
+                // (Eliminado) Filtro por tipo de propiedad
                 
                 // Filtro por análisis de IA
                 if (filters.aiAnalysis) {
@@ -1683,13 +1558,11 @@
             // Limpiar campos
             document.getElementById('location-search').value = '';
             document.getElementById('client-requirements').value = '';
-            document.querySelector('input[name="property-type"][value="casa"]').checked = true;
             document.getElementById('ai-analysis').classList.remove('show');
             
             // Resetear filtros
             currentFilters = {
                 location: '',
-                propertyType: 'casa',
                 requirements: '',
                 aiAnalysis: null
             };
@@ -1701,7 +1574,6 @@
         // Inicializar todas las funcionalidades
         function initFilterSystem() {
             initLocationSearch();
-            initPropertyTypeSelector();
             initRequirementsAnalysis();
             initFilterActions();
         }
