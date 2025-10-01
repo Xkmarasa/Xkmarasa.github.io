@@ -1016,6 +1016,8 @@
             let currentPage = 1;
             const propertiesPerPage = 10;
             let editingPropertyIndex = null;
+            // Inicializar autocompletado en el campo de ubicación del formulario
+            initAdminLocationAutocomplete();
             
             // Load properties
             loadProperties();
@@ -1279,6 +1281,7 @@
                 document.getElementById('propertyForm').reset();
                 document.getElementById('acceptButton').textContent = 'Añadir';
                 document.getElementById('propertyModal').style.display = 'block';
+                initAdminLocationAutocomplete();
             };
             
             window.editProperty = async function(index) {
@@ -1303,6 +1306,7 @@
                 }
                 
                 document.getElementById('propertyModal').style.display = 'block';
+                initAdminLocationAutocomplete();
             };
             
             window.deleteProperty = async function(index) {
@@ -1490,6 +1494,24 @@
                 });
             };
         });
+
+        // Autocompletado de ubicación (mismo comportamiento que en filtros de casas.html)
+        function initAdminLocationAutocomplete() {
+            const input = document.getElementById('propertyUbi');
+            if (!input) return;
+            if (input.__placesBound) return;
+            if (!window.google || !google.maps || !google.maps.places) return;
+            const autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['(regions)'],
+                fields: ['name', 'formatted_address', 'address_components', 'geometry']
+            });
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                input.value = place.formatted_address || place.name || input.value;
+            });
+            input.__placesBound = true;
+        }
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0&libraries=places"></script>
 </body>
 </html>
