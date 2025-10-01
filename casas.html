@@ -1380,11 +1380,13 @@
                 const minEl = document.getElementById('price-min');
                 const maxEl = document.getElementById('price-max');
                 const typeEl = document.getElementById('property-type');
+                const locEl = document.getElementById('location-search');
                 const minVal = parseFloat(minEl && minEl.value);
                 const maxVal = parseFloat(maxEl && maxEl.value);
                 currentFilters.priceMin = Number.isFinite(minVal) ? minVal : null;
                 currentFilters.priceMax = Number.isFinite(maxVal) ? maxVal : null;
                 currentFilters.propertyType = typeEl ? (typeEl.value || '').trim() : '';
+                currentFilters.location = locEl ? (locEl.value || '').trim() : '';
                 applyFilters();
             });
             
