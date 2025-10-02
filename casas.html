@@ -216,15 +216,46 @@
         }
         
         .filters-panel {
-            width: 350px;
+            width: 320px;
             background: var(--white);
-            border-radius: 12px;
+            border-radius: 8px;
             box-shadow: 0 4px 25px rgba(32, 178, 170, 0.08);
-            padding: 25px;
+            padding: 15px;
             height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
             position: sticky;
             top: 20px;
             border: 1px solid var(--light-gray);
+        }
+        
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-turquoise);
+        }
+        
+        .toggle-filters-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark-turquoise);
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-filters-btn:hover {
+            background: var(--light-turquoise);
+        }
+        
+        .filters-content {
+            transition: all 0.3s ease;
         }
         
         .content-area {
@@ -240,8 +271,8 @@
         
         /* Estilos para las secciones de filtros */
         .filter-section {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--light-gray);
         }
         
@@ -251,15 +282,15 @@
         }
         
         .filter-section h3 {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 700;
             color: var(--dark-turquoise);
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
-        .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .range-row input { width: 100%; padding: 10px 12px; border: 2px solid var(--light-gray); border-radius: 8px; font-size: 0.95em; }
+        .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .range-row input { width: 100%; padding: 8px 10px; border: 2px solid var(--light-gray); border-radius: 6px; font-size: 0.9em; }
         .range-row input:focus { outline: none; border-color: var(--primary-turquoise); box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1); }
-        .select-field { width: 100%; padding: 12px 15px; border: 2px solid var(--light-gray); border-radius: 8px; font-size: 0.95em; background: var(--white); }
+        .select-field { width: 100%; padding: 8px 12px; border: 2px solid var(--light-gray); border-radius: 6px; font-size: 0.9em; background: var(--white); }
         
         /* Búsqueda de ubicación */
         .search-container {
@@ -268,10 +299,10 @@
         
         #location-search {
             width: 100%;
-            padding: 12px 15px;
+            padding: 8px 12px;
             border: 2px solid var(--light-gray);
-            border-radius: 8px;
-            font-size: 0.95em;
+            border-radius: 6px;
+            font-size: 0.9em;
             transition: all 0.3s ease;
             background: var(--white);
         }
@@ -371,11 +402,11 @@
         
         #client-requirements {
             width: 100%;
-            min-height: 100px;
-            padding: 12px 15px;
+            min-height: 60px;
+            padding: 8px 12px;
             border: 2px solid var(--light-gray);
-            border-radius: 8px;
-            font-size: 0.9em;
+            border-radius: 6px;
+            font-size: 0.85em;
             font-family: inherit;
             resize: vertical;
             transition: all 0.3s ease;
@@ -443,13 +474,13 @@
         
         .apply-filters-btn, .clear-filters-btn {
             flex: 1;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
         
         .apply-filters-btn {
@@ -774,34 +805,66 @@
         @media (max-width: 767px) {
             .main-layout {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
+                margin: 10px auto;
+                padding: 0 10px;
             }
             
             .filters-panel {
                 width: 100%;
                 position: static;
                 order: 1;
+                padding: 12px;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .toggle-filters-btn {
+                display: block;
+            }
+            
+            .filters-content.collapsed {
+                display: none;
             }
             
             .content-area {
                 order: 2;
             }
             
+            .filter-section {
+                margin-bottom: 12px;
+                padding-bottom: 10px;
+            }
+            
             .filter-section h3 {
-                font-size: 1em;
+                font-size: 0.95em;
+                margin-bottom: 6px;
+            }
+            
+            .range-row {
+                gap: 6px;
+            }
+            
+            .range-row input, .select-field, #location-search {
+                padding: 6px 10px;
+                font-size: 0.85em;
             }
             
             #client-requirements {
-                min-height: 80px;
+                min-height: 50px;
+                padding: 6px 10px;
+                font-size: 0.8em;
             }
             
             .filter-actions {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 8px;
+                margin-top: 15px;
             }
             
             .apply-filters-btn, .clear-filters-btn {
-                padding: 10px 15px;
+                padding: 8px 12px;
+                font-size: 0.8em;
             }
             
             header {
@@ -1173,7 +1236,14 @@
     <div id="app-content">
         <div class="main-layout">
             <!-- Panel de filtros izquierdo -->
-            <div class="filters-panel">
+            <div class="filters-panel" id="filters-panel">
+                <div class="filters-header">
+                    <h2 style="margin: 0; font-size: 1.1em; color: var(--dark-turquoise);">Filtros de Búsqueda</h2>
+                    <button class="toggle-filters-btn" id="toggle-filters" onclick="toggleFilters()">
+                        <span id="toggle-icon">▼</span>
+                    </button>
+                </div>
+                <div class="filters-content" id="filters-content">
                 <div class="filter-section">
                     <h3>Ubicación</h3>
                     <div class="search-container">
@@ -1248,6 +1318,7 @@
                 <div class="filter-actions">
                     <button id="apply-filters" class="apply-filters-btn">Aplicar Filtros</button>
                     <button id="clear-filters" class="clear-filters-btn">Limpiar</button>
+                </div>
                 </div>
             </div>
             
@@ -1479,18 +1550,21 @@
         }
         
         function applyFilters() {
-            console.log('Aplicando filtros:', currentFilters);
+            console.log('🔍 Aplicando filtros:', currentFilters);
+            console.log('📊 Total propiedades disponibles:', allProperties.length);
             
             // Verificar si hay algún filtro activo
             const hasActiveFilters = 
                 (currentFilters.location && currentFilters.location.trim() !== '') ||
-                (currentFilters.priceMin !== null && !isNaN(currentFilters.priceMin)) ||
-                (currentFilters.priceMax !== null && !isNaN(currentFilters.priceMax)) ||
+                (currentFilters.priceMin !== null && !isNaN(currentFilters.priceMin) && currentFilters.priceMin > 0) ||
+                (currentFilters.priceMax !== null && !isNaN(currentFilters.priceMax) && currentFilters.priceMax > 0) ||
                 (currentFilters.propertyType && currentFilters.propertyType.trim() !== '') ||
-                (currentFilters.bedrooms !== null && !isNaN(currentFilters.bedrooms)) ||
-                (currentFilters.bathrooms !== null && !isNaN(currentFilters.bathrooms)) ||
-                (currentFilters.minSize !== null && !isNaN(currentFilters.minSize)) ||
-                (currentFilters.maxSize !== null && !isNaN(currentFilters.maxSize));
+                (currentFilters.bedrooms !== null && !isNaN(currentFilters.bedrooms) && currentFilters.bedrooms > 0) ||
+                (currentFilters.bathrooms !== null && !isNaN(currentFilters.bathrooms) && currentFilters.bathrooms > 0) ||
+                (currentFilters.minSize !== null && !isNaN(currentFilters.minSize) && currentFilters.minSize > 0) ||
+                (currentFilters.maxSize !== null && !isNaN(currentFilters.maxSize) && currentFilters.maxSize > 0);
+            
+            console.log('🎯 Filtros activos:', hasActiveFilters);
             
             // Si no hay filtros activos, mostrar todas las propiedades
             if (!hasActiveFilters) {
@@ -1501,6 +1575,7 @@
             
             // Filtrar propiedades basándose en los criterios
             const filteredProperties = filterProperties(allProperties, currentFilters);
+            console.log('✅ Propiedades filtradas:', filteredProperties.length);
             
             // Actualizar la visualización con las propiedades filtradas
             displayFilteredProperties(filteredProperties);
@@ -1640,7 +1715,7 @@
                 
                 // Filtro por dormitorios - solo aplicar si se especifica
                 if (filters.bedrooms !== null && !isNaN(filters.bedrooms) && filters.bedrooms > 0) {
-                    const propertyBedrooms = parseInt(property.baños) || 0;
+                    const propertyBedrooms = parseInt(property.dormitorios) || parseInt(property.bedrooms) || parseInt(property.baños) || 0;
                     if (propertyBedrooms > 0 && propertyBedrooms < filters.bedrooms) {
                         return false;
                     }
@@ -1648,7 +1723,7 @@
                 
                 // Filtro por baños - solo aplicar si se especifica
                 if (filters.bathrooms !== null && !isNaN(filters.bathrooms) && filters.bathrooms > 0) {
-                    const propertyBathrooms = parseInt(property.bathrooms) || parseInt(property.baños) || 0;
+                    const propertyBathrooms = parseInt(property.bathrooms) || parseInt(property.banos) || parseInt(property.aseos) || 0;
                     if (propertyBathrooms > 0 && propertyBathrooms < filters.bathrooms) {
                         return false;
                     }
@@ -1832,11 +1907,33 @@
             updatePropertiesDisplay();
         }
         
+        // Función para toggle de filtros en móvil
+        function toggleFilters() {
+            const filtersContent = document.getElementById('filters-content');
+            const toggleIcon = document.getElementById('toggle-icon');
+            
+            if (filtersContent.classList.contains('collapsed')) {
+                filtersContent.classList.remove('collapsed');
+                toggleIcon.textContent = '▼';
+            } else {
+                filtersContent.classList.add('collapsed');
+                toggleIcon.textContent = '▶';
+            }
+        }
+        
         // Inicializar todas las funcionalidades
         function initFilterSystem() {
             initLocationSearch();
             initRequirementsAnalysis();
             initFilterActions();
+            
+            // Colapsar filtros por defecto en móvil
+            if (window.innerWidth <= 767) {
+                const filtersContent = document.getElementById('filters-content');
+                const toggleIcon = document.getElementById('toggle-icon');
+                filtersContent.classList.add('collapsed');
+                toggleIcon.textContent = '▶';
+            }
         }
         
         document.addEventListener('DOMContentLoaded', function() {
