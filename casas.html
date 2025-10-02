@@ -1670,7 +1670,10 @@
         }
         
         function filterProperties(properties, filters) {
-            return properties.filter(property => {
+            console.log('🔍 Iniciando filtrado de', properties.length, 'propiedades');
+            console.log('🎛️ Filtros aplicados:', filters);
+            
+            const filtered = properties.filter(property => {
                 // Filtro por ubicación - solo aplicar si hay texto de búsqueda
                 if (filters.location && filters.location.trim() !== '') {
                     const searchLocation = filters.location.toLowerCase().trim();
@@ -1683,7 +1686,9 @@
                 // Filtro por precio mínimo - solo aplicar si se especifica un valor
                 if (filters.priceMin !== null && !isNaN(filters.priceMin) && filters.priceMin > 0) {
                     const propertyPrice = parseFloat(property.price) || 0;
+                    // Solo filtrar si la propiedad tiene precio y es menor al mínimo
                     if (propertyPrice > 0 && propertyPrice < filters.priceMin) {
+                        console.log(`❌ Propiedad rechazada por precio mínimo: ${propertyPrice} < ${filters.priceMin}`);
                         return false;
                     }
                 }
@@ -1691,7 +1696,9 @@
                 // Filtro por precio máximo - solo aplicar si se especifica un valor
                 if (filters.priceMax !== null && !isNaN(filters.priceMax) && filters.priceMax > 0) {
                     const propertyPrice = parseFloat(property.price) || 0;
+                    // Solo filtrar si la propiedad tiene precio y es mayor al máximo
                     if (propertyPrice > 0 && propertyPrice > filters.priceMax) {
+                        console.log(`❌ Propiedad rechazada por precio máximo: ${propertyPrice} > ${filters.priceMax}`);
                         return false;
                     }
                 }
@@ -1716,7 +1723,9 @@
                 // Filtro por dormitorios - solo aplicar si se especifica
                 if (filters.bedrooms !== null && !isNaN(filters.bedrooms) && filters.bedrooms > 0) {
                     const propertyBedrooms = parseInt(property.dormitorios) || parseInt(property.bedrooms) || parseInt(property.baños) || 0;
+                    // Solo filtrar si la propiedad tiene datos de dormitorios y es menor al filtro
                     if (propertyBedrooms > 0 && propertyBedrooms < filters.bedrooms) {
+                        console.log(`❌ Propiedad rechazada por dormitorios: ${propertyBedrooms} < ${filters.bedrooms}`);
                         return false;
                     }
                 }
@@ -1724,7 +1733,9 @@
                 // Filtro por baños - solo aplicar si se especifica
                 if (filters.bathrooms !== null && !isNaN(filters.bathrooms) && filters.bathrooms > 0) {
                     const propertyBathrooms = parseInt(property.bathrooms) || parseInt(property.banos) || parseInt(property.aseos) || 0;
+                    // Solo filtrar si la propiedad tiene datos de baños y es menor al filtro
                     if (propertyBathrooms > 0 && propertyBathrooms < filters.bathrooms) {
+                        console.log(`❌ Propiedad rechazada por baños: ${propertyBathrooms} < ${filters.bathrooms}`);
                         return false;
                     }
                 }
@@ -1732,7 +1743,9 @@
                 // Filtro por tamaño mínimo - solo aplicar si se especifica
                 if (filters.minSize !== null && !isNaN(filters.minSize) && filters.minSize > 0) {
                     const propertySize = parseInt(property.tamaño) || parseInt(property.construido) || 0;
+                    // Solo filtrar si la propiedad tiene datos de tamaño y es menor al mínimo
                     if (propertySize > 0 && propertySize < filters.minSize) {
+                        console.log(`❌ Propiedad rechazada por tamaño mínimo: ${propertySize} < ${filters.minSize}`);
                         return false;
                     }
                 }
@@ -1740,22 +1753,32 @@
                 // Filtro por tamaño máximo - solo aplicar si se especifica
                 if (filters.maxSize !== null && !isNaN(filters.maxSize) && filters.maxSize > 0) {
                     const propertySize = parseInt(property.tamaño) || parseInt(property.construido) || 0;
+                    // Solo filtrar si la propiedad tiene datos de tamaño y es mayor al máximo
                     if (propertySize > 0 && propertySize > filters.maxSize) {
+                        console.log(`❌ Propiedad rechazada por tamaño máximo: ${propertySize} > ${filters.maxSize}`);
                         return false;
                     }
                 }
                 
+                console.log(`✅ Propiedad aprobada: ${property.name || property.id || 'Sin nombre'}`);
                 return true;
             });
+            
+            console.log('✅ Propiedades que pasaron el filtro:', filtered.length);
+            return filtered;
         }
         
         function displayFilteredProperties(properties) {
+            console.log('🏠 Mostrando propiedades filtradas:', properties.length);
+            console.log('📋 Propiedades a mostrar:', properties.map(p => p.name || p.id || 'Sin nombre'));
+            
             const container = document.getElementById('properties-container');
             const paginationContainer = document.getElementById('pagination-container');
             container.innerHTML = '';
             paginationContainer.innerHTML = '';
             
             if (properties.length === 0) {
+                console.log('❌ No hay propiedades para mostrar');
                 container.innerHTML = `
                     <div class="property-card">
                         <div class="no-image" style="padding: 40px; text-align: center; color: var(--text-gray);">
@@ -1772,6 +1795,10 @@
             properties.forEach((property, index) => {
                 const propertyCard = document.createElement('div');
                 propertyCard.className = 'property-card';
+                
+                // Encontrar el índice global de la propiedad en allProperties
+                const globalIndex = allProperties.findIndex(p => p.id === property.id || 
+                    (p.name === property.name && p.ubi === property.ubi && p.price === property.price));
                 
                 // Manejo de valores nulos
                 const title = property.name ? 
@@ -1850,18 +1877,21 @@
                         </div>
                         <div class="bottom-row">
                             <div class="property-price">${price}</div>
-                            <a href="casas.html?id=${index}" class="view-details" style="width:auto;">View Details</a>
+                            <a href="casas.html?id=${globalIndex >= 0 ? globalIndex : index}" class="view-details" style="width:auto;">View Details</a>
                         </div>
                     </div>
                 `;
                 
                 container.appendChild(propertyCard);
+                console.log(`✅ Propiedad ${index + 1}/${properties.length} agregada: ${title}`);
                 
                 // Inicializar carrusel si hay imágenes
                 if (hasImages) {
                     initCarousel(propertyCard);
                 }
             });
+            
+            console.log(`🎯 Total de propiedades mostradas: ${container.children.length}`);
         }
         
         function clearFilters() {
