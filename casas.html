@@ -1122,6 +1122,29 @@
                 gap: 15px;
             }
         }
+        
+        /* Animaciones para mensajes de filtros */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1180,6 +1203,37 @@
                     </select>
                 </div>
                 
+                <div class="filter-section">
+                    <h3>Dormitorios</h3>
+                    <select id="bedrooms" class="select-field">
+                        <option value="">Cualquier cantidad</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                        <option value="5">5+</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Baños</h3>
+                    <select id="bathrooms" class="select-field">
+                        <option value="">Cualquier cantidad</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Tamaño (m²)</h3>
+                    <div class="range-row">
+                        <input type="number" id="size-min" placeholder="Mínimo">
+                        <input type="number" id="size-max" placeholder="Máximo">
+                    </div>
+                </div>
+                
                 
                 
                 <div class="filter-section">
@@ -1219,6 +1273,10 @@
             priceMin: null,
             priceMax: null,
             propertyType: '',
+            bedrooms: null,
+            bathrooms: null,
+            minSize: null,
+            maxSize: null,
             requirements: '',
             aiAnalysis: null
         };
@@ -1384,17 +1442,34 @@
             const clearBtn = document.getElementById('clear-filters');
             
             applyBtn.addEventListener('click', function() {
-                // Leer valores de precio y tipo
-                const minEl = document.getElementById('price-min');
-                const maxEl = document.getElementById('price-max');
+                // Leer todos los valores de los filtros
+                const minPriceEl = document.getElementById('price-min');
+                const maxPriceEl = document.getElementById('price-max');
                 const typeEl = document.getElementById('property-type');
                 const locEl = document.getElementById('location-search');
-                const minVal = parseFloat(minEl && minEl.value);
-                const maxVal = parseFloat(maxEl && maxEl.value);
-                currentFilters.priceMin = Number.isFinite(minVal) ? minVal : null;
-                currentFilters.priceMax = Number.isFinite(maxVal) ? maxVal : null;
+                const bedroomsEl = document.getElementById('bedrooms');
+                const bathroomsEl = document.getElementById('bathrooms');
+                const minSizeEl = document.getElementById('size-min');
+                const maxSizeEl = document.getElementById('size-max');
+                
+                // Procesar valores numéricos
+                const minPriceVal = parseFloat(minPriceEl && minPriceEl.value);
+                const maxPriceVal = parseFloat(maxPriceEl && maxPriceEl.value);
+                const bedroomsVal = parseInt(bedroomsEl && bedroomsEl.value);
+                const bathroomsVal = parseInt(bathroomsEl && bathroomsEl.value);
+                const minSizeVal = parseFloat(minSizeEl && minSizeEl.value);
+                const maxSizeVal = parseFloat(maxSizeEl && maxSizeEl.value);
+                
+                // Actualizar filtros globales
+                currentFilters.priceMin = Number.isFinite(minPriceVal) ? minPriceVal : null;
+                currentFilters.priceMax = Number.isFinite(maxPriceVal) ? maxPriceVal : null;
                 currentFilters.propertyType = typeEl ? (typeEl.value || '').trim() : '';
                 currentFilters.location = locEl ? (locEl.value || '').trim() : '';
+                currentFilters.bedrooms = Number.isFinite(bedroomsVal) ? bedroomsVal : null;
+                currentFilters.bathrooms = Number.isFinite(bathroomsVal) ? bathroomsVal : null;
+                currentFilters.minSize = Number.isFinite(minSizeVal) ? minSizeVal : null;
+                currentFilters.maxSize = Number.isFinite(maxSizeVal) ? maxSizeVal : null;
+                
                 applyFilters();
             });
             
@@ -1406,56 +1481,194 @@
         function applyFilters() {
             console.log('Aplicando filtros:', currentFilters);
             
+            // Verificar si hay algún filtro activo
+            const hasActiveFilters = 
+                (currentFilters.location && currentFilters.location.trim() !== '') ||
+                (currentFilters.priceMin !== null && !isNaN(currentFilters.priceMin)) ||
+                (currentFilters.priceMax !== null && !isNaN(currentFilters.priceMax)) ||
+                (currentFilters.propertyType && currentFilters.propertyType.trim() !== '') ||
+                (currentFilters.bedrooms !== null && !isNaN(currentFilters.bedrooms)) ||
+                (currentFilters.bathrooms !== null && !isNaN(currentFilters.bathrooms)) ||
+                (currentFilters.minSize !== null && !isNaN(currentFilters.minSize)) ||
+                (currentFilters.maxSize !== null && !isNaN(currentFilters.maxSize));
+            
+            // Si no hay filtros activos, mostrar todas las propiedades
+            if (!hasActiveFilters) {
+                updatePropertiesDisplay();
+                showFilterMessage('info', 'Mostrando todas las propiedades', `Se muestran las ${allProperties.length} propiedades disponibles.`);
+                return;
+            }
+            
             // Filtrar propiedades basándose en los criterios
             const filteredProperties = filterProperties(allProperties, currentFilters);
             
             // Actualizar la visualización con las propiedades filtradas
             displayFilteredProperties(filteredProperties);
             
-            // Mostrar mensaje de resultados
+            // Mostrar mensaje de resultados más informativo
             const resultsCount = filteredProperties.length;
             const totalCount = allProperties.length;
             
             if (resultsCount === 0) {
-                alert('No se encontraron propiedades que coincidan con los criterios seleccionados.');
+                showFilterMessage('warning', 'Sin resultados', 'No se encontraron propiedades que coincidan con los criterios seleccionados. Intenta ajustar los filtros para obtener más resultados.');
+            } else if (resultsCount === totalCount) {
+                showFilterMessage('success', 'Todos los resultados', `Todas las ${totalCount} propiedades cumplen con los criterios seleccionados.`);
             } else {
-                alert(`Se encontraron ${resultsCount} propiedades de ${totalCount} totales.`);
+                showFilterMessage('success', 'Filtros aplicados', `Se encontraron ${resultsCount} propiedades de ${totalCount} totales que cumplen con los criterios.`);
             }
+        }
+        
+        function showFilterMessage(type, title, message) {
+            // Crear un mensaje temporal más elegante que alert()
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `filter-message ${type}`;
+            messageDiv.innerHTML = `
+                <div class="filter-message-content">
+                    <strong>${title}</strong><br>
+                    <span>${message}</span>
+                </div>
+                <button class="filter-message-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            // Estilos inline para el mensaje
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                max-width: 400px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                font-family: Arial, sans-serif;
+                font-size: 0.9em;
+                line-height: 1.4;
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            // Colores según el tipo
+            if (type === 'success') {
+                messageDiv.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+                messageDiv.style.color = 'white';
+            } else if (type === 'warning') {
+                messageDiv.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+                messageDiv.style.color = 'white';
+            } else if (type === 'info') {
+                messageDiv.style.background = 'linear-gradient(135deg, #20b2aa, #48cae4)';
+                messageDiv.style.color = 'white';
+            }
+            
+            // Estilo del botón de cerrar
+            const closeBtn = messageDiv.querySelector('.filter-message-close');
+            closeBtn.style.cssText = `
+                background: none;
+                border: none;
+                color: inherit;
+                font-size: 1.2em;
+                cursor: pointer;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                opacity: 0.8;
+                transition: opacity 0.2s;
+            `;
+            
+            closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
+            closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.8');
+            
+            document.body.appendChild(messageDiv);
+            
+            // Auto-remover después de 5 segundos
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => messageDiv.remove(), 300);
+                }
+            }, 5000);
         }
         
         function filterProperties(properties, filters) {
             return properties.filter(property => {
-                // Filtro por ubicación
-                if (filters.location && !property.ubi?.toLowerCase().includes(filters.location.toLowerCase())) {
-                    return false;
-                }
-                // Filtro por precio mínimo / máximo
-                if (filters.priceMin !== null && property.price && property.price < filters.priceMin) {
-                    return false;
-                }
-                if (filters.priceMax !== null && property.price && property.price > filters.priceMax) {
-                    return false;
-                }
-                // Filtro por tipo de propiedad (heurístico)
-                if (filters.propertyType) {
-                    const text = ((property.name || '') + ' ' + (property.description || '')).toLowerCase();
-                    const matches = {
-                        house: ['casa', 'villa', 'chalet', 'house', 'villa'],
-                        apartment: ['apartamento', 'piso', 'apartment', 'flat'],
-                        townhouse: ['adosado', 'townhouse'],
-                        plot: ['parcela', 'solar', 'plot', 'land'],
-                        commercial: ['local', 'comercial', 'oficina', 'office', 'commercial'],
-                        other: []
-                    };
-                    const keywords = matches[filters.propertyType] || [];
-                    if (keywords.length && !keywords.some(k => text.includes(k))) {
+                // Filtro por ubicación - solo aplicar si hay texto de búsqueda
+                if (filters.location && filters.location.trim() !== '') {
+                    const searchLocation = filters.location.toLowerCase().trim();
+                    const propertyLocation = (property.ubi || '').toLowerCase();
+                    if (!propertyLocation.includes(searchLocation)) {
                         return false;
                     }
                 }
                 
-                // (Eliminado) Filtro por tipo de propiedad
+                // Filtro por precio mínimo - solo aplicar si se especifica un valor
+                if (filters.priceMin !== null && !isNaN(filters.priceMin) && filters.priceMin > 0) {
+                    const propertyPrice = parseFloat(property.price) || 0;
+                    if (propertyPrice > 0 && propertyPrice < filters.priceMin) {
+                        return false;
+                    }
+                }
                 
-                // Filtro por análisis de IA (deshabilitado temporalmente a petición)
+                // Filtro por precio máximo - solo aplicar si se especifica un valor
+                if (filters.priceMax !== null && !isNaN(filters.priceMax) && filters.priceMax > 0) {
+                    const propertyPrice = parseFloat(property.price) || 0;
+                    if (propertyPrice > 0 && propertyPrice > filters.priceMax) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por tipo de propiedad - solo aplicar si se selecciona un tipo específico
+                if (filters.propertyType && filters.propertyType.trim() !== '') {
+                    const text = ((property.name || '') + ' ' + (property.description || '')).toLowerCase();
+                    const matches = {
+                        house: ['casa', 'villa', 'chalet', 'house', 'villa', 'unifamiliar'],
+                        apartment: ['apartamento', 'piso', 'apartment', 'flat', 'ático'],
+                        townhouse: ['adosado', 'townhouse', 'pareado'],
+                        plot: ['parcela', 'solar', 'plot', 'land', 'terreno'],
+                        commercial: ['local', 'comercial', 'oficina', 'office', 'commercial', 'negocio'],
+                        other: []
+                    };
+                    const keywords = matches[filters.propertyType] || [];
+                    if (keywords.length > 0 && !keywords.some(k => text.includes(k))) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por dormitorios - solo aplicar si se especifica
+                if (filters.bedrooms !== null && !isNaN(filters.bedrooms) && filters.bedrooms > 0) {
+                    const propertyBedrooms = parseInt(property.baños) || 0;
+                    if (propertyBedrooms > 0 && propertyBedrooms < filters.bedrooms) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por baños - solo aplicar si se especifica
+                if (filters.bathrooms !== null && !isNaN(filters.bathrooms) && filters.bathrooms > 0) {
+                    const propertyBathrooms = parseInt(property.bathrooms) || parseInt(property.baños) || 0;
+                    if (propertyBathrooms > 0 && propertyBathrooms < filters.bathrooms) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por tamaño mínimo - solo aplicar si se especifica
+                if (filters.minSize !== null && !isNaN(filters.minSize) && filters.minSize > 0) {
+                    const propertySize = parseInt(property.tamaño) || parseInt(property.construido) || 0;
+                    if (propertySize > 0 && propertySize < filters.minSize) {
+                        return false;
+                    }
+                }
+                
+                // Filtro por tamaño máximo - solo aplicar si se especifica
+                if (filters.maxSize !== null && !isNaN(filters.maxSize) && filters.maxSize > 0) {
+                    const propertySize = parseInt(property.tamaño) || parseInt(property.construido) || 0;
+                    if (propertySize > 0 && propertySize > filters.maxSize) {
+                        return false;
+                    }
+                }
                 
                 return true;
             });
@@ -1463,25 +1676,25 @@
         
         function displayFilteredProperties(properties) {
             const container = document.getElementById('properties-container');
+            const paginationContainer = document.getElementById('pagination-container');
             container.innerHTML = '';
+            paginationContainer.innerHTML = '';
             
             if (properties.length === 0) {
                 container.innerHTML = `
                     <div class="property-card">
-                        <div class="no-image" style="padding: 40px; text-align: center;">
-                            No se encontraron propiedades que coincidan con los criterios seleccionados
+                        <div class="no-image" style="padding: 40px; text-align: center; color: var(--text-gray);">
+                            <h3 style="margin-bottom: 10px; color: var(--dark-turquoise);">Sin resultados</h3>
+                            <p>No se encontraron propiedades que coincidan con los criterios seleccionados.</p>
+                            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Intenta ajustar los filtros para obtener más resultados.</p>
                         </div>
                     </div>
                 `;
                 return;
             }
             
-            // Mostrar las propiedades filtradas (máximo 10 por página)
-            const startIndex = 0;
-            const endIndex = Math.min(10, properties.length);
-            const propertiesToShow = properties.slice(startIndex, endIndex);
-            
-            propertiesToShow.forEach((property, index) => {
+            // Mostrar todas las propiedades filtradas (sin paginación para mejor UX en filtros)
+            properties.forEach((property, index) => {
                 const propertyCard = document.createElement('div');
                 propertyCard.className = 'property-card';
                 
@@ -1577,23 +1790,40 @@
         }
         
         function clearFilters() {
-            // Limpiar campos
-            document.getElementById('location-search').value = '';
-            document.getElementById('client-requirements').value = '';
-            document.getElementById('ai-analysis').classList.remove('show');
-            const minEl = document.getElementById('price-min');
-            const maxEl = document.getElementById('price-max');
+            // Limpiar todos los campos de filtros
+            const locationEl = document.getElementById('location-search');
+            const requirementsEl = document.getElementById('client-requirements');
+            const analysisEl = document.getElementById('ai-analysis');
+            const minPriceEl = document.getElementById('price-min');
+            const maxPriceEl = document.getElementById('price-max');
             const typeEl = document.getElementById('property-type');
-            if (minEl) minEl.value = '';
-            if (maxEl) maxEl.value = '';
-            if (typeEl) typeEl.value = '';
+            const bedroomsEl = document.getElementById('bedrooms');
+            const bathroomsEl = document.getElementById('bathrooms');
+            const minSizeEl = document.getElementById('size-min');
+            const maxSizeEl = document.getElementById('size-max');
             
-            // Resetear filtros
+            // Limpiar valores
+            if (locationEl) locationEl.value = '';
+            if (requirementsEl) requirementsEl.value = '';
+            if (analysisEl) analysisEl.classList.remove('show');
+            if (minPriceEl) minPriceEl.value = '';
+            if (maxPriceEl) maxPriceEl.value = '';
+            if (typeEl) typeEl.value = '';
+            if (bedroomsEl) bedroomsEl.value = '';
+            if (bathroomsEl) bathroomsEl.value = '';
+            if (minSizeEl) minSizeEl.value = '';
+            if (maxSizeEl) maxSizeEl.value = '';
+            
+            // Resetear filtros globales
             currentFilters = {
                 location: '',
                 priceMin: null,
                 priceMax: null,
                 propertyType: '',
+                bedrooms: null,
+                bathrooms: null,
+                minSize: null,
+                maxSize: null,
                 requirements: '',
                 aiAnalysis: null
             };
