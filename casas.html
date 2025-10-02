@@ -514,6 +514,39 @@
             flex-direction: column;
             transition: all 0.4s ease;
             border: 1px solid var(--light-gray);
+            position: relative;
+        }
+
+        /* Marca de agua MBIR grande desde el precio hasta la ubicación */
+        .property-card::before {
+            content: '';
+            position: absolute;
+            top: 28px; /* Altura aproximada donde empieza el título/ubicación */
+            left: 50%; /* Comienza desde la mitad del contenedor */
+            right: 0;
+            height: 200px; /* Altura específica desde ubicación hasta precio */
+            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 400px auto;
+            pointer-events: none;
+            z-index: 0.5; /* Entre el fondo y el precio */
+        }
+
+        .property-card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Asegurar que el texto importante esté por encima de la marca de agua */
+        .property-title,
+        .property-location,
+        .property-description,
+        .property-features,
+        .property-details,
+        .view-details {
+            position: relative;
+            z-index: 3;
         }
         
         .property-card:hover {
@@ -679,6 +712,11 @@
             display: flex;
             align-items: center;
             text-shadow: 0 1px 2px rgba(32, 178, 170, 0.1);
+            position: relative;
+            z-index: 0; /* Menor que la marca de agua para que no la tape */
+            background: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente para legibilidad */
+            padding: 5px 10px;
+            border-radius: 8px;
         }
         
         .property-price:before {
@@ -1109,6 +1147,17 @@
         .legend-item { display: inline-flex; align-items: center; gap: 8px; }
         .legend-item img { width: 20px; height: 20px; display: block; border-radius: 50%; }
 
+        /* Ajuste de marca de agua para móviles (layout vertical) */
+        @media (max-width: 767px) {
+            .property-card::before {
+                top: 278px; /* Después de la imagen + padding, altura del título/ubicación */
+                left: 0;
+                height: 180px; /* Altura desde ubicación hasta precio en móviles */
+                background-size: 320px auto;
+                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
+            }
+        }
+
         /* Media queries para tablets y desktop */
          @media (min-width: 768px) {
             header {
@@ -1149,6 +1198,15 @@
             .property-card {
                 flex-direction: row;
                 min-height: 400px;
+            }
+
+            /* Ajuste de marca de agua para layout horizontal */
+            .property-card::before {
+                left: 50%; /* En desktop, la imagen ocupa la mitad izquierda */
+                top: 30px; /* Altura del título/ubicación en desktop */
+                height: 220px; /* Altura desde ubicación hasta precio en desktop */
+                background-size: 420px auto;
+                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
             }
             
             .property-image-container {
