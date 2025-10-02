@@ -904,26 +904,46 @@
             }
             
             .filters-content {
-                padding: 20px;
-                display: none;
                 background: var(--white);
                 border-radius: 0 0 12px 12px;
                 box-shadow: 0 4px 12px rgba(32, 178, 170, 0.1);
+                max-height: 0;
+                overflow: hidden;
+                padding: 0 20px;
+                transition: max-height 0.4s ease, padding 0.4s ease;
             }
             
             .filters-content.show {
-                display: block;
+                max-height: 1000px; /* Altura suficiente para el contenido */
+                padding: 20px;
             }
             
             .content-area {
                 order: 2;
                 margin-left: 0;
-                padding: 20px 10px;
+                padding: 0; /* Sin padding, las casas van pegadas */
+                transition: margin-top 0.3s ease;
+            }
+            
+            /* Espaciado dinámico cuando los filtros están desplegados */
+            .filters-content.show + .content-area {
+                margin-top: 0; /* Sin espacio extra cuando están desplegados */
             }
             
             .filter-section {
                 margin-bottom: 12px;
                 padding-bottom: 10px;
+            }
+            
+            /* Ajustar el espaciado de las casas individuales */
+            .property-card {
+                margin: 10px;
+                margin-bottom: 20px;
+            }
+            
+            /* Espaciado superior de la primera casa */
+            .content-area .property-card:first-child {
+                margin-top: 20px;
             }
             
             .filter-section h3 {
