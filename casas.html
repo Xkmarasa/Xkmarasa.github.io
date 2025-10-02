@@ -1842,15 +1842,40 @@
                     let hasImages = false;
                     
                     try {
-                        if (property.imagenes && property.imagenes.length > 0) {
-                            hasImages = true;
-                            // Convertir string JSON a array si es necesario
-                            const imagesArray = typeof property.imagenes === 'string' ? 
-                                JSON.parse(property.imagenes) : property.imagenes;
+                        if (property.imagenes) {
+                            let imagesArray = [];
                             
-                            if (Array.isArray(imagesArray) && imagesArray.length > 0) {
+                            // Caso 1: Es un string que parece una URL
+                            if (typeof property.imagenes === 'string' && 
+                                (property.imagenes.startsWith('http') || property.imagenes.startsWith('/'))) {
+                                imagesArray = [property.imagenes];
+                                hasImages = true;
+                            }
+                            // Caso 2: Es un string JSON
+                            else if (typeof property.imagenes === 'string') {
+                                try {
+                                    const parsed = JSON.parse(property.imagenes);
+                                    if (Array.isArray(parsed)) {
+                                        imagesArray = parsed;
+                                        hasImages = true;
+                                    }
+                                } catch (jsonError) {
+                                    // Si falla el JSON, tratar como URL simple
+                                    imagesArray = [property.imagenes];
+                                    hasImages = true;
+                                }
+                            }
+                            // Caso 3: Ya es un array
+                            else if (Array.isArray(property.imagenes) && property.imagenes.length > 0) {
+                                imagesArray = property.imagenes;
+                                hasImages = true;
+                            }
+                            
+                            // Generar HTML si tenemos imágenes válidas
+                            if (hasImages && imagesArray.length > 0 && imagesArray[0]) {
                                 imagesHTML = imagesArray.map((img, idx) => `
-                                    <img src="${img}" class="carousel-image ${idx === 0 ? 'active' : ''}" alt="Property image ${idx + 1}">
+                                    <img src="${img}" class="carousel-image ${idx === 0 ? 'active' : ''}" alt="Property image ${idx + 1}" 
+                                         onerror="this.style.display='none';">
                                 `).join('');
                                 
                                 indicatorsHTML = imagesArray.map((img, idx) => `
@@ -1986,14 +2011,86 @@
                     const globalIndex = allProperties.findIndex(p => p.id === property.id || 
                         (p.name === property.name && p.ubi === property.ubi && p.price === property.price));
                     
+                    // Procesamiento inteligente de imágenes
+                    let imageHTML = '';
+                    let hasImages = false;
+                    
+                    try {
+                        if (property.imagenes) {
+                            let imagesArray = [];
+                            
+                            // Caso 1: Es un string que parece una URL
+                            if (typeof property.imagenes === 'string' && 
+                                (property.imagenes.startsWith('http') || property.imagenes.startsWith('/'))) {
+                                imagesArray = [property.imagenes];
+                                console.log(`📸 Imagen URL detectada para ${title}:`, property.imagenes);
+                            }
+                            // Caso 2: Es un string JSON
+                            else if (typeof property.imagenes === 'string') {
+                                try {
+                                    const parsed = JSON.parse(property.imagenes);
+                                    if (Array.isArray(parsed)) {
+                                        imagesArray = parsed;
+                                        console.log(`📸 Array JSON detectado para ${title}:`, parsed.length, 'imágenes');
+                                    }
+                                } catch (jsonError) {
+                                    console.warn(`⚠️ Error parseando JSON de imágenes para ${title}:`, jsonError);
+                                    // Si falla el JSON, tratar como URL simple
+                                    imagesArray = [property.imagenes];
+                                }
+                            }
+                            // Caso 3: Ya es un array
+                            else if (Array.isArray(property.imagenes)) {
+                                imagesArray = property.imagenes;
+                                console.log(`📸 Array directo detectado para ${title}:`, imagesArray.length, 'imágenes');
+                            }
+                            
+                            // Generar HTML si tenemos imágenes válidas
+                            if (imagesArray.length > 0 && imagesArray[0]) {
+                                hasImages = true;
+                                const firstImage = imagesArray[0];
+                                imageHTML = `
+                                    <div class="image-carousel">
+                                        <img src="${firstImage}" class="carousel-image active" alt="Property image" 
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="no-image" style="display: none; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-turquoise) 0%, var(--white) 100%); color: var(--text-gray);">
+                                            Property Image Coming Soon
+                                        </div>
+                                        ${imagesArray.length > 1 ? `
+                                            <div class="carousel-nav">
+                                                <button class="carousel-btn prev" onclick="prevImage(this)">‹</button>
+                                                <button class="carousel-btn next" onclick="nextImage(this)">›</button>
+                                            </div>
+                                            <div class="carousel-indicators">
+                                                ${imagesArray.map((_, idx) => `
+                                                    <div class="indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}" onclick="showImage(this, ${idx})"></div>
+                                                `).join('')}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }
+                        }
+                    } catch (imageError) {
+                        console.warn(`⚠️ Error procesando imágenes para ${title}:`, imageError);
+                        hasImages = false;
+                    }
+                    
+                    // Si no hay imágenes válidas, usar placeholder
+                    if (!hasImages) {
+                        imageHTML = `
+                            <div class="image-carousel">
+                                <div class="no-image" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-turquoise) 0%, var(--white) 100%); color: var(--text-gray);">
+                                    Property Image Coming Soon
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
                     allPropertiesHTML += `
                         <div class="property-card">
                             <div class="property-image-container">
-                                <div class="image-carousel">
-                                    <div class="no-image" style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, var(--light-turquoise) 0%, var(--white) 100%); color: var(--text-gray);">
-                                        Property Image Coming Soon
-                                    </div>
-                                </div>
+                                ${imageHTML}
                             </div>
                             <div class="property-details-container">
                                 <h1 class="property-title">${title}</h1>
@@ -2021,6 +2118,63 @@
             // Insertar todo el HTML de una vez
             container.innerHTML = allPropertiesHTML;
             console.log(`🎯 HTML insertado. Total elementos en container: ${container.children.length}`);
+        }
+        
+        // Funciones simples para el carrusel de imágenes
+        function nextImage(button) {
+            const carousel = button.closest('.image-carousel');
+            const images = carousel.querySelectorAll('.carousel-image');
+            const indicators = carousel.querySelectorAll('.indicator');
+            
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            let nextIndex = (currentIndex + 1) % images.length;
+            
+            // Cambiar imagen activa
+            images[currentIndex].classList.remove('active');
+            images[nextIndex].classList.add('active');
+            
+            // Cambiar indicador activo
+            if (indicators.length > 0) {
+                indicators[currentIndex].classList.remove('active');
+                indicators[nextIndex].classList.add('active');
+            }
+        }
+        
+        function prevImage(button) {
+            const carousel = button.closest('.image-carousel');
+            const images = carousel.querySelectorAll('.carousel-image');
+            const indicators = carousel.querySelectorAll('.indicator');
+            
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            let prevIndex = (currentIndex - 1 + images.length) % images.length;
+            
+            // Cambiar imagen activa
+            images[currentIndex].classList.remove('active');
+            images[prevIndex].classList.add('active');
+            
+            // Cambiar indicador activo
+            if (indicators.length > 0) {
+                indicators[currentIndex].classList.remove('active');
+                indicators[prevIndex].classList.add('active');
+            }
+        }
+        
+        function showImage(indicator, targetIndex) {
+            const carousel = indicator.closest('.image-carousel');
+            const images = carousel.querySelectorAll('.carousel-image');
+            const indicators = carousel.querySelectorAll('.indicator');
+            
+            // Remover todas las clases activas
+            images.forEach(img => img.classList.remove('active'));
+            indicators.forEach(ind => ind.classList.remove('active'));
+            
+            // Activar la imagen e indicador objetivo
+            if (images[targetIndex]) {
+                images[targetIndex].classList.add('active');
+            }
+            if (indicators[targetIndex]) {
+                indicators[targetIndex].classList.add('active');
+            }
         }
         
         function clearFilters() {
