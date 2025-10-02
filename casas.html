@@ -1569,7 +1569,7 @@
             // Si no hay filtros activos, mostrar todas las propiedades
             if (!hasActiveFilters) {
                 updatePropertiesDisplay();
-                showFilterMessage('info', 'Mostrando todas las propiedades', `Se muestran las ${allProperties.length} propiedades disponibles.`);
+                showFilterMessage('info', 'Catálogo Completo', `Visualizando el catálogo completo de ${allProperties.length} propiedades disponibles en nuestro portfolio.`);
                 return;
             }
             
@@ -1580,83 +1580,146 @@
             // Actualizar la visualización con las propiedades filtradas usando función simple
             displayFilteredPropertiesSimple(filteredProperties);
             
-            // Mostrar mensaje de resultados más informativo
+            // Mostrar mensaje de resultados más informativo y formal
             const resultsCount = filteredProperties.length;
             const totalCount = allProperties.length;
+            const percentage = Math.round((resultsCount / totalCount) * 100);
             
             if (resultsCount === 0) {
-                showFilterMessage('warning', 'Sin resultados', 'No se encontraron propiedades que coincidan con los criterios seleccionados. Intenta ajustar los filtros para obtener más resultados.');
+                showFilterMessage('warning', 'Búsqueda Sin Resultados', 'Lamentamos informar que no se han encontrado propiedades que cumplan con los criterios de búsqueda especificados. Le sugerimos revisar y ajustar los filtros aplicados para ampliar los resultados de su consulta.');
             } else if (resultsCount === totalCount) {
-                showFilterMessage('success', 'Todos los resultados', `Todas las ${totalCount} propiedades cumplen con los criterios seleccionados.`);
+                showFilterMessage('success', 'Búsqueda Completa', `Excelente. La totalidad de nuestras ${totalCount} propiedades en catálogo satisfacen los criterios de búsqueda establecidos.`);
             } else {
-                showFilterMessage('success', 'Filtros aplicados', `Se encontraron ${resultsCount} propiedades de ${totalCount} totales que cumplen con los criterios.`);
+                showFilterMessage('success', 'Resultados de Búsqueda', `Su consulta ha generado ${resultsCount} propiedades de un total de ${totalCount} disponibles (${percentage}% del catálogo), todas ellas cumpliendo con los criterios especificados.`);
             }
         }
         
         function showFilterMessage(type, title, message) {
-            // Crear un mensaje temporal más elegante que alert()
+            // Crear un mensaje temporal más elegante y formal
             const messageDiv = document.createElement('div');
             messageDiv.className = `filter-message ${type}`;
+            
+            // Iconos más profesionales según el tipo
+            const icons = {
+                success: '✓',
+                warning: '⚠',
+                info: 'ℹ',
+                error: '✗'
+            };
+            
             messageDiv.innerHTML = `
+                <div class="filter-message-icon">${icons[type] || icons.info}</div>
                 <div class="filter-message-content">
-                    <strong>${title}</strong><br>
-                    <span>${message}</span>
+                    <div class="filter-message-title">${title}</div>
+                    <div class="filter-message-text">${message}</div>
                 </div>
-                <button class="filter-message-close" onclick="this.parentElement.remove()">×</button>
+                <button class="filter-message-close" onclick="this.parentElement.remove()" title="Cerrar notificación">×</button>
             `;
             
-            // Estilos inline para el mensaje
+            // Estilos inline para el mensaje más profesionales
             messageDiv.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                max-width: 400px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+                border: 1px solid var(--dark-turquoise);
+                border-left: 4px solid var(--dark-turquoise);
+                border-radius: 12px;
+                padding: 0;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
                 z-index: 1000;
-                font-family: Arial, sans-serif;
-                font-size: 0.9em;
-                line-height: 1.4;
+                max-width: 450px;
+                min-width: 350px;
+                font-family: 'Poppins', sans-serif;
+                animation: slideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
                 display: flex;
                 align-items: flex-start;
-                gap: 10px;
-                animation: slideInRight 0.3s ease;
+                gap: 12px;
+                overflow: hidden;
             `;
             
-            // Colores según el tipo
-            if (type === 'success') {
-                messageDiv.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
-                messageDiv.style.color = 'white';
-            } else if (type === 'warning') {
-                messageDiv.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
-                messageDiv.style.color = 'white';
-            } else if (type === 'info') {
-                messageDiv.style.background = 'linear-gradient(135deg, #20b2aa, #48cae4)';
-                messageDiv.style.color = 'white';
+            // Estilos para el icono
+            const iconElement = messageDiv.querySelector('.filter-message-icon');
+            if (iconElement) {
+                iconElement.style.cssText = `
+                    background: var(--dark-turquoise);
+                    color: white;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                    margin: 16px 0 16px 16px;
+                    flex-shrink: 0;
+                `;
             }
             
-            // Estilo del botón de cerrar
-            const closeBtn = messageDiv.querySelector('.filter-message-close');
-            closeBtn.style.cssText = `
-                background: none;
-                border: none;
-                color: inherit;
-                font-size: 1.2em;
-                cursor: pointer;
-                padding: 0;
-                width: 20px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                opacity: 0.8;
-                transition: opacity 0.2s;
-            `;
+            // Estilos para el contenido
+            const contentElement = messageDiv.querySelector('.filter-message-content');
+            if (contentElement) {
+                contentElement.style.cssText = `
+                    flex: 1;
+                    padding: 16px 8px 16px 0;
+                `;
+            }
             
-            closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
-            closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.8');
+            // Estilos para el título
+            const titleElement = messageDiv.querySelector('.filter-message-title');
+            if (titleElement) {
+                titleElement.style.cssText = `
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: var(--dark-turquoise);
+                    margin-bottom: 6px;
+                    letter-spacing: 0.3px;
+                `;
+            }
+            
+            // Estilos para el texto
+            const textElement = messageDiv.querySelector('.filter-message-text');
+            if (textElement) {
+                textElement.style.cssText = `
+                    font-size: 14px;
+                    color: #4a5568;
+                    line-height: 1.5;
+                    font-weight: 400;
+                `;
+            }
+            
+            // Estilo del botón de cerrar más elegante
+            const closeBtn = messageDiv.querySelector('.filter-message-close');
+            if (closeBtn) {
+                closeBtn.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    background: none;
+                    border: none;
+                    font-size: 20px;
+                    color: #a0aec0;
+                    cursor: pointer;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    transition: all 0.2s ease;
+                `;
+                
+                closeBtn.addEventListener('mouseenter', function() {
+                    this.style.background = '#f7fafc';
+                    this.style.color = '#2d3748';
+                });
+                
+                closeBtn.addEventListener('mouseleave', function() {
+                    this.style.background = 'none';
+                    this.style.color = '#a0aec0';
+                });
+            }
             
             document.body.appendChild(messageDiv);
             
