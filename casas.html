@@ -921,13 +921,8 @@
             .content-area {
                 order: 2;
                 margin-left: 0;
-                padding: 0; /* Sin padding, las casas van pegadas */
-                transition: margin-top 0.3s ease;
-            }
-            
-            /* Espaciado dinámico cuando los filtros están desplegados */
-            .filters-content.show + .content-area {
-                margin-top: 0; /* Sin espacio extra cuando están desplegados */
+                padding: 0;
+                transition: transform 0.4s ease; /* Transición suave para el desplazamiento */
             }
             
             .filter-section {
@@ -941,9 +936,9 @@
                 margin-bottom: 20px;
             }
             
-            /* Espaciado superior de la primera casa */
+            /* Sin espaciado superior - las casas van pegadas al header de filtros */
             .content-area .property-card:first-child {
-                margin-top: 20px;
+                margin-top: 0;
             }
             
             .filter-section h3 {
@@ -2442,6 +2437,7 @@
         function toggleFilters() {
             const filtersContent = document.getElementById('filters-content');
             const toggleIcon = document.getElementById('toggle-icon');
+            const contentArea = document.querySelector('.content-area');
             
             // Detectar si estamos en móvil
             const isMobile = window.innerWidth <= 767;
@@ -2451,9 +2447,20 @@
                 if (filtersContent.classList.contains('show')) {
                     filtersContent.classList.remove('show');
                     toggleIcon.textContent = '▼';
+                    // Las propiedades se mueven hacia arriba suavemente
+                    if (contentArea) {
+                        contentArea.style.transform = 'translateY(0)';
+                    }
                 } else {
                     filtersContent.classList.add('show');
                     toggleIcon.textContent = '▲';
+                    // Las propiedades se mueven hacia abajo suavemente
+                    if (contentArea) {
+                        // Esperar un poco para que la transición de altura se inicie
+                        setTimeout(() => {
+                            contentArea.style.transform = 'translateY(0)';
+                        }, 50);
+                    }
                 }
             } else {
                 // En desktop, colapsar/expandir solo el contenido
