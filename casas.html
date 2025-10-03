@@ -915,6 +915,7 @@
             }
             
             .filters-content.show {
+                display: block;
                 max-height: 1000px; /* Altura suficiente para el contenido */
                 padding: 20px;
             }
@@ -2438,7 +2439,6 @@
         function toggleFilters() {
             const filtersContent = document.getElementById('filters-content');
             const toggleIcon = document.getElementById('toggle-icon');
-            const contentArea = document.querySelector('.content-area');
             
             // Detectar si estamos en móvil
             const isMobile = window.innerWidth <= 767;
@@ -2448,20 +2448,9 @@
                 if (filtersContent.classList.contains('show')) {
                     filtersContent.classList.remove('show');
                     toggleIcon.textContent = '▼';
-                    // Las propiedades se mueven hacia arriba suavemente
-                    if (contentArea) {
-                        contentArea.style.transform = 'translateY(0)';
-                    }
                 } else {
                     filtersContent.classList.add('show');
                     toggleIcon.textContent = '▲';
-                    // Las propiedades se mueven hacia abajo suavemente
-                    if (contentArea) {
-                        // Esperar un poco para que la transición de altura se inicie
-                        setTimeout(() => {
-                            contentArea.style.transform = 'translateY(0)';
-                        }, 50);
-                    }
                 }
             } else {
                 // En desktop, colapsar/expandir solo el contenido
@@ -2485,8 +2474,8 @@
             if (window.innerWidth <= 767) {
                 const filtersContent = document.getElementById('filters-content');
                 const toggleIcon = document.getElementById('toggle-icon');
-                filtersContent.classList.add('collapsed');
-                toggleIcon.textContent = '▶';
+                filtersContent.classList.remove('show');
+                toggleIcon.textContent = '▼';
             }
         }
         
