@@ -2883,7 +2883,6 @@
             const header = document.querySelector('header');
             
             if (!filtersPanel || !header) {
-                console.log('Elementos no encontrados');
                 return;
             }
             
@@ -2892,27 +2891,13 @@
                 return;
             }
             
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const headerHeight = header.offsetHeight;
-            const contentPadding = 20;
-            const initialTop = headerHeight + contentPadding; // 140px aproximadamente
+            // Colocar el panel justo debajo del header visible.
+            // Si el header está fuera de pantalla (scroll hacia abajo), su bottom será <= 0 y el panel quedará pegado al top (0).
+            const headerRect = header.getBoundingClientRect();
+            const headerBottom = Math.max(0, Math.round(headerRect.bottom));
             
-            // El panel debe moverse hacia arriba conforme haces scroll hacia abajo
-            // Fórmula: posición inicial - scroll = nueva posición
-            let newTop = initialTop - scrollTop;
-            
-            // No puede ir más arriba de 0px
-            newTop = Math.max(0, newTop);
-            
-            // Aplicar la nueva posición
-            filtersPanel.style.top = newTop + 'px';
-            
-            // Ajustar la altura para que siempre llegue al final de la pantalla
-            const newHeight = window.innerHeight - newTop;
-            filtersPanel.style.height = newHeight + 'px';
-            
-            // Debug para verificar que funciona
-            console.log('Scroll:', scrollTop, 'Initial:', initialTop, 'New top:', newTop);
+            filtersPanel.style.top = headerBottom + 'px';
+            filtersPanel.style.height = (window.innerHeight - headerBottom) + 'px';
         }
 
         // Función de prueba para verificar que el scroll funciona
