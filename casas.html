@@ -50,6 +50,7 @@
             background: var(--body-bg);
             color: var(--text-gray);
             line-height: 1.7;
+            min-height: 100vh;
             min-height: 100dvh;
             font-weight: 400;
         }
@@ -213,6 +214,7 @@
             max-width: none;
             margin: 0;
             padding: 0;
+            min-height: calc(100vh - 120px); /* fallback */
             min-height: calc(100dvh - 120px); /* Altura completa menos header */
         }
         
@@ -223,6 +225,7 @@
             border-radius: 0;
             box-shadow: 2px 0 10px rgba(32, 178, 170, 0.1);
             padding: 20px;
+            height: calc(100vh - 140px); /* fallback */
             height: calc(100dvh - 140px); /* Altura completa menos header y padding */
             overflow-y: auto;
             position: fixed;
@@ -236,6 +239,7 @@
         /* Clase para cuando el panel debe subir al hacer scroll */
         .filters-panel.scrolled {
             top: 0; /* Sube hasta arriba cuando el header se oculta */
+            height: 100vh; /* fallback */
             height: 100dvh; /* Ocupa toda la altura de la pantalla */
         }
         
@@ -1198,7 +1202,7 @@
         /* Map in property detail */
         #property-map {
             width: 100%;
-            height: 60vh;
+            height: 60dvh;
             border-radius: 12px;
             border: 1px solid #e9ecef;
             box-shadow: 0 4px 18px rgba(32, 178, 170, 0.08);
@@ -1277,7 +1281,7 @@
                 top: 140px;
                 left: 0;
                 width: 300px;
-                height: calc(100vh - 140px);
+                height: calc(100dvh - 140px);
                 border-radius: 0;
                 box-shadow: 2px 0 10px rgba(32, 178, 170, 0.1);
                 border-right: 2px solid var(--light-turquoise);
