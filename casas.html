@@ -50,7 +50,7 @@
             background: var(--body-bg);
             color: var(--text-gray);
             line-height: 1.7;
-            min-height: 100vh;
+            min-height: 100dvh;
             font-weight: 400;
         }
         
@@ -213,7 +213,7 @@
             max-width: none;
             margin: 0;
             padding: 0;
-            min-height: calc(100vh - 120px); /* Altura completa menos header */
+            min-height: calc(100dvh - 120px); /* Altura completa menos header */
         }
         
         .filters-panel {
@@ -223,7 +223,7 @@
             border-radius: 0;
             box-shadow: 2px 0 10px rgba(32, 178, 170, 0.1);
             padding: 20px;
-            height: calc(100vh - 140px); /* Altura completa menos header y padding */
+            height: calc(100dvh - 140px); /* Altura completa menos header y padding */
             overflow-y: auto;
             position: fixed;
             top: 140px; /* Alineado con la primera casa (header + padding) */
@@ -236,7 +236,7 @@
         /* Clase para cuando el panel debe subir al hacer scroll */
         .filters-panel.scrolled {
             top: 0; /* Sube hasta arriba cuando el header se oculta */
-            height: 100vh; /* Ocupa toda la altura de la pantalla */
+            height: 100dvh; /* Ocupa toda la altura de la pantalla */
         }
         
         .filters-header {
