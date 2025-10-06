@@ -2919,25 +2919,58 @@
         // Función de prueba disponible globalmente
         window.testScroll = testScrollFunction;
         
-        // Agregar event listener para resize de ventana
+        // Evitar que el teclado cierre los filtros en móvil: solo reaccionar a cambios de ancho
+        let lastResizeInnerWidth = window.innerWidth;
         window.addEventListener('resize', function() {
             const filtersPanel = document.getElementById('filters-panel');
             const filtersContent = document.getElementById('filters-content');
             const toggleIcon = document.getElementById('toggle-icon');
+            const isMobile = window.innerWidth <= 767;
+            const widthChanged = window.innerWidth !== lastResizeInnerWidth;
+            lastResizeInnerWidth = window.innerWidth;
             
-            if (window.innerWidth <= 767) {
-                // En móvil, resetear estilos inline y ocultar contenido
-                filtersPanel.style.top = '';
-                filtersPanel.style.height = '';
-                filtersContent.classList.remove('show');
-                toggleIcon.textContent = '▼';
+            // Si estamos en móvil y solo cambió la altura (apertura del teclado), no colapsar
+            if (isMobile && !widthChanged) {
+                // Si además el foco está en un control dentro de los filtros, mantenerlos abiertos
+                const ae = document.activeElement;
+                const isTypingInFilters = ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.tagName === 'SELECT') && ae.closest('#filters-panel');
+                if (isTypingInFilters) {
+                    if (filtersContent) filtersContent.classList.add('show');
+                    if (toggleIcon) toggleIcon.textContent = '▲';
+                }
+                return;
+            }
+            
+            if (isMobile) {
+                // En móvil, ante cambios de ancho (p.ej., orientación), resetear estilos
+                if (filtersPanel) {
+                    filtersPanel.style.top = '';
+                    filtersPanel.style.height = '';
+                }
+                if (filtersContent) filtersContent.classList.remove('show');
+                if (toggleIcon) toggleIcon.textContent = '▼';
             } else {
                 // En desktop, resetear estilos y aplicar lógica de scroll
-                filtersPanel.style.top = '';
-                filtersPanel.style.height = '';
-                filtersContent.classList.remove('show');
-                toggleIcon.textContent = '▼';
+                if (filtersPanel) {
+                    filtersPanel.style.top = '';
+                    filtersPanel.style.height = '';
+                }
+                if (filtersContent) filtersContent.classList.remove('show');
+                if (toggleIcon) toggleIcon.textContent = '▼';
                 handleFiltersScroll();
+            }
+        });
+
+        // En móvil, al enfocar cualquier input dentro de filtros, forzar apertura del desplegable
+        document.addEventListener('focusin', function(ev) {
+            if (window.innerWidth > 767) return;
+            const target = ev.target;
+            if (!target) return;
+            if (target.closest && target.closest('#filters-panel')) {
+                const filtersContent = document.getElementById('filters-content');
+                const toggleIcon = document.getElementById('toggle-icon');
+                if (filtersContent) filtersContent.classList.add('show');
+                if (toggleIcon) toggleIcon.textContent = '▲';
             }
         });
         
