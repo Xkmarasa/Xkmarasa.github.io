@@ -235,7 +235,26 @@
 
         // Traducción dinámica de contenido de noticias
         function hashCode(str){ let h=0,i=0, len=str.length; while(i<len){ h=(h<<5)-h+str.charCodeAt(i++)|0; } return h.toString(); }
-        async function mtTranslate(text, to){ if(!text) return text; const key='mbi_mt_'+to+'_'+hashCode(text); const cached=localStorage.getItem(key); if(cached) return cached; try{ const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair='+encodeURIComponent('auto|'+to); const res=await fetch(url); const json=await res.json(); const out=(json&&json.responseData&&json.responseData.translatedText)?json.responseData.translatedText:text; localStorage.setItem(key,out); return out; }catch(_){ return text; } }
+        async function mtTranslate(text, to){
+            if(!text) return text;
+            const key='mbi_mt_'+to+'_'+hashCode(text);
+            const cached=localStorage.getItem(key); if(cached) return cached;
+            const candidates = ['en','es','fr','de'].filter(s=>s!==to);
+            let best = { out:text, score:-1 };
+            for(const src of candidates){
+                try{
+                    const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair='+encodeURIComponent(src+'|'+to);
+                    const res=await fetch(url);
+                    const json=await res.json();
+                    const out=(json&&json.responseData&&json.responseData.translatedText)?json.responseData.translatedText:text;
+                    const score = (json&&Array.isArray(json.matches)&&json.matches.length)? Math.max(...json.matches.map(m=>Number(m.match)||0)) : (Number(json.responseData.match)||0);
+                    if(score>best.score){ best={ out, score }; }
+                    if(best.score>=0.9) break; // suficientemente buena
+                }catch(_){}
+            }
+            localStorage.setItem(key,best.out);
+            return best.out;
+        }
         async function translateDynamicNews(){ const lang=localStorage.getItem('mbi_lang')||'en'; if(lang==='en') return; const titles=[...document.querySelectorAll('.news-title')]; const descs=[...document.querySelectorAll('.news-desc')]; for(const el of titles){ el.textContent = await mtTranslate(el.textContent.trim(), lang); } for(const el of descs){ el.innerHTML = (await mtTranslate(el.textContent.trim(), lang)).replace(/\n/g,'<br>'); } }
 
         document.addEventListener('DOMContentLoaded', ()=>{ initLang(); renderNews(); });
