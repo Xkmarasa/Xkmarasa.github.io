@@ -1350,8 +1350,10 @@
         // Cloudinary Config (rellenar con tus valores de Cloudinary - unsigned preset)
         const CLOUDINARY_CLOUD_NAME = '';// Ej: 'demo'
         const CLOUDINARY_UPLOAD_PRESET = '';// Ej: 'unsigned_preset'
+        const CLOUDINARY_FOLDER = 'properties';// Déjalo vacío '' si tu preset no permite carpeta
+        const MAX_IMAGE_MB = 10; // Límite recomendado para evitar errores de tamaño
 
-        async function uploadImageToCloudinary(file, folder = 'properties') {
+        async function uploadImageToCloudinary(file, folder = CLOUDINARY_FOLDER) {
             if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
                 throw new Error('Falta configuración de Cloudinary (cloud_name o upload_preset)');
             }
@@ -1359,11 +1361,18 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-            formData.append('folder', folder);
+            if (folder) { formData.append('folder', folder); }
             const response = await fetch(url, { method: 'POST', body: formData });
             if (!response.ok) {
-                const text = await response.text().catch(() => '');
-                throw new Error(`Error Cloudinary ${response.status}: ${text}`);
+                // Intenta leer JSON de error de Cloudinary para mensaje claro
+                let detail = '';
+                try {
+                    const dataErr = await response.json();
+                    detail = (dataErr && dataErr.error && dataErr.error.message) ? dataErr.error.message : JSON.stringify(dataErr);
+                } catch (_) {
+                    detail = await response.text().catch(() => '');
+                }
+                throw new Error(`Error Cloudinary ${response.status}: ${detail}`);
             }
             const data = await response.json();
             if (!data.secure_url) {
@@ -1558,12 +1567,21 @@
                     const urls = [];
                     for (const file of files) {
                         try {
+                            // Validaciones básicas de tipo y tamaño
+                            if (!/^image\//.test(file.type)) {
+                                throw new Error('Tipo de archivo no permitido');
+                            }
+                            const sizeMb = file.size / (1024 * 1024);
+                            if (sizeMb > MAX_IMAGE_MB) {
+                                throw new Error(`Archivo demasiado grande (${sizeMb.toFixed(1)}MB > ${MAX_IMAGE_MB}MB)`);
+                            }
                             const url = await uploadImageToCloudinary(file, 'properties');
                             urls.push(url);
                             successCount++;
                         } catch (err) {
                             console.error('Error subiendo a Cloudinary:', err);
                             failCount++;
+                            try { showWarning('Error de subida', (err && err.message) ? err.message : 'Error desconocido', 5000, '⚠️'); } catch (_) {}
                         }
                     }
                     if (urls.length) {
