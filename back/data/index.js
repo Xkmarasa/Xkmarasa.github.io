@@ -8,19 +8,7 @@ const app = express();
 app.use(cors()); // Añade esta línea
 app.use(express.json());
 
-// Ruta de almacenamiento para noticias (JSON en disco)
-const newsFilePath = path.join(__dirname, 'news.json');
-function readNewsFromDisk() {
-  try {
-    if (!fs.existsSync(newsFilePath)) return [];
-    const raw = fs.readFileSync(newsFilePath, 'utf8');
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
-  } catch (e) { return []; }
-}
-function writeNewsToDisk(arr) {
-  fs.writeFileSync(newsFilePath, JSON.stringify(arr, null, 2), 'utf8');
-}
+// News storage is now handled by the database
 
 // Ruta GET (obtener datos)
 app.get('/data', async (req, res) => {
@@ -151,68 +139,84 @@ app.put('/data/:id', async (req, res) => {
   }
 });
 
-// --- Rutas NEWS (JSON file based) ---
-app.get('/news', (req, res) => {
+// --- Rutas NEWS (Database based) ---
+app.get('/news', async (req, res) => {
   try {
-    const items = readNewsFromDisk();
-    return res.json(items);
+    const { rows } = await pool.query('SELECT * FROM "new" ORDER BY date DESC');
+    return res.json(rows);
   } catch (err) {
     if (res.headersSent) return;
     return res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/news', (req, res) => {
+app.post('/news', async (req, res) => {
   try {
-    const items = readNewsFromDisk();
     const { title, description, link, image, date, id } = req.body || {};
-    const item = {
-      id: id != null ? id : Date.now(),
-      title: title || '',
-      description: description || '',
-      link: link || '',
-      image: image || '',
-      date: date != null ? date : Date.now()
-    };
-    items.unshift(item);
-    writeNewsToDisk(items);
-    return res.status(201).json(item);
+    const newsId = id != null ? id : Date.now().toString();
+    const newsDate = date != null ? date.toString() : Date.now().toString();
+    
+    const values = [
+      newsId,
+      title || '',
+      description || '',
+      link || '',
+      image || '',
+      newsDate
+    ];
+
+    const insertSql = 'INSERT INTO "new" (id, title, description, link, image, date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+    const { rows } = await pool.query(insertSql, values);
+    return res.status(201).json(rows[0]);
   } catch (err) {
     if (res.headersSent) return;
     return res.status(500).json({ error: err.message });
   }
 });
 
-app.put('/news/:id', (req, res) => {
+app.put('/news/:id', async (req, res) => {
   try {
-    const items = readNewsFromDisk();
     const id = req.params.id;
-    const idx = items.findIndex(n => String(n.id) === String(id));
-    if (idx === -1) return res.status(404).json({ error: 'Noticia no encontrada' });
     const { title, description, link, image, date } = req.body || {};
-    const updated = Object.assign({}, items[idx], {
-      title: title != null ? title : items[idx].title,
-      description: description != null ? description : items[idx].description,
-      link: link != null ? link : items[idx].link,
-      image: image != null ? image : items[idx].image,
-      date: date != null ? date : items[idx].date
-    });
-    items[idx] = updated;
-    writeNewsToDisk(items);
-    return res.json(updated);
+    
+    const values = [
+      title,
+      description,
+      link,
+      image,
+      date,
+      id
+    ];
+
+    const updateSql = `
+      UPDATE "new" 
+      SET title = $1, description = $2, link = $3, image = $4, date = $5 
+      WHERE id = $6 
+      RETURNING *
+    `;
+    
+    const { rows } = await pool.query(updateSql, values);
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Noticia no encontrada' });
+    }
+    
+    return res.json(rows[0]);
   } catch (err) {
     if (res.headersSent) return;
     return res.status(500).json({ error: err.message });
   }
 });
 
-app.delete('/news/:id', (req, res) => {
+app.delete('/news/:id', async (req, res) => {
   try {
-    const items = readNewsFromDisk();
     const id = req.params.id;
-    const next = items.filter(n => String(n.id) !== String(id));
-    if (next.length === items.length) return res.status(404).json({ error: 'Noticia no encontrada' });
-    writeNewsToDisk(next);
+    const { rowCount } = await pool.query('DELETE FROM "new" WHERE id = $1', [id]);
+    
+    if (rowCount === 0) {
+      return res.status(404).json({ error: 'Noticia no encontrada' });
+    }
+    
     return res.json({ message: 'Noticia eliminada' });
   } catch (err) {
     if (res.headersSent) return;
