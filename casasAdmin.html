@@ -1347,6 +1347,31 @@
     
     <script>
         // Custom Message System
+        // Cloudinary Config (rellenar con tus valores de Cloudinary - unsigned preset)
+        const CLOUDINARY_CLOUD_NAME = '';// Ej: 'demo'
+        const CLOUDINARY_UPLOAD_PRESET = '';// Ej: 'unsigned_preset'
+
+        async function uploadImageToCloudinary(file, folder = 'properties') {
+            if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+                throw new Error('Falta configuración de Cloudinary (cloud_name o upload_preset)');
+            }
+            const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+            formData.append('folder', folder);
+            const response = await fetch(url, { method: 'POST', body: formData });
+            if (!response.ok) {
+                const text = await response.text().catch(() => '');
+                throw new Error(`Error Cloudinary ${response.status}: ${text}`);
+            }
+            const data = await response.json();
+            if (!data.secure_url) {
+                throw new Error('Respuesta de Cloudinary inválida (sin secure_url)');
+            }
+            return data.secure_url;
+        }
+
         function showMessage(type, title, message, duration = 5000, customIcon = null) {
             const messageContainer = document.getElementById('messageContainer');
             
@@ -1516,7 +1541,7 @@
                 await saveProperty();
             });
             
-            // Manejo de subida de imágenes desde dispositivo
+            // Manejo de subida de imágenes a Cloudinary (unsigned)
             const uploadImagesBtn = document.getElementById('uploadImagesBtn');
             const propertyImagesFile = document.getElementById('propertyImagesFile');
             const propertyImagesTextarea = document.getElementById('propertyImages');
@@ -1527,16 +1552,31 @@
                 propertyImagesFile.addEventListener('change', async function(e) {
                     const files = Array.from(e.target.files || []);
                     if (!files.length) return;
-                    const readAsDataUrl = (file) => new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = function(ev) { resolve(ev.target.result); };
-                        reader.readAsDataURL(file);
-                    });
-                    const dataUrls = await Promise.all(files.map(readAsDataUrl));
-                    const existing = propertyImagesTextarea.value.trim();
-                    const existingLines = existing ? existing.split('\n').map(s => s.trim()).filter(Boolean) : [];
-                    propertyImagesTextarea.value = [...existingLines, ...dataUrls].join('\n');
-                    try { showSuccess('Imágenes añadidas', `${dataUrls.length} imagen(es) agregadas desde el dispositivo.`, 4000, '🖼️'); } catch (_) {}
+                    let successCount = 0;
+                    let failCount = 0;
+                    showInfo('Subiendo imágenes…', 'Iniciando subida a Cloudinary', 2500, '☁️');
+                    const urls = [];
+                    for (const file of files) {
+                        try {
+                            const url = await uploadImageToCloudinary(file, 'properties');
+                            urls.push(url);
+                            successCount++;
+                        } catch (err) {
+                            console.error('Error subiendo a Cloudinary:', err);
+                            failCount++;
+                        }
+                    }
+                    if (urls.length) {
+                        const existing = propertyImagesTextarea.value.trim();
+                        const existingLines = existing ? existing.split('\n').map(s => s.trim()).filter(Boolean) : [];
+                        propertyImagesTextarea.value = [...existingLines, ...urls].join('\n');
+                    }
+                    if (successCount) {
+                        try { showSuccess('Imágenes subidas', `${successCount} imagen(es) agregadas`, 4000, '🖼️'); } catch (_) {}
+                    }
+                    if (failCount) {
+                        try { showWarning('Subida incompleta', `${failCount} imagen(es) fallaron`, 5000, '⚠️'); } catch (_) {}
+                    }
                     propertyImagesFile.value = '';
                 });
             }
