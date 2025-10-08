@@ -52,6 +52,30 @@
         .news-empty { text-align: center; color: var(--text-gray); padding: 40px; }
         footer { background-color: var(--dark-blue); color: var(--white); padding: 20px 0; text-align: center; font-size: 0.8em; margin-top: 40px; }
         @media (max-width: 767px) { header { padding: 12px 14px; } .logo-graphic { transform: scale(0.85); transform-origin: left center; } .nav-item { font-size: 0.75em; padding: 6px 10px; } }
+
+        /* Media queries para tablets y desktop (alinear con casas.html) */
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px 40px;
+            }
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .logo-section {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 0;
+                width: auto;
+            }
+            .logo-graphic { margin: 0 20px 0 0; width: 350px; }
+            .nav-section { width: auto; padding: 8px 18px; gap: 10px; }
+            .nav-item { font-size: 0.85em; padding: 8px 15px; }
+        }
+        @media (min-width: 1024px) { .logo-graphic { width: 400px; } .nav-section { gap: 15px; } }
     </style>
 </head>
 <body>
