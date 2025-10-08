@@ -56,6 +56,9 @@
                 <div style="flex:1 1 320px">
                     <label for="newsLink">Enlace (opcional)</label>
                     <input id="newsLink" placeholder="https://...">
+                    <div id="linkPreview" style="margin-top:8px;display:none">
+                        <img id="linkPreviewImg" alt="preview" style="max-width:100%;max-height:160px;border:1px solid var(--medium-gray);border-radius:6px;">
+                    </div>
                 </div>
             </div>
             <div class="form-row" style="margin-top:10px">
@@ -162,6 +165,9 @@
                 if(!descEl.value.trim() && meta.description) descEl.value = meta.description;
                 linkInput.value = meta.url || url;
                 linkInput.dataset.image = meta.image || '';
+                const prevWrap = document.getElementById('linkPreview');
+                const prevImg = document.getElementById('linkPreviewImg');
+                if(meta.image){ prevImg.src = meta.image; prevWrap.style.display = 'block'; } else { prevImg.removeAttribute('src'); prevWrap.style.display = 'none'; }
             }
         });
 
