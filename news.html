@@ -50,6 +50,7 @@
         .news-title { font-weight: 700; color: var(--dark-turquoise); }
         .news-meta { font-size: 0.85em; color: var(--text-gray); opacity: 0.85; }
         .news-link { color: var(--primary-turquoise); text-decoration: none; word-break: break-word; }
+        .preview { margin-top: 8px; }
         .news-empty { text-align: center; color: var(--text-gray); padding: 40px; }
         footer { background-color: var(--dark-blue); color: var(--white); padding: 20px 0; text-align: center; font-size: 0.8em; margin-top: 40px; }
         @media (max-width: 767px) { header { padding: 12px 14px; } .logo-graphic { transform: scale(0.85); transform-origin: left center; } .nav-item { font-size: 0.75em; padding: 6px 10px; } .news-hero { padding: 60px 16px; } }
@@ -119,13 +120,16 @@
                     <div class="news-meta">${dateStr}</div>
                     ${item.description ? `<div>${(item.description||'').replace(/\n/g,'<br>')}</div>` : ''}
                     ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="news-link">${item.link}</a>` : ''}
+                    ${item.link ? `<div class="preview"><a class="mclink" href="${item.link}" target="_blank" rel="noopener"></a></div>` : ''}
                 `;
                 list.appendChild(card);
             });
+            try { if (window.microlink) { window.microlink('.mclink'); } } catch (_) {}
         }
 
         document.addEventListener('DOMContentLoaded', renderNews);
     </script>
+    <script src="https://cdn.microlink.io/microlink.js"></script>
 </body>
 </html>
 
