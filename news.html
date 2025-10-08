@@ -50,6 +50,7 @@
         .news-title { font-weight: 700; color: var(--dark-turquoise); }
         .news-meta { font-size: 0.85em; color: var(--text-gray); opacity: 0.85; }
         .news-link { color: var(--primary-turquoise); text-decoration: none; word-break: break-word; }
+        .news-image { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid var(--medium-gray); }
         .preview { margin-top: 8px; }
         .news-empty { text-align: center; color: var(--text-gray); padding: 40px; }
         footer { background-color: var(--dark-blue); color: var(--white); padding: 20px 0; text-align: center; font-size: 0.8em; margin-top: 40px; }
@@ -118,6 +119,7 @@
                 card.innerHTML = `
                     <div class="news-title">${item.title || 'Untitled'}</div>
                     <div class="news-meta">${dateStr}</div>
+                    ${item.image ? `<img class="news-image" src="${item.image}" alt="news image">` : ''}
                     ${item.description ? `<div>${(item.description||'').replace(/\n/g,'<br>')}</div>` : ''}
                     ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="news-link">${item.link}</a>` : ''}
                     ${item.link ? `<div class="preview"><a class="mclink" href="${item.link}" target="_blank" rel="noopener"></a></div>` : ''}

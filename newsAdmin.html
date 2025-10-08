@@ -130,13 +130,58 @@
             });
         }
 
-        document.getElementById('saveNews').addEventListener('click', ()=>{
+        async function fetchLinkMetadata(url){
+            try{
+                const endpoint = 'https://api.microlink.io/?url=' + encodeURIComponent(url);
+                const res = await fetch(endpoint);
+                if(!res.ok) throw new Error('HTTP '+res.status);
+                const json = await res.json();
+                if(!json || !json.status || !json.data) throw new Error('Respuesta inválida');
+                const d = json.data;
+                return {
+                    title: d.title || '',
+                    description: d.description || '',
+                    image: d.image && (d.image.url || d.image) ? (d.image.url || d.image) : '',
+                    url: d.url || url
+                };
+            }catch(err){
+                console.error('Metadata fetch error:', err);
+                return null;
+            }
+        }
+
+        const linkInput = document.getElementById('newsLink');
+        linkInput.addEventListener('blur', async ()=>{
+            const url = linkInput.value.trim();
+            if(!url) return;
+            const meta = await fetchLinkMetadata(url);
+            if(meta){
+                const titleEl = document.getElementById('newsTitle');
+                const descEl = document.getElementById('newsDesc');
+                if(!titleEl.value.trim() && meta.title) titleEl.value = meta.title;
+                if(!descEl.value.trim() && meta.description) descEl.value = meta.description;
+                linkInput.value = meta.url || url;
+                linkInput.dataset.image = meta.image || '';
+            }
+        });
+
+        document.getElementById('saveNews').addEventListener('click', async ()=>{
             const title = document.getElementById('newsTitle').value.trim();
             const link = document.getElementById('newsLink').value.trim();
             const description = document.getElementById('newsDesc').value.trim();
             if(!title && !description && !link){ return; }
+            // asegúrate de tener metadata si solo hay link
+            let image = linkInput.dataset.image || '';
+            if(link && (!title || !description || !image)){
+                const meta = await fetchLinkMetadata(link);
+                if(meta){
+                    if(!title) document.getElementById('newsTitle').value = meta.title || '';
+                    if(!description) document.getElementById('newsDesc').value = meta.description || '';
+                    if(!image) image = meta.image || '';
+                }
+            }
             const items = loadNews();
-            const obj = { title, link, description, date: Date.now() };
+            const obj = { title: document.getElementById('newsTitle').value.trim(), link, description: document.getElementById('newsDesc').value.trim(), image, date: Date.now() };
             if(editingIndex!==null){ items[editingIndex]=obj; } else { items.unshift(obj); }
             saveNewsArray(items); clearForm(); renderList();
         });
