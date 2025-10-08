@@ -102,17 +102,22 @@
 
     <script>
         const KEY = 'mbi_news_items';
+        const NEWS_API = 'https://xkmarasa-github-io.onrender.com/news';
         let editingIndex = null;
 
         function loadNews(){ try{ const raw=localStorage.getItem(KEY); const arr = raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(_){ return []; } }
         function saveNewsArray(arr){ localStorage.setItem(KEY, JSON.stringify(arr)); }
+        async function fetchAll(){ try{ const r=await fetch(NEWS_API); if(!r.ok) throw 0; const d=await r.json(); if(Array.isArray(d)){ saveNewsArray(d); return d; } }catch(_){ } return loadNews(); }
+        async function createNews(obj){ try{ const r=await fetch(NEWS_API,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); if(!r.ok) throw 0; const d=await r.json(); const arr=loadNews(); arr.unshift(d); saveNewsArray(arr); return d; }catch(_){ const arr=loadNews(); arr.unshift(obj); saveNewsArray(arr); return obj; } }
+        async function updateNewsAt(index,obj){ const items=loadNews(); const id=items[index]&&items[index].id; try{ const r=await fetch(`${NEWS_API}/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); if(!r.ok) throw 0; const d=await r.json(); items[index]=d; saveNewsArray(items); return d; }catch(_){ items[index]=Object.assign({id},obj); saveNewsArray(items); return items[index]; } }
+        async function deleteNewsAt(index){ const items=loadNews(); const id=items[index]&&items[index].id; try{ const r=await fetch(`${NEWS_API}/${id}`,{method:'DELETE'}); if(!r.ok) throw 0; items.splice(index,1); saveNewsArray(items); }catch(_){ items.splice(index,1); saveNewsArray(items); } }
 
         function clearForm(){ document.getElementById('newsTitle').value=''; document.getElementById('newsLink').value=''; document.getElementById('newsDesc').value=''; editingIndex=null; }
 
-        function renderList(){
+        async function renderList(){
             const container = document.getElementById('newsList');
             container.innerHTML='';
-            const items = loadNews();
+            const items = await fetchAll();
             if(!items.length){ container.innerHTML = '<div style="text-align:center;color:#666;padding:16px">Sin noticias</div>'; return; }
             items.forEach((item, idx)=>{
                 const el = document.createElement('div');
@@ -137,10 +142,8 @@
                     document.getElementById('newsDesc').value = it.description||'';
                     editingIndex = idx;
                 });
-                el.querySelector('[data-action="delete"]').addEventListener('click', ()=>{
-                    const items = loadNews();
-                    items.splice(idx,1);
-                    saveNewsArray(items);
+                el.querySelector('[data-action="delete"]').addEventListener('click', async ()=>{
+                    await deleteNewsAt(idx);
                     renderList();
                 });
                 container.appendChild(el);
@@ -200,10 +203,9 @@
                     if(!image) image = meta.image || '';
                 }
             }
-            const items = loadNews();
             const obj = { title: document.getElementById('newsTitle').value.trim(), link, description: document.getElementById('newsDesc').value.trim(), image, date: Date.now() };
-            if(editingIndex!==null){ items[editingIndex]=obj; } else { items.unshift(obj); }
-            saveNewsArray(items); clearForm(); renderList();
+            if(editingIndex!==null){ await updateNewsAt(editingIndex,obj); } else { await createNews(obj); }
+            clearForm(); renderList();
         });
 
         document.getElementById('clearForm').addEventListener('click', clearForm);
