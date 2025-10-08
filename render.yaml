@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: xkmarasa-backend
+    env: node
+    plan: free
+    buildCommand: cd back && npm install
+    startCommand: cd back && node data/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production

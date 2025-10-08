@@ -1,0 +1,18 @@
+{
+  "name": "xkmarasa-website",
+  "version": "1.0.0",
+  "description": "Xkmarasa website with news management",
+  "main": "back/data/index.js",
+  "scripts": {
+    "start": "cd back && node data/index.js",
+    "install": "cd back && npm install"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "pg": "^8.11.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
