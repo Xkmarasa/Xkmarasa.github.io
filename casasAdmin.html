@@ -1292,7 +1292,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="propertyImages">Images (one URL per line):</label>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <label for="propertyImages" style="margin-bottom: 0;">Images (one URL per line):</label>
+                        <div>
+                            <input type="file" id="propertyImagesFile" accept="image/*" multiple style="display:none">
+                            <button type="button" id="uploadImagesBtn" class="btn btn-secondary" title="Selecciona imágenes desde tu dispositivo">Subir desde dispositivo</button>
+                        </div>
+                    </div>
                     <textarea id="propertyImages" name="images" placeholder="Enter image URLs, one per line"></textarea>
                 </div>
                 
@@ -1509,6 +1515,31 @@
                 e.preventDefault();
                 await saveProperty();
             });
+            
+            // Manejo de subida de imágenes desde dispositivo
+            const uploadImagesBtn = document.getElementById('uploadImagesBtn');
+            const propertyImagesFile = document.getElementById('propertyImagesFile');
+            const propertyImagesTextarea = document.getElementById('propertyImages');
+            if (uploadImagesBtn && propertyImagesFile && propertyImagesTextarea) {
+                uploadImagesBtn.addEventListener('click', function() {
+                    propertyImagesFile.click();
+                });
+                propertyImagesFile.addEventListener('change', async function(e) {
+                    const files = Array.from(e.target.files || []);
+                    if (!files.length) return;
+                    const readAsDataUrl = (file) => new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) { resolve(ev.target.result); };
+                        reader.readAsDataURL(file);
+                    });
+                    const dataUrls = await Promise.all(files.map(readAsDataUrl));
+                    const existing = propertyImagesTextarea.value.trim();
+                    const existingLines = existing ? existing.split('\n').map(s => s.trim()).filter(Boolean) : [];
+                    propertyImagesTextarea.value = [...existingLines, ...dataUrls].join('\n');
+                    try { showSuccess('Imágenes añadidas', `${dataUrls.length} imagen(es) agregadas desde el dispositivo.`, 4000, '🖼️'); } catch (_) {}
+                    propertyImagesFile.value = '';
+                });
+            }
             
             function loadProperties() {
                 fetch('https://xkmarasa-github-io.onrender.com/data')
