@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News | Mediterranean Blue International</title>
+    <style>
+        :root {
+            --primary-turquoise: #20B2AA;
+            --dark-turquoise: #008B8B;
+            --light-turquoise: #E0FFFF;
+            --soft-turquoise: #B0E0E6;
+            --pale-turquoise: #F0FFFF;
+            --medium-turquoise: #48CAE4;
+            --deep-turquoise: #007F7F;
+            --white: #FFFFFF;
+            --cream: #FDFDFD;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E9ECEF;
+            --text-gray: #495057;
+            --dark-gray: #212529;
+            --charcoal: #343A40;
+            --header-bg: linear-gradient(135deg, var(--pale-turquoise) 0%, var(--light-turquoise) 50%, var(--soft-turquoise) 100%);
+            --body-bg: linear-gradient(180deg, var(--pale-turquoise) 0%, var(--light-turquoise) 100%);
+            --card-bg: var(--white);
+            --hover-bg: var(--light-gray);
+            --logo-accent: var(--primary-turquoise);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background: var(--body-bg); color: var(--text-gray); line-height: 1.7; min-height: 100vh; font-weight: 400; }
+        header { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 15px 20px; background: var(--header-bg); position: relative; z-index: 100; }
+        .header-content { display: flex; flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+        .logo-section { display: flex; flex-direction: column; align-items: flex-start; width: auto; }
+        .logo-graphic { position: relative; width: 100%; max-width: 400px; height: 120px; background: transparent; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .semicircle { position: absolute; bottom: 40px; left: 0; width: 100px; height: 50px; border: 5px solid var(--logo-accent); border-bottom: none; background: transparent; border-top-left-radius: 100px; border-top-right-radius: 100px; z-index: 1; }
+        .horizon-line { position: absolute; bottom: 40px; left: 0; width: 100%; height: 5px; background-color: var(--logo-accent); border-top-left-radius: 100px; border-top-right-radius: 100px; z-index: 1; }
+        .semicircle-underline { position: absolute; bottom: 24px; left: 8px; width: 85px; height: 5px; background-color: var(--logo-accent); border-radius: 4px; z-index: 1; }
+        .logo-text { position: relative; z-index: 2; margin-left: 110px; display: flex; flex-direction: column; justify-content: center; height: 100%; align-items: center; text-align: center; }
+        .logo-main { font-size: 1.1em; font-weight: 700; color: var(--dark-turquoise); text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8); letter-spacing: -0.5px; line-height: 1.2; }
+        .nav-section { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; padding: 10px 15px; background: transparent; }
+        .nav-item { font-weight: bold; cursor: pointer; color: var(--dark-gray); transition: all 0.3s; text-transform: uppercase; font-size: 0.8em; letter-spacing: 1px; padding: 8px 15px; text-decoration: none; border-radius: 4px; background-color: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .nav-item:hover { color: var(--primary-blue); background-color: var(--light-blue); transform: translateY(-2px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+        .nav-item.active { background-color: var(--primary-blue); color: var(--white); }
+        .news-hero { background: linear-gradient(rgba(0, 139, 139, 0.85), rgba(0, 127, 127, 0.85)), url('https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; color: var(--white); padding: 80px 20px; text-align: center; box-shadow: 0 4px 20px rgba(32, 178, 170, 0.2); }
+        .hero-title { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
+        .hero-subtitle { font-size: 1.1em; opacity: 0.95; }
+        .news-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .news-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+        .news-card { background: var(--card-bg); border: 1px solid var(--medium-gray); border-radius: 10px; box-shadow: 0 3px 18px rgba(0,0,0,0.06); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+        .news-title { font-weight: 700; color: var(--dark-turquoise); }
+        .news-meta { font-size: 0.85em; color: var(--text-gray); opacity: 0.85; }
+        .news-link { color: var(--primary-turquoise); text-decoration: none; word-break: break-word; }
+        .news-empty { text-align: center; color: var(--text-gray); padding: 40px; }
+        footer { background-color: var(--dark-blue); color: var(--white); padding: 20px 0; text-align: center; font-size: 0.8em; margin-top: 40px; }
+        @media (max-width: 767px) { header { padding: 12px 14px; } .logo-graphic { transform: scale(0.85); transform-origin: left center; } .nav-item { font-size: 0.75em; padding: 6px 10px; } .news-hero { padding: 60px 16px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-graphic">
+                    <div class="semicircle"></div>
+                    <div class="semicircle-underline"></div>
+                    <div class="horizon-line"></div>
+                    <div class="logo-text">
+                        <div class="logo-main">Mediterranean Blue International LLC Realty</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-section">
+                <a href="home.html" class="nav-item">Home</a>
+                <a href="casas.html" class="nav-item">Properties</a>
+                <a href="news.html" class="nav-item active">News</a>
+                <a href="Contact.html" class="nav-item">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="news-hero">
+        <h1 class="hero-title">Latest News & Updates</h1>
+        <p class="hero-subtitle">Announcements, articles and helpful links from Mediterranean Blue</p>
+    </section>
+
+    <main class="news-container">
+        <div id="newsList" class="news-list"></div>
+        <div id="newsEmpty" class="news-empty" style="display:none;">No news yet</div>
+    </main>
+
+    <footer>© 2023 Mediterranean Blue International LLC. All rights reserved.</footer>
+
+    <script>
+        // Fuente de datos simple usando localStorage (clave: 'mbi_news_items')
+        function loadNews() {
+            try {
+                const raw = localStorage.getItem('mbi_news_items');
+                if (!raw) return [];
+                const arr = JSON.parse(raw);
+                return Array.isArray(arr) ? arr : [];
+            } catch (_) { return []; }
+        }
+
+        function renderNews() {
+            const list = document.getElementById('newsList');
+            const empty = document.getElementById('newsEmpty');
+            const items = loadNews();
+            list.innerHTML = '';
+            if (!items.length) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                const dateStr = item.date ? new Date(item.date).toLocaleString() : '';
+                card.innerHTML = `
+                    <div class="news-title">${item.title || 'Untitled'}</div>
+                    <div class="news-meta">${dateStr}</div>
+                    ${item.description ? `<div>${(item.description||'').replace(/\n/g,'<br>')}</div>` : ''}
+                    ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="news-link">${item.link}</a>` : ''}
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderNews);
+    </script>
+</body>
+</html>
+
+
