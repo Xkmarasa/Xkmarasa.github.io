@@ -1423,7 +1423,12 @@
             if(btn&&menu){
               btn.addEventListener('click',()=> menu.style.display=(menu.style.display==='block'?'none':'block'));
               menu.querySelectorAll('.lang-option').forEach(opt=>{
-                opt.addEventListener('click',()=>{ localStorage.setItem('mbi_lang', opt.getAttribute('data-lang')); menu.style.display='none'; apply(); });
+                opt.addEventListener('click',()=>{ 
+                  localStorage.setItem('mbi_lang', opt.getAttribute('data-lang')); 
+                  menu.style.display='none'; 
+                  apply();
+                  try { applyFiltersI18n(); } catch(_) {}
+                });
               });
               document.addEventListener('click',(e)=>{ if(!menu.contains(e.target)&&!btn.contains(e.target)) menu.style.display='none'; });
             }
@@ -1437,45 +1442,45 @@
             <!-- Panel de filtros izquierdo -->
             <div class="filters-panel" id="filters-panel">
                 <div class="filters-header">
-                    <h2 style="margin: 0; font-size: 1.1em; color: var(--dark-turquoise);">Filtros de Búsqueda</h2>
+                    <h2 style="margin: 0; font-size: 1.1em; color: var(--dark-turquoise);" data-i18n="filters.title">Search Filters</h2>
                     <button class="toggle-filters-btn" id="toggle-filters" onclick="toggleFilters()">
                         <span id="toggle-icon">▼</span>
                     </button>
                 </div>
                 <div class="filters-content" id="filters-content">
                 <div class="filter-section">
-                    <h3>Ubicación</h3>
+                    <h3 data-i18n="filters.location">Location</h3>
                     <div class="search-container">
-                        <input type="text" id="location-search" placeholder="Buscar ubicación..." autocomplete="off">
+                        <input type="text" id="location-search" data-i18n-ph="filters.location.ph" placeholder="Search location..." autocomplete="off">
                         <div id="location-suggestions" class="suggestions-dropdown"></div>
                     </div>
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Precio (€)</h3>
+                    <h3 data-i18n="filters.price">Price (€)</h3>
                     <div class="range-row">
-                        <input type="number" id="price-min" placeholder="Mínimo">
-                        <input type="number" id="price-max" placeholder="Máximo">
+                        <input type="number" id="price-min" data-i18n-ph="filters.min" placeholder="Minimum">
+                        <input type="number" id="price-max" data-i18n-ph="filters.max" placeholder="Maximum">
                     </div>
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Tipo de Propiedad</h3>
+                    <h3 data-i18n="filters.type">Property Type</h3>
                     <select id="property-type" class="select-field">
-                        <option value="">Todos</option>
-                        <option value="house">Casa / Villa</option>
-                        <option value="apartment">Apartamento / Piso</option>
-                        <option value="townhouse">Adosado</option>
-                        <option value="plot">Parcela</option>
-                        <option value="commercial">Comercial</option>
-                        <option value="other">Otros</option>
+                        <option value="" data-i18n="filters.any">Any</option>
+                        <option value="house" data-i18n="filters.type.house">House / Villa</option>
+                        <option value="apartment" data-i18n="filters.type.apartment">Apartment / Flat</option>
+                        <option value="townhouse" data-i18n="filters.type.townhouse">Townhouse</option>
+                        <option value="plot" data-i18n="filters.type.plot">Plot</option>
+                        <option value="commercial" data-i18n="filters.type.commercial">Commercial</option>
+                        <option value="other" data-i18n="filters.type.other">Other</option>
                     </select>
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Dormitorios</h3>
+                    <h3 data-i18n="filters.bedrooms">Bedrooms</h3>
                     <select id="bedrooms" class="select-field">
-                        <option value="">Cualquier cantidad</option>
+                        <option value="" data-i18n="filters.anyAmount">Any amount</option>
                         <option value="1">1+</option>
                         <option value="2">2+</option>
                         <option value="3">3+</option>
@@ -1485,9 +1490,9 @@
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Baños</h3>
+                    <h3 data-i18n="filters.bathrooms">Bathrooms</h3>
                     <select id="bathrooms" class="select-field">
-                        <option value="">Cualquier cantidad</option>
+                        <option value="" data-i18n="filters.anyAmount">Any amount</option>
                         <option value="1">1+</option>
                         <option value="2">2+</option>
                         <option value="3">3+</option>
@@ -1496,27 +1501,27 @@
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Tamaño (m²)</h3>
+                    <h3 data-i18n="filters.size">Size (m²)</h3>
                     <div class="range-row">
-                        <input type="number" id="size-min" placeholder="Mínimo">
-                        <input type="number" id="size-max" placeholder="Máximo">
+                        <input type="number" id="size-min" data-i18n-ph="filters.min" placeholder="Minimum">
+                        <input type="number" id="size-max" data-i18n-ph="filters.max" placeholder="Maximum">
                     </div>
                 </div>
                 
                 
                 
                 <div class="filter-section">
-                    <h3>Requisitos del Cliente</h3>
+                    <h3 data-i18n="filters.req">Client Requirements</h3>
                     <div class="requirements-container">
-                        <textarea id="client-requirements" placeholder="Describe tus requisitos específicos...&#10;Ejemplo: Necesito una casa con jardín, piscina, cerca del mar, con 3 dormitorios, presupuesto máximo 500.000€"></textarea>
-                        <button id="analyze-requirements" class="analyze-btn">Analizar con IA</button>
+                        <textarea id="client-requirements" data-i18n-ph-multi="filters.req.ph" placeholder="Describe your specific requirements...&#10;Example: Need a house with garden, pool, near the sea, with 3 bedrooms, max budget €500,000"></textarea>
+                        <button id="analyze-requirements" class="analyze-btn" data-i18n="filters.req.ai">Analyze with AI</button>
                         <div id="ai-analysis" class="ai-analysis-result"></div>
                     </div>
                 </div>
                 
                 <div class="filter-actions">
-                    <button id="apply-filters" class="apply-filters-btn">Aplicar Filtros</button>
-                    <button id="clear-filters" class="clear-filters-btn">Limpiar</button>
+                    <button id="apply-filters" class="apply-filters-btn" data-i18n="filters.apply">Apply Filters</button>
+                    <button id="clear-filters" class="clear-filters-btn" data-i18n="filters.clear">Clear</button>
                 </div>
                 </div>
             </div>
@@ -1570,6 +1575,27 @@
                 currentFilters.location = value; // guardar en filtros
             });
         }
+        // === i18n para filtros ===
+        const I18N_FILTERS = {
+            en:{'filters.title':'Search Filters','filters.location':'Location','filters.location.ph':'Search location...','filters.price':'Price (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Property Type','filters.any':'Any','filters.type.house':'House / Villa','filters.type.apartment':'Apartment / Flat','filters.type.townhouse':'Townhouse','filters.type.plot':'Plot','filters.type.commercial':'Commercial','filters.type.other':'Other','filters.bedrooms':'Bedrooms','filters.anyAmount':'Any amount','filters.bathrooms':'Bathrooms','filters.size':'Size (m²)','filters.req':'Client Requirements','filters.req.ph':'Describe your specific requirements...\nExample: Need a house with garden, pool, near the sea, with 3 bedrooms, max budget €500,000','filters.req.ai':'Analyze with AI','filters.apply':'Apply Filters','filters.clear':'Clear'},
+            es:{'filters.title':'Filtros de Búsqueda','filters.location':'Ubicación','filters.location.ph':'Buscar ubicación...','filters.price':'Precio (€)','filters.min':'Mínimo','filters.max':'Máximo','filters.type':'Tipo de Propiedad','filters.any':'Todos','filters.type.house':'Casa / Villa','filters.type.apartment':'Apartamento / Piso','filters.type.townhouse':'Adosado','filters.type.plot':'Parcela','filters.type.commercial':'Comercial','filters.type.other':'Otros','filters.bedrooms':'Dormitorios','filters.anyAmount':'Cualquier cantidad','filters.bathrooms':'Baños','filters.size':'Tamaño (m²)','filters.req':'Requisitos del Cliente','filters.req.ph':'Describe tus requisitos específicos...\nEjemplo: Necesito una casa con jardín, piscina, cerca del mar, con 3 dormitorios, presupuesto máximo 500.000€','filters.req.ai':'Analizar con IA','filters.apply':'Aplicar Filtros','filters.clear':'Limpiar'},
+            fr:{'filters.title':'Filtres de recherche','filters.location':'Localisation','filters.location.ph':'Rechercher un lieu...','filters.price':'Prix (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Type de propriété','filters.any':'Tous','filters.type.house':'Maison / Villa','filters.type.apartment':'Appartement','filters.type.townhouse':'Maison de ville','filters.type.plot':'Terrain','filters.type.commercial':'Commercial','filters.type.other':'Autres','filters.bedrooms':'Chambres','filters.anyAmount':'N’importe quel nombre','filters.bathrooms':'Salles de bain','filters.size':'Superficie (m²)','filters.req':'Exigences du client','filters.req.ph':'Décrivez vos exigences spécifiques...\nExemple : maison avec jardin, piscine, près de la mer, 3 chambres, budget max 500 000 €','filters.req.ai':'Analyser avec IA','filters.apply':'Appliquer les filtres','filters.clear':'Effacer'},
+            de:{'filters.title':'Suchfilter','filters.location':'Ort','filters.location.ph':'Ort suchen...','filters.price':'Preis (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Immobilienart','filters.any':'Alle','filters.type.house':'Haus / Villa','filters.type.apartment':'Apartment / Wohnung','filters.type.townhouse':'Reihenhaus','filters.type.plot':'Grundstück','filters.type.commercial':'Gewerbe','filters.type.other':'Sonstige','filters.bedrooms':'Schlafzimmer','filters.anyAmount':'Beliebig','filters.bathrooms':'Badezimmer','filters.size':'Größe (m²)','filters.req':'Kundenanforderungen','filters.req.ph':'Beschreiben Sie Ihre Anforderungen...\nBeispiel: Haus mit Garten, Pool, in Meeresnähe, 3 Schlafzimmer, max. Budget 500.000€','filters.req.ai':'Mit KI analysieren','filters.apply':'Filter anwenden','filters.clear':'Zurücksetzen'}
+        };
+        function applyFiltersI18n(){
+            const lang = localStorage.getItem('mbi_lang')||'en';
+            const dict = I18N_FILTERS[lang]||I18N_FILTERS.en;
+            document.querySelectorAll('#filters-panel [data-i18n]').forEach(el=>{
+                const k=el.getAttribute('data-i18n'); if(dict[k]) el.textContent=dict[k];
+            });
+            document.querySelectorAll('#filters-panel [data-i18n-ph]').forEach(el=>{
+                const k=el.getAttribute('data-i18n-ph'); if(dict[k]) el.setAttribute('placeholder', dict[k]);
+            });
+            document.querySelectorAll('#filters-panel [data-i18n-ph-multi]').forEach(el=>{
+                const k=el.getAttribute('data-i18n-ph-multi'); if(dict[k]) el.setAttribute('placeholder', dict[k]);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', applyFiltersI18n);
         
         // (Eliminado) Selector de tipo de propiedad
         
@@ -2172,11 +2198,11 @@
                     </div>
                     
                     <div class="property-details-container">
-                        <h1 class="property-title">${title}</h1>
+                                <h1 class="property-title" data-i18n-prop="title">${title}</h1>
                         <div class="property-location">${location}</div>
-                        <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
-                        <ul class="property-features">
-                            ${features.map(feature => `<li>${feature}</li>`).join('')}
+                                <p class="property-description" data-i18n-prop="description">${descriptionText.replace(/\n/g, '<br>')}</p>
+                            <ul class="property-features" data-i18n-prop="features">
+                                ${features.map(feature => `<li>${feature}</li>`).join('')}
                         </ul>
                         <div class="property-details">
                             ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
@@ -2354,9 +2380,9 @@
                                 ${imageHTML}
                             </div>
                             <div class="property-details-container">
-                                <h1 class="property-title">${title}</h1>
+                                <h1 class="property-title" data-i18n-prop="title">${title}</h1>
                                 <div class="property-location">${location}</div>
-                                <p class="property-description">${description.replace(/\n/g, '<br>')}</p>
+                                <p class="property-description" data-i18n-prop="description">${description.replace(/\n/g, '<br>')}</p>
                                 <div class="property-details">
                                     <span class="detail-item">${property.baños || '3+'} Beds</span>
                                     <span class="detail-item">${property.baños || '2+'} Baths</span>
@@ -2649,10 +2675,10 @@
                         </div>
                         
                         <div class="property-details-container">
-                            <h1 class="property-title">${title}</h1>
+                            <h1 class="property-title" data-i18n-prop="title">${title}</h1>
                             <div class="property-location">${location}</div>
-                            <p class="property-description">${descriptionText.replace(/\n/g, '<br>')}</p>
-                            <ul class="property-features">
+                            <p class="property-description" data-i18n-prop="description">${descriptionText.replace(/\n/g, '<br>')}</p>
+                            <ul class="property-features" data-i18n-prop="features">
                                 ${features.map(feature => `<li>${feature}</li>`).join('')}
                             </ul>
                             <div class="property-details">
