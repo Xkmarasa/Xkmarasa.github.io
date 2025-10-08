@@ -142,7 +142,7 @@ app.put('/data/:id', async (req, res) => {
 // --- Rutas NEWS (Database based) ---
 app.get('/news', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM "new" ORDER BY date DESC');
+    const { rows } = await pool.query('SELECT * FROM "news" ORDER BY date DESC');
     return res.json(rows);
   } catch (err) {
     if (res.headersSent) return;
@@ -152,6 +152,7 @@ app.get('/news', async (req, res) => {
 
 app.post('/news', async (req, res) => {
   try {
+    console.log('🔥 NEWS API: Using DATABASE version (updated code)');
     const { title, description, link, image, date, id } = req.body || {};
     const newsId = id != null ? id : Date.now().toString();
     const newsDate = date != null ? date.toString() : Date.now().toString();
@@ -165,7 +166,7 @@ app.post('/news', async (req, res) => {
       newsDate
     ];
 
-    const insertSql = 'INSERT INTO "new" (id, title, description, link, image, date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+    const insertSql = 'INSERT INTO "news" (id, title, description, link, image, date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
     const { rows } = await pool.query(insertSql, values);
     return res.status(201).json(rows[0]);
   } catch (err) {
@@ -189,7 +190,7 @@ app.put('/news/:id', async (req, res) => {
     ];
 
     const updateSql = `
-      UPDATE "new" 
+      UPDATE "news" 
       SET title = $1, description = $2, link = $3, image = $4, date = $5 
       WHERE id = $6 
       RETURNING *
@@ -211,7 +212,7 @@ app.put('/news/:id', async (req, res) => {
 app.delete('/news/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const { rowCount } = await pool.query('DELETE FROM "new" WHERE id = $1', [id]);
+    const { rowCount } = await pool.query('DELETE FROM "news" WHERE id = $1', [id]);
     
     if (rowCount === 0) {
       return res.status(404).json({ error: 'Noticia no encontrada' });
