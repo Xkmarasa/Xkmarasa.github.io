@@ -111,9 +111,9 @@
                 <a href="news.html" class="nav-item active" data-i18n="nav.news">News</a>
                 <a href="Contact.html" class="nav-item" data-i18n="nav.contact">Contact</a>
                 <div class="lang-selector" id="langSelector">
-                    <div class="lang-btn" id="langBtn">🇬🇧 <span id="langLabel">English</span></div>
+                    <div class="lang-btn" id="langBtn">🇺🇸 <span id="langLabel">English</span></div>
                     <div class="lang-menu" id="langMenu">
-                        <div class="lang-option" data-lang="en">🇬🇧 English</div>
+                        <div class="lang-option" data-lang="en">🇺🇸 English</div>
                         <div class="lang-option" data-lang="es">🇪🇸 Español</div>
                         <div class="lang-option" data-lang="fr">🇫🇷 Français</div>
                         <div class="lang-option" data-lang="de">🇩🇪 Deutsch</div>
@@ -160,7 +160,7 @@
                 if(dict[key]) el.textContent = dict[key];
             });
             const label = {en:'English', es:'Español', fr:'Français', de:'Deutsch'}[lang] || 'English';
-            const flag = {en:'🇬🇧', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪'}[lang] || '🇬🇧';
+            const flag = {en:'🇺🇸', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪'}[lang] || '🇺🇸';
             const langBtn = document.getElementById('langBtn');
             const langLabel = document.getElementById('langLabel');
             if(langBtn && langLabel){ langBtn.firstChild.nodeValue = flag+' '; langLabel.textContent = label; }

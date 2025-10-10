@@ -626,9 +626,9 @@
                 <a href="news.html" class="nav-item" data-i18n="nav.news">News</a>
                 <a href="Contact.html" class="nav-item" data-i18n="nav.contact">Contact</a>
                 <div class="lang-selector" id="langSelector" style="margin-left:auto">
-                    <div class="lang-btn" id="langBtn" style="display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-weight:700;cursor:pointer">🇬🇧 <span id="langLabel">English</span></div>
+                    <div class="lang-btn" id="langBtn" style="display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-weight:700;cursor:pointer">🇺🇸 <span id="langLabel">English</span></div>
                     <div class="lang-menu" id="langMenu" style="position:absolute;right:0;top:110%;background:#fff;border:1px solid #E9ECEF;border-radius:6px;box-shadow:0 6px 16px rgba(0,0,0,0.12);display:none;min-width:160px;z-index:50">
-                        <div class="lang-option" data-lang="en" style="display:flex;gap:8px;align-items:center;padding:8px 12px;cursor:pointer;font-weight:600">🇬🇧 English</div>
+                        <div class="lang-option" data-lang="en" style="display:flex;gap:8px;align-items:center;padding:8px 12px;cursor:pointer;font-weight:600">🇺🇸 English</div>
                         <div class="lang-option" data-lang="es" style="display:flex;gap:8px;align-items:center;padding:8px 12px;cursor:pointer;font-weight:600">🇪🇸 Español</div>
                         <div class="lang-option" data-lang="fr" style="display:flex;gap:8px;align-items:center;padding:8px 12px;cursor:pointer;font-weight:600">🇫🇷 Français</div>
                         <div class="lang-option" data-lang="de" style="display:flex;gap:8px;align-items:center;padding:8px 12px;cursor:pointer;font-weight:600">🇩🇪 Deutsch</div>
@@ -751,7 +751,7 @@
     <footer>
         © 2023 Mediterranean Blue International LLC. All rights reserved.
         <br>
-        <a href="https://www.vapf.com/es" target="_blank" style="color: var(--white); text-decoration: underline; margin-top: 10px; display: inline-block;">@https://www.vapf.com/es</a>
+        <a href="https://www.RXDev.com/es" target="_blank" style="color: var(--white); text-decoration: underline; margin-top: 10px; display: inline-block;">@https://www.RXDev.com/es</a>
     </footer>
     <script>
         // i18n diccionarios
@@ -820,7 +820,7 @@
             });
             const lang = localStorage.getItem('mbi_lang') || 'en';
             const label = {en:'English', es:'Español', fr:'Français', de:'Deutsch'}[lang] || 'English';
-            const flag = {en:'🇬🇧', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪'}[lang] || '🇬🇧';
+            const flag = {en:'🇺🇸', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪'}[lang] || '🇺🇸';
             const btn = document.getElementById('langBtn'); const lab = document.getElementById('langLabel');
             if(btn && lab){ btn.firstChild.nodeValue = flag+' '; lab.textContent = label; }
         }
