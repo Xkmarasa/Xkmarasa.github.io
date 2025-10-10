@@ -179,7 +179,7 @@
         .nav-item {
             font-weight: 600;
             cursor: pointer;
-            color: var(--text-gray);
+            color: var(--dark-turquoise);
             transition: all 0.4s ease;
             text-transform: uppercase;
             font-size: 0.85em;
@@ -189,16 +189,16 @@
             text-decoration: none;
             border-radius: 8px;
             background: var(--white);
-            box-shadow: 0 2px 8px rgba(32, 178, 170, 0.1);
-            border: 1px solid var(--light-gray);
+            box-shadow: 0 2px 8px rgba(32, 178, 170, 0.2);
+            border: 2px solid var(--primary-turquoise);
         }
         
         .nav-item:hover {
             color: var(--white);
-            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--medium-turquoise) 100%);
+            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(32, 178, 170, 0.25);
-            border-color: var(--primary-turquoise);
+            box-shadow: 0 6px 20px rgba(32, 178, 170, 0.4);
+            border-color: var(--dark-turquoise);
         }
         
         .nav-item.active {
@@ -288,8 +288,8 @@
         
         /* Estilos para las secciones de filtros */
         .filter-section {
-            margin-bottom: 15px;
-            padding-bottom: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--light-gray);
         }
         
@@ -417,81 +417,19 @@
             gap: 12px;
         }
         
-        #client-requirements {
-            width: 100%;
-            min-height: 60px;
-            padding: 8px 12px;
-            border: 2px solid var(--light-gray);
-            border-radius: 6px;
-            font-size: 0.85em;
-            font-family: inherit;
-            resize: vertical;
-            transition: all 0.3s ease;
-        }
         
-        #client-requirements:focus {
-            outline: none;
-            border-color: var(--primary-turquoise);
-            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
-        }
         
-        .analyze-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-        }
-        
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3);
-        }
-        
-        .analyze-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .ai-analysis-result {
-            background: var(--light-turquoise);
-            border: 1px solid var(--medium-turquoise);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 0.9em;
-            line-height: 1.5;
-            display: none;
-        }
-        
-        .ai-analysis-result.show {
-            display: block;
-        }
-        
-        .ai-analysis-result .analysis-title {
-            font-weight: 700;
-            color: var(--dark-turquoise);
-            margin-bottom: 8px;
-        }
-        
-        .ai-analysis-result .analysis-content {
-            color: var(--text-gray);
-        }
         
         /* Botones de acción */
         .filter-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 25px;
         }
         
         .apply-filters-btn, .clear-filters-btn {
             flex: 1;
-            padding: 10px 16px;
+            padding: 12px 18px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
@@ -542,7 +480,7 @@
             left: 50%; /* Comienza desde la mitad del contenedor */
             right: 0;
             height: 200px; /* Altura específica desde ubicación hasta precio */
-            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
+            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBI</text></g></svg>');
             background-repeat: no-repeat;
             background-position: center;
             background-size: 400px auto;
@@ -963,20 +901,15 @@
                 font-size: 0.85em;
             }
             
-            #client-requirements {
-                min-height: 50px;
-                padding: 6px 10px;
-                font-size: 0.8em;
-            }
             
             .filter-actions {
                 flex-direction: row;
-                gap: 8px;
-                margin-top: 15px;
+                gap: 10px;
+                margin-top: 20px;
             }
             
             .apply-filters-btn, .clear-filters-btn {
-                padding: 8px 12px;
+                padding: 10px 14px;
                 font-size: 0.8em;
             }
             
@@ -1229,7 +1162,7 @@
                 left: 0;
                 height: 180px; /* Altura desde ubicación hasta precio en móviles */
                 background-size: 320px auto;
-                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
+                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBI</text></g></svg>');
             }
         }
 
@@ -1307,7 +1240,7 @@
                 top: 30px; /* Altura del título/ubicación en desktop */
                 height: 220px; /* Altura desde ubicación hasta precio en desktop */
                 background-size: 420px auto;
-                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBIR</text></g></svg>');
+                background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><g transform="rotate(305 300 150)" opacity="0.3"><g fill="none" stroke="%2320B2AA" stroke-width="6"><path d="M100 200 Q150 150 200 200" fill="none"/><rect x="108" y="184" width="85" height="6" rx="4" fill="%2320B2AA"/><rect x="100" y="200" width="250" height="6" rx="100" fill="%2320B2AA"/></g><text x="210" y="195" font-family="Arial" font-size="32" font-weight="900" fill="%23003366" letter-spacing="3px">MBI</text></g></svg>');
             }
             
             .property-image-container {
@@ -1510,14 +1443,6 @@
                 
                 
                 
-                <div class="filter-section">
-                    <h3 data-i18n="filters.req">Client Requirements</h3>
-                    <div class="requirements-container">
-                        <textarea id="client-requirements" data-i18n-ph-multi="filters.req.ph" placeholder="Describe your specific requirements...&#10;Example: Need a house with garden, pool, near the sea, with 3 bedrooms, max budget €500,000"></textarea>
-                        <button id="analyze-requirements" class="analyze-btn" data-i18n="filters.req.ai">Analyze with AI</button>
-                        <div id="ai-analysis" class="ai-analysis-result"></div>
-                    </div>
-                </div>
                 
                 <div class="filter-actions">
                     <button id="apply-filters" class="apply-filters-btn" data-i18n="filters.apply">Apply Filters</button>
@@ -1577,10 +1502,10 @@
         }
         // === i18n para filtros ===
         const I18N_FILTERS = {
-            en:{'filters.title':'Search Filters','filters.location':'Location','filters.location.ph':'Search location...','filters.price':'Price (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Property Type','filters.any':'Any','filters.type.house':'House / Villa','filters.type.apartment':'Apartment / Flat','filters.type.townhouse':'Townhouse','filters.type.plot':'Plot','filters.type.commercial':'Commercial','filters.type.other':'Other','filters.bedrooms':'Bedrooms','filters.anyAmount':'Any amount','filters.bathrooms':'Bathrooms','filters.size':'Size (m²)','filters.req':'Client Requirements','filters.req.ph':'Describe your specific requirements...\nExample: Need a house with garden, pool, near the sea, with 3 bedrooms, max budget €500,000','filters.req.ai':'Analyze with AI','filters.apply':'Apply Filters','filters.clear':'Clear'},
-            es:{'filters.title':'Filtros de Búsqueda','filters.location':'Ubicación','filters.location.ph':'Buscar ubicación...','filters.price':'Precio (€)','filters.min':'Mínimo','filters.max':'Máximo','filters.type':'Tipo de Propiedad','filters.any':'Todos','filters.type.house':'Casa / Villa','filters.type.apartment':'Apartamento / Piso','filters.type.townhouse':'Adosado','filters.type.plot':'Parcela','filters.type.commercial':'Comercial','filters.type.other':'Otros','filters.bedrooms':'Dormitorios','filters.anyAmount':'Cualquier cantidad','filters.bathrooms':'Baños','filters.size':'Tamaño (m²)','filters.req':'Requisitos del Cliente','filters.req.ph':'Describe tus requisitos específicos...\nEjemplo: Necesito una casa con jardín, piscina, cerca del mar, con 3 dormitorios, presupuesto máximo 500.000€','filters.req.ai':'Analizar con IA','filters.apply':'Aplicar Filtros','filters.clear':'Limpiar'},
-            fr:{'filters.title':'Filtres de recherche','filters.location':'Localisation','filters.location.ph':'Rechercher un lieu...','filters.price':'Prix (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Type de propriété','filters.any':'Tous','filters.type.house':'Maison / Villa','filters.type.apartment':'Appartement','filters.type.townhouse':'Maison de ville','filters.type.plot':'Terrain','filters.type.commercial':'Commercial','filters.type.other':'Autres','filters.bedrooms':'Chambres','filters.anyAmount':'N’importe quel nombre','filters.bathrooms':'Salles de bain','filters.size':'Superficie (m²)','filters.req':'Exigences du client','filters.req.ph':'Décrivez vos exigences spécifiques...\nExemple : maison avec jardin, piscine, près de la mer, 3 chambres, budget max 500 000 €','filters.req.ai':'Analyser avec IA','filters.apply':'Appliquer les filtres','filters.clear':'Effacer'},
-            de:{'filters.title':'Suchfilter','filters.location':'Ort','filters.location.ph':'Ort suchen...','filters.price':'Preis (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Immobilienart','filters.any':'Alle','filters.type.house':'Haus / Villa','filters.type.apartment':'Apartment / Wohnung','filters.type.townhouse':'Reihenhaus','filters.type.plot':'Grundstück','filters.type.commercial':'Gewerbe','filters.type.other':'Sonstige','filters.bedrooms':'Schlafzimmer','filters.anyAmount':'Beliebig','filters.bathrooms':'Badezimmer','filters.size':'Größe (m²)','filters.req':'Kundenanforderungen','filters.req.ph':'Beschreiben Sie Ihre Anforderungen...\nBeispiel: Haus mit Garten, Pool, in Meeresnähe, 3 Schlafzimmer, max. Budget 500.000€','filters.req.ai':'Mit KI analysieren','filters.apply':'Filter anwenden','filters.clear':'Zurücksetzen'}
+            en:{'filters.title':'Search Filters','filters.location':'Location','filters.location.ph':'Search location...','filters.price':'Price (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Property Type','filters.any':'Any','filters.type.house':'House / Villa','filters.type.apartment':'Apartment / Flat','filters.type.townhouse':'Townhouse','filters.type.plot':'Plot','filters.type.commercial':'Commercial','filters.type.other':'Other','filters.bedrooms':'Bedrooms','filters.anyAmount':'Any amount','filters.bathrooms':'Bathrooms','filters.size':'Size (m²)','filters.apply':'Apply Filters','filters.clear':'Clear'},
+            es:{'filters.title':'Filtros de Búsqueda','filters.location':'Ubicación','filters.location.ph':'Buscar ubicación...','filters.price':'Precio (€)','filters.min':'Mínimo','filters.max':'Máximo','filters.type':'Tipo de Propiedad','filters.any':'Todos','filters.type.house':'Casa / Villa','filters.type.apartment':'Apartamento / Piso','filters.type.townhouse':'Adosado','filters.type.plot':'Parcela','filters.type.commercial':'Comercial','filters.type.other':'Otros','filters.bedrooms':'Dormitorios','filters.anyAmount':'Cualquier cantidad','filters.bathrooms':'Baños','filters.size':'Tamaño (m²)','filters.apply':'Aplicar Filtros','filters.clear':'Limpiar'},
+            fr:{'filters.title':'Filtres de recherche','filters.location':'Localisation','filters.location.ph':'Rechercher un lieu...','filters.price':'Prix (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Type de propriété','filters.any':'Tous','filters.type.house':'Maison / Villa','filters.type.apartment':'Appartement','filters.type.townhouse':'Maison de ville','filters.type.plot':'Terrain','filters.type.commercial':'Commercial','filters.type.other':'Autres','filters.bedrooms':'Chambres','filters.anyAmount':'N\'importe quel nombre','filters.bathrooms':'Salles de bain','filters.size':'Superficie (m²)','filters.apply':'Appliquer les filtres','filters.clear':'Effacer'},
+            de:{'filters.title':'Suchfilter','filters.location':'Ort','filters.location.ph':'Ort suchen...','filters.price':'Preis (€)','filters.min':'Minimum','filters.max':'Maximum','filters.type':'Immobilienart','filters.any':'Alle','filters.type.house':'Haus / Villa','filters.type.apartment':'Apartment / Wohnung','filters.type.townhouse':'Reihenhaus','filters.type.plot':'Grundstück','filters.type.commercial':'Gewerbe','filters.type.other':'Sonstige','filters.bedrooms':'Schlafzimmer','filters.anyAmount':'Beliebig','filters.bathrooms':'Badezimmer','filters.size':'Größe (m²)','filters.apply':'Filter anwenden','filters.clear':'Zurücksetzen'}
         };
         function applyFiltersI18n(){
             const lang = localStorage.getItem('mbi_lang')||'en';
@@ -1599,137 +1524,6 @@
         
         // (Eliminado) Selector de tipo de propiedad
         
-        // Funcionalidad de análisis de requisitos con IA
-        function initRequirementsAnalysis() {
-            const analyzeBtn = document.getElementById('analyze-requirements');
-            const requirementsTextarea = document.getElementById('client-requirements');
-            const analysisResult = document.getElementById('ai-analysis');
-            
-            analyzeBtn.addEventListener('click', function() {
-                const requirements = requirementsTextarea.value.trim();
-                
-                if (!requirements) {
-                    return;
-                }
-                
-                this.disabled = true;
-                this.textContent = 'Analizando...';
-                
-                // Simulación de análisis con IA
-                setTimeout(() => {
-                    const analysis = analyzeRequirementsWithAI(requirements);
-                    displayAIAnalysis(analysis);
-                    
-                    // Guardar requisitos en filtros
-                    currentFilters.requirements = requirements;
-                    
-                    this.disabled = false;
-                    this.textContent = 'Analizar con IA';
-                }, 2000);
-            });
-        }
-        
-        function analyzeRequirementsWithAI(requirements) {
-            // Simulación de análisis de IA
-            const keywords = requirements.toLowerCase();
-            const analysis = {
-                budget: extractBudget(requirements),
-                bedrooms: extractBedrooms(requirements),
-                bathrooms: extractBathrooms(requirements),
-                features: extractFeatures(requirements),
-                location: extractLocation(requirements),
-                propertyType: extractPropertyType(requirements)
-            };
-            
-            return analysis;
-        }
-        
-        function extractBudget(text) {
-            const budgetMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:€|euros?|euro)/i);
-            return budgetMatch ? parseFloat(budgetMatch[1]) : null;
-        }
-        
-        function extractBedrooms(text) {
-            const bedroomMatch = text.match(/(\d+)\s*(?:dormitorios?|habitaciones?|bedrooms?)/i);
-            return bedroomMatch ? parseInt(bedroomMatch[1]) : null;
-        }
-        
-        function extractBathrooms(text) {
-            const bathroomMatch = text.match(/(\d+)\s*(?:baños?|bathrooms?)/i);
-            return bathroomMatch ? parseInt(bathroomMatch[1]) : null;
-        }
-        
-        function extractFeatures(text) {
-            const features = [];
-            const featureKeywords = {
-                'piscina': 'pool',
-                'jardín': 'garden',
-                'terraza': 'terrace',
-                'garaje': 'garage',
-                'ascensor': 'elevator',
-                'vista al mar': 'sea view',
-                'cerca del mar': 'near sea',
-                'centro': 'city center',
-                'tranquilo': 'quiet'
-            };
-            
-            Object.keys(featureKeywords).forEach(keyword => {
-                if (text.includes(keyword)) {
-                    features.push(featureKeywords[keyword]);
-                }
-            });
-            
-            return features;
-        }
-        
-        function extractLocation(text) {
-            const locationMatch = text.match(/(?:en|cerca de|en)\s+([A-Za-z\s]+)/i);
-            return locationMatch ? locationMatch[1].trim() : null;
-        }
-        
-        function extractPropertyType(text) {
-            if (text.includes('casa') || text.includes('house')) return 'casa';
-            if (text.includes('apartamento') || text.includes('apartment')) return 'apartamento';
-            return null;
-        }
-        
-        function displayAIAnalysis(analysis) {
-            const analysisResult = document.getElementById('ai-analysis');
-            
-            let analysisHTML = '<div class="analysis-title">🤖 Análisis de IA</div><div class="analysis-content">';
-            
-            if (analysis.budget) {
-                analysisHTML += `<p><strong>💰 Presupuesto:</strong> ${analysis.budget.toLocaleString()}€</p>`;
-            }
-            
-            if (analysis.bedrooms) {
-                analysisHTML += `<p><strong>🛏️ Dormitorios:</strong> ${analysis.bedrooms}</p>`;
-            }
-            
-            if (analysis.bathrooms) {
-                analysisHTML += `<p><strong>🚿 Baños:</strong> ${analysis.bathrooms}</p>`;
-            }
-            
-            if (analysis.features.length > 0) {
-                analysisHTML += `<p><strong>✨ Características:</strong> ${analysis.features.join(', ')}</p>`;
-            }
-            
-            if (analysis.location) {
-                analysisHTML += `<p><strong>📍 Ubicación preferida:</strong> ${analysis.location}</p>`;
-            }
-            
-            if (analysis.propertyType) {
-                analysisHTML += `<p><strong>🏠 Tipo:</strong> ${analysis.propertyType}</p>`;
-            }
-            
-            analysisHTML += '</div>';
-            
-            analysisResult.innerHTML = analysisHTML;
-            analysisResult.classList.add('show');
-            
-            // Guardar análisis en filtros
-            currentFilters.aiAnalysis = analysis;
-        }
         
         // Funcionalidad de aplicación de filtros
         function initFilterActions() {
@@ -2467,8 +2261,6 @@
         function clearFilters() {
             // Limpiar todos los campos de filtros
             const locationEl = document.getElementById('location-search');
-            const requirementsEl = document.getElementById('client-requirements');
-            const analysisEl = document.getElementById('ai-analysis');
             const minPriceEl = document.getElementById('price-min');
             const maxPriceEl = document.getElementById('price-max');
             const typeEl = document.getElementById('property-type');
@@ -2479,8 +2271,6 @@
             
             // Limpiar valores
             if (locationEl) locationEl.value = '';
-            if (requirementsEl) requirementsEl.value = '';
-            if (analysisEl) analysisEl.classList.remove('show');
             if (minPriceEl) minPriceEl.value = '';
             if (maxPriceEl) maxPriceEl.value = '';
             if (typeEl) typeEl.value = '';
@@ -2539,7 +2329,6 @@
         // Inicializar todas las funcionalidades
         function initFilterSystem() {
             initLocationSearch();
-            initRequirementsAnalysis();
             initFilterActions();
             
             // Colapsar filtros por defecto en móvil
