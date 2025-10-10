@@ -1342,13 +1342,20 @@
             fr:{'nav.home':'Accueil','nav.properties':'Propriétés','nav.news':'Actualités','nav.contact':'Contact'},
             de:{'nav.home':'Start','nav.properties':'Immobilien','nav.news':'News','nav.contact':'Kontakt'}
           };
-          function apply(){
+          async function apply(){
             const lang = localStorage.getItem('mbi_lang')||'en';
             const dict = I18N[lang]||I18N.en;
             document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(dict[k]) el.textContent=dict[k]; });
             const label={en:'English',es:'Español',fr:'Français',de:'Deutsch'}[lang]||'English';
             const flag={en:'🇺🇸',es:'🇪🇸',fr:'🇫🇷',de:'🇩🇪'}[lang]||'🇺🇸';
             const btn=document.getElementById('langBtn'); const lab=document.getElementById('langLabel'); if(btn&&lab){ btn.firstChild.nodeValue=flag+' '; lab.textContent=label; }
+            
+            // Traducir contenido dinámico de propiedades
+            try {
+                await translateDynamicProperties();
+            } catch (error) {
+                console.error('Error en traducción dinámica:', error);
+            }
           }
           function init(){
             apply();
@@ -1567,7 +1574,7 @@
             });
         }
         
-        function applyFilters() {
+        async function applyFilters() {
             console.log('🔍 Aplicando filtros:', currentFilters);
             console.log('📊 Total propiedades disponibles:', allProperties.length);
             
@@ -1586,7 +1593,7 @@
             
             // Si no hay filtros activos, mostrar todas las propiedades
             if (!hasActiveFilters) {
-                updatePropertiesDisplay();
+                await updatePropertiesDisplay();
                 showFilterMessage('info', 'Catálogo Completo', `Visualizando el catálogo completo de ${allProperties.length} propiedades disponibles en nuestro portfolio.`);
                 return;
             }
@@ -2258,7 +2265,7 @@
             }
         }
         
-        function clearFilters() {
+        async function clearFilters() {
             // Limpiar todos los campos de filtros
             const locationEl = document.getElementById('location-search');
             const minPriceEl = document.getElementById('price-min');
@@ -2294,7 +2301,7 @@
             };
             
             // Restaurar visualización original de todas las propiedades
-            updatePropertiesDisplay();
+            await updatePropertiesDisplay();
         }
         
         // Función para toggle de filtros (funciona en móvil y desktop)
@@ -2340,6 +2347,75 @@
             }
         }
         
+        // Función de traducción automática
+        function hashCode(str) { 
+            let h = 0, i = 0, len = str.length; 
+            while(i < len) { 
+                h = (h << 5) - h + str.charCodeAt(i++) | 0; 
+            } 
+            return h.toString(); 
+        }
+        
+        async function mtTranslate(text, to) {
+            if (!text) return text;
+            const key = 'mbi_mt_' + to + '_' + hashCode(text);
+            const cached = localStorage.getItem(key); 
+            if (cached) return cached;
+            
+            const candidates = ['en', 'es', 'fr', 'de'].filter(s => s !== to);
+            let best = { out: text, score: -1 };
+            
+            for (const src of candidates) {
+                try {
+                    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + encodeURIComponent(src + '|' + to);
+                    const res = await fetch(url);
+                    const json = await res.json();
+                    const out = (json && json.responseData && json.responseData.translatedText) ? json.responseData.translatedText : text;
+                    const score = (json && Array.isArray(json.matches) && json.matches.length) ? Math.max(...json.matches.map(m => Number(m.match) || 0)) : (Number(json.responseData.match) || 0);
+                    if (score > best.score) { best = { out, score }; }
+                    if (best.score >= 0.9) break; // suficientemente buena
+                } catch (_) {}
+            }
+            localStorage.setItem(key, best.out);
+            return best.out;
+        }
+
+        // Función para traducir contenido dinámico de propiedades
+        async function translateDynamicProperties() {
+            const lang = localStorage.getItem('mbi_lang') || 'en';
+            if (lang === 'en') return;
+            
+            try {
+                // Traducir títulos de propiedades
+                const titles = [...document.querySelectorAll('.property-title[data-i18n-prop="title"]')];
+                for (const el of titles) {
+                    if (el.textContent.trim()) {
+                        el.textContent = await mtTranslate(el.textContent.trim(), lang);
+                    }
+                }
+                
+                // Traducir descripciones de propiedades
+                const descriptions = [...document.querySelectorAll('.property-description[data-i18n-prop="description"]')];
+                for (const el of descriptions) {
+                    if (el.textContent.trim()) {
+                        el.innerHTML = (await mtTranslate(el.textContent.trim(), lang)).replace(/\n/g, '<br>');
+                    }
+                }
+                
+                // Traducir características de propiedades
+                const features = [...document.querySelectorAll('.property-features[data-i18n-prop="features"] li')];
+                for (const el of features) {
+                    if (el.textContent.trim()) {
+                        el.textContent = await mtTranslate(el.textContent.trim(), lang);
+                    }
+                }
+                
+                console.log('✅ Propiedades traducidas dinámicamente');
+            } catch (error) {
+                console.error('❌ Error en traducción dinámica de propiedades:', error);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar sistema de filtros
             initFilterSystem();
@@ -2364,9 +2440,9 @@
                 }
                 return response.json();
             })
-            .then(properties => {
+            .then(async properties => {
                 allProperties = properties;
-                updatePropertiesDisplay();
+                await updatePropertiesDisplay();
                 setupPagination();
             })
             .catch(error => {
@@ -2381,7 +2457,7 @@
                 `;
             });
             
-            function updatePropertiesDisplay() {
+            async function updatePropertiesDisplay() {
                 const container = document.getElementById('properties-container');
                 container.innerHTML = '';
                 
@@ -2491,6 +2567,13 @@
                         initCarousel(propertyCard);
                     }
                 });
+                
+                // Traducir contenido dinámico después de mostrar las propiedades
+                try {
+                    await translateDynamicProperties();
+                } catch (error) {
+                    console.error('Error en traducción dinámica:', error);
+                }
             }
             
             function setupPagination() {
@@ -2504,10 +2587,10 @@
                 const prevBtn = document.createElement('button');
                 prevBtn.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
                 prevBtn.textContent = 'Previous';
-                prevBtn.addEventListener('click', () => {
+                prevBtn.addEventListener('click', async () => {
                     if (currentPage > 1) {
                         currentPage--;
-                        updatePropertiesDisplay();
+                        await updatePropertiesDisplay();
                         setupPagination();
                         window.scrollTo({top: 0, behavior: 'smooth'});
                     }
@@ -2519,9 +2602,9 @@
                     const pageBtn = document.createElement('button');
                     pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
                     pageBtn.textContent = i;
-                    pageBtn.addEventListener('click', () => {
+                    pageBtn.addEventListener('click', async () => {
                         currentPage = i;
-                        updatePropertiesDisplay();
+                        await updatePropertiesDisplay();
                         setupPagination();
                         window.scrollTo({top: 0, behavior: 'smooth'});
                     });
@@ -2532,10 +2615,10 @@
                 const nextBtn = document.createElement('button');
                 nextBtn.className = `page-btn ${currentPage === totalPages ? 'disabled' : ''}`;
                 nextBtn.textContent = 'Next';
-                nextBtn.addEventListener('click', () => {
+                nextBtn.addEventListener('click', async () => {
                     if (currentPage < totalPages) {
                         currentPage++;
-                        updatePropertiesDisplay();
+                        await updatePropertiesDisplay();
                         setupPagination();
                         window.scrollTo({top: 0, behavior: 'smooth'});
                     }
