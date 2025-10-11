@@ -2433,29 +2433,33 @@
             }
             
             // Cargar propiedades si estamos en la página principal
+            console.log('🔄 Cargando propiedades desde: http://93.189.91.62/data');
             fetch('http://93.189.91.62/data')
                 .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(async properties => {
-                allProperties = properties;
-                await updatePropertiesDisplay();
-                setupPagination();
-            })
-            .catch(error => {
-                console.error('Error loading properties:', error);
-                document.getElementById('properties-container').innerHTML = `
-                    <div class="property-card">
-                        <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                            We're currently updating our property listings<br>
-                            <small>Please try again later or contact us directly</small>
+                    console.log('📡 Respuesta del servidor:', response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(async properties => {
+                    console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
+                    console.log('📋 Primera propiedad:', properties[0]);
+                    allProperties = properties;
+                    await updatePropertiesDisplay();
+                    setupPagination();
+                })
+                .catch(error => {
+                    console.error('❌ Error loading properties:', error);
+                    document.getElementById('properties-container').innerHTML = `
+                        <div class="property-card">
+                            <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
+                                Error loading properties: ${error.message}<br>
+                                <small>Please check the console for more details</small>
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
             
             async function updatePropertiesDisplay() {
                 const container = document.getElementById('properties-container');

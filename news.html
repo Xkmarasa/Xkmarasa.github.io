@@ -194,12 +194,17 @@
 
         async function loadNewsBackend() {
             try {
+                console.log('🔄 Cargando noticias desde: http://93.189.91.62/news');
                 const res = await fetch('http://93.189.91.62/news');
+                console.log('📡 Respuesta del servidor:', res.status, res.statusText);
                 if (!res.ok) throw new Error('HTTP '+res.status);
                 const data = await res.json();
+                console.log('✅ Noticias cargadas:', data.length, 'elementos');
+                console.log('📋 Primera noticia:', data[0]);
                 if (!Array.isArray(data)) throw new Error('Invalid payload');
                 return data;
             } catch (e) {
+                console.error('❌ Error loading news:', e);
                 return null;
             }
         }
