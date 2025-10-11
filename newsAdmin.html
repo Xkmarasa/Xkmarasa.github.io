@@ -333,7 +333,7 @@
 
     <script>
         const KEY = 'mbi_news_items';
-        const NEWS_API = 'https://xkmarasa-github-io.onrender.com/news';
+        const NEWS_API = 'http://93.189.91.62/news';
         let editingIndex = null;
 
         function loadNews(){ try{ const raw=localStorage.getItem(KEY); const arr = raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(_){ return []; } }

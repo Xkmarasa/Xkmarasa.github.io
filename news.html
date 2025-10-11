@@ -194,7 +194,7 @@
 
         async function loadNewsBackend() {
             try {
-                const res = await fetch('https://xkmarasa-github-io.onrender.com/news');
+                const res = await fetch('http://93.189.91.62/news');
                 if (!res.ok) throw new Error('HTTP '+res.status);
                 const data = await res.json();
                 if (!Array.isArray(data)) throw new Error('Invalid payload');
