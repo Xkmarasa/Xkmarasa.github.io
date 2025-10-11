@@ -1333,7 +1333,7 @@
                 <div style="background-color: var(--light-blue); padding: 15px; border-radius: 6px; margin-top: 10px;">
                     <p><strong>Total Properties:</strong> <span id="totalProperties">-</span></p>
                     <p><strong>Last Updated:</strong> <span id="lastUpdated">-</span></p>
-                    <p><strong>API Endpoint:</strong> https://mediterranean-blue-api.onrender.com/data</p>
+                    <p><strong>API Endpoint:</strong> https://mediterranean-blue-api.on.com/data</p>
                 </div>
             </div>
             
@@ -1602,7 +1602,7 @@
             }
             
             function loadProperties() {
-                fetch('https://mediterranean-blue-api.onrender.com/data')
+                fetch('https://xkmarasa-github-io.onrender.com/data')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
@@ -1893,7 +1893,7 @@
                 if (confirmed) {
                     try {
                         const property = allProperties[index];
-                        const response = await fetch(`https://mediterranean-blue-api.onrender.com/data/${property.id}`, {
+                        const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${property.id}`, {
                             method: 'DELETE',
                             headers: { 
                                 'Content-Type': 'application/json' 
@@ -1994,7 +1994,7 @@
               try {
                 if (editingPropertyIndex !== null) {
                     console.log('📤 Enviando PUT al backend...', propertyData);
-                    const response = await fetch(`https://mediterranean-blue-api.onrender.com/data/${propertyData.id}`, {
+                    const response = await fetch(`https://xkmarasa-github-io.onrender.com/data/${propertyData.id}`, {
                         method: 'PUT',
                         headers: { 
                             'Content-Type': 'application/json',
@@ -2024,7 +2024,7 @@
                     showSuccess('¡Propiedad Actualizada!', 'Los cambios han sido guardados exitosamente.', 5000, '📝');
                 } else {
                     console.log('📤 Enviando POST al backend...', propertyData);
-                    const response = await fetch('https://mediterranean-blue-api.onrender.com/data', {
+                    const response = await fetch('https://xkmarasa-github-io.onrender.com/data', {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
