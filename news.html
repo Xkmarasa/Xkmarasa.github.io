@@ -192,60 +192,40 @@
             } catch (_) { return []; }
         }
 
-        // Detección de móvil y configuración de URLs
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        function getNewsAPIURL() {
-            const isMobileDevice = isMobile();
-            console.log('📱 Es dispositivo móvil:', isMobileDevice);
-            
-            if (isMobileDevice) {
-                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
-                return 'https://93.189.91.62';
-            } else {
-                // Para desktop, usar HTTPS con puerto específico
-                return 'https://93.189.91.62:8443';
-            }
-        }
-
         async function loadNewsBackend() {
-            try {
-                const apiURL = getNewsAPIURL();
-                console.log('🔄 Cargando noticias desde:', apiURL + '/news');
+            const urls = [
+                'https://93.189.91.62:8443/news',  // URL principal
+                'https://93.189.91.62/news',       // HTTPS estándar
+                'http://93.189.91.62:8080/news'    // HTTP fallback
+            ];
+            
+            console.log('🔄 Intentando cargar noticias...');
+            
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                console.log(`🔄 Intento ${i + 1}/3: ${url}`);
                 
-                const res = await fetch(apiURL + '/news');
-                console.log('📡 Respuesta del servidor:', res.status, res.statusText);
-                
-                if (!res.ok) throw new Error('HTTP '+res.status);
-                
-                const data = await res.json();
-                console.log('✅ Noticias cargadas:', data.length, 'elementos');
-                console.log('📋 Primera noticia:', data[0]);
-                if (!Array.isArray(data)) throw new Error('Invalid payload');
-                return data;
-            } catch (e) {
-                console.error('❌ Error loading news:', e);
-                
-                // Si es móvil y falló HTTPS, probar HTTP
-                if (isMobile() && getNewsAPIURL().includes('https')) {
-                    console.log('🔄 Probando fallback HTTP para móvil...');
-                    try {
-                        const httpRes = await fetch('http://93.189.91.62:8080/news');
-                        if (httpRes.ok) {
-                            const data = await httpRes.json();
-                            console.log('✅ Noticias cargadas via HTTP:', data.length, 'elementos');
-                            if (!Array.isArray(data)) throw new Error('Invalid payload');
-                            return data;
-                        }
-                    } catch (httpError) {
-                        console.error('❌ Fallback HTTP también falló:', httpError);
+                try {
+                    const res = await fetch(url);
+                    console.log('📡 Respuesta del servidor:', res.status, res.statusText);
+                    
+                    if (res.ok) {
+                        const data = await res.json();
+                        console.log('✅ Noticias cargadas:', data.length, 'elementos');
+                        console.log('📋 Primera noticia:', data[0]);
+                        if (!Array.isArray(data)) throw new Error('Invalid payload');
+                        return data; // Éxito, devolver datos
+                    } else {
+                        console.warn(`⚠️ URL ${i + 1} falló con status:`, res.status);
                     }
+                } catch (error) {
+                    console.warn(`⚠️ URL ${i + 1} falló con error:`, error.message);
                 }
-                
-                return null;
             }
+            
+            // Si llegamos aquí, todas las URLs fallaron
+            console.error('❌ Todas las URLs de noticias fallaron');
+            return null;
         }
 
         async function renderNews() {

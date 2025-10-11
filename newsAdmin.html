@@ -335,102 +335,130 @@
         const KEY = 'mbi_news_items';
         let editingIndex = null;
 
-        // Detección de móvil y configuración de URLs
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        function getNewsAPIURL() {
-            const isMobileDevice = isMobile();
-            console.log('📱 Es dispositivo móvil:', isMobileDevice);
-            
-            if (isMobileDevice) {
-                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
-                return 'https://93.189.91.62';
-            } else {
-                // Para desktop, usar HTTPS con puerto específico
-                return 'https://93.189.91.62:8443';
-            }
-        }
-
         function loadNews(){ try{ const raw=localStorage.getItem(KEY); const arr = raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(_){ return []; } }
         function saveNewsArray(arr){ localStorage.setItem(KEY, JSON.stringify(arr)); }
         
-        async function fetchAll(){ 
-            try{ 
-                const apiURL = getNewsAPIURL();
-                console.log('🔄 Cargando noticias desde:', apiURL + '/news');
-                const r=await fetch(apiURL + '/news'); 
-                if(!r.ok) throw 0; 
-                const d=await r.json(); 
-                if(Array.isArray(d)){ saveNewsArray(d); return d; } 
-            }catch(_){ 
-                // Si es móvil y falló HTTPS, probar HTTP
-                if (isMobile() && getNewsAPIURL().includes('https')) {
-                    try {
-                        console.log('🔄 Probando fallback HTTP para móvil...');
-                        const httpRes = await fetch('http://93.189.91.62:8080/news');
-                        if (httpRes.ok) {
-                            const d = await httpRes.json();
-                            if (Array.isArray(d)) { saveNewsArray(d); return d; }
-                        }
-                    } catch (httpError) {
-                        console.error('❌ Fallback HTTP también falló:', httpError);
-                    }
+        // Función para probar múltiples URLs
+        async function tryFetch(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                if (response.ok) {
+                    return response;
                 }
-            } 
-            return loadNews(); 
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                throw error;
+            }
+        }
+        
+        async function fetchAll(){ 
+            const urls = [
+                'https://93.189.91.62:8443/news',
+                'https://93.189.91.62/news',
+                'http://93.189.91.62:8080/news'
+            ];
+            
+            for (const url of urls) {
+                try {
+                    console.log('🔄 Probando:', url);
+                    const r = await tryFetch(url);
+                    const d = await r.json();
+                    if (Array.isArray(d)) {
+                        saveNewsArray(d);
+                        return d;
+                    }
+                } catch (e) {
+                    console.warn('⚠️ URL falló:', url, e.message);
+                }
+            }
+            return loadNews();
         }
         
         async function createNews(obj){ 
-            try{ 
-                const apiURL = getNewsAPIURL();
-                const r=await fetch(apiURL + '/news',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); 
-                if(!r.ok) throw 0; 
-                const d=await r.json(); 
-                const arr=loadNews(); 
-                arr.unshift(d); 
-                saveNewsArray(arr); 
-                return d; 
-            }catch(_){ 
-                const arr=loadNews(); 
-                arr.unshift(obj); 
-                saveNewsArray(arr); 
-                return obj; 
-            } 
+            const urls = [
+                'https://93.189.91.62:8443/news',
+                'https://93.189.91.62/news',
+                'http://93.189.91.62:8080/news'
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const r = await tryFetch(url, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                        body: JSON.stringify(obj)
+                    });
+                    const d = await r.json();
+                    const arr = loadNews();
+                    arr.unshift(d);
+                    saveNewsArray(arr);
+                    return d;
+                } catch (e) {
+                    console.warn('⚠️ URL falló:', url, e.message);
+                }
+            }
+            
+            // Fallback local
+            const arr = loadNews();
+            arr.unshift(obj);
+            saveNewsArray(arr);
+            return obj;
         }
         
         async function updateNewsAt(index,obj){ 
-            const items=loadNews(); 
-            const id=items[index]&&items[index].id; 
-            try{ 
-                const apiURL = getNewsAPIURL();
-                const r=await fetch(`${apiURL}/news/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); 
-                if(!r.ok) throw 0; 
-                const d=await r.json(); 
-                items[index]=d; 
-                saveNewsArray(items); 
-                return d; 
-            }catch(_){ 
-                items[index]=Object.assign({id},obj); 
-                saveNewsArray(items); 
-                return items[index]; 
-            } 
+            const items = loadNews();
+            const id = items[index] && items[index].id;
+            const urls = [
+                `https://93.189.91.62:8443/news/${id}`,
+                `https://93.189.91.62/news/${id}`,
+                `http://93.189.91.62:8080/news/${id}`
+            ];
+            
+            for (const url of urls) {
+                try {
+                    const r = await tryFetch(url, {
+                        method: 'PUT',
+                        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                        body: JSON.stringify(obj)
+                    });
+                    const d = await r.json();
+                    items[index] = d;
+                    saveNewsArray(items);
+                    return d;
+                } catch (e) {
+                    console.warn('⚠️ URL falló:', url, e.message);
+                }
+            }
+            
+            // Fallback local
+            items[index] = Object.assign({id}, obj);
+            saveNewsArray(items);
+            return items[index];
         }
         
         async function deleteNewsAt(index){ 
-            const items=loadNews(); 
-            const id=items[index]&&items[index].id; 
-            try{ 
-                const apiURL = getNewsAPIURL();
-                const r=await fetch(`${apiURL}/news/${id}`,{method:'DELETE'}); 
-                if(!r.ok) throw 0; 
-                items.splice(index,1); 
-                saveNewsArray(items); 
-            }catch(_){ 
-                items.splice(index,1); 
-                saveNewsArray(items); 
-            } 
+            const items = loadNews();
+            const id = items[index] && items[index].id;
+            const urls = [
+                `https://93.189.91.62:8443/news/${id}`,
+                `https://93.189.91.62/news/${id}`,
+                `http://93.189.91.62:8080/news/${id}`
+            ];
+            
+            for (const url of urls) {
+                try {
+                    await tryFetch(url, {method: 'DELETE'});
+                    items.splice(index, 1);
+                    saveNewsArray(items);
+                    return;
+                } catch (e) {
+                    console.warn('⚠️ URL falló:', url, e.message);
+                }
+            }
+            
+            // Fallback local
+            items.splice(index, 1);
+            saveNewsArray(items);
         }
 
         function clearForm(){ document.getElementById('newsTitle').value=''; document.getElementById('newsLink').value=''; document.getElementById('newsDesc').value=''; editingIndex=null; }

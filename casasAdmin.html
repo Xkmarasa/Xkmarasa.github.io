@@ -1348,21 +1348,16 @@
     </footer>
     
     <script>
-        // Detección de móvil y configuración de URLs
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        function getAPIURL() {
-            const isMobileDevice = isMobile();
-            console.log('📱 Es dispositivo móvil:', isMobileDevice);
-            
-            if (isMobileDevice) {
-                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
-                return 'https://93.189.91.62';
-            } else {
-                // Para desktop, usar HTTPS con puerto específico
-                return 'https://93.189.91.62:8443';
+        // Función para probar múltiples URLs
+        async function tryFetch(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                if (response.ok) {
+                    return response;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                throw error;
             }
         }
 
@@ -1619,66 +1614,40 @@
                 });
             }
             
-            function loadProperties() {
-                const apiURL = getAPIURL();
-                console.log('🔄 Cargando propiedades desde:', apiURL + '/data');
+            async function loadProperties() {
+                const urls = [
+                    'https://93.189.91.62:8443/data',
+                    'https://93.189.91.62/data',
+                    'http://93.189.91.62:8080/data'
+                ];
                 
-                fetch(apiURL + '/data')
-                    .then(response => {
-                        console.log('📡 Respuesta del servidor:', response.status, response.statusText);
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(properties => {
+                console.log('🔄 Intentando cargar propiedades...');
+                
+                for (let i = 0; i < urls.length; i++) {
+                    const url = urls[i];
+                    console.log(`🔄 Intento ${i + 1}/3: ${url}`);
+                    
+                    try {
+                        const response = await tryFetch(url);
+                        const properties = await response.json();
                         console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
                         allProperties = properties;
                         updatePropertiesDisplay();
                         setupPagination();
                         updateSystemInfo();
-                    })
-                    .catch(error => {
-                        console.error('❌ Error loading properties:', error);
-                        
-                        // Si es móvil y falló HTTPS, probar HTTP
-                        if (isMobile() && apiURL.includes('https')) {
-                            console.log('🔄 Probando fallback HTTP para móvil...');
-                            fetch('http://93.189.91.62:8080/data')
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.json();
-                                    }
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                })
-                                .then(properties => {
-                                    console.log('✅ Propiedades cargadas via HTTP:', properties.length, 'elementos');
-                                    allProperties = properties;
-                                    updatePropertiesDisplay();
-                                    setupPagination();
-                                    updateSystemInfo();
-                                })
-                                .catch(httpError => {
-                                    console.error('❌ Fallback HTTP también falló:', httpError);
-                                    showError();
-                                });
-                        } else {
-                            showError();
-                        }
-                    });
-            }
-
-            function showError() {
-                const errorMessage = isMobile() 
-                    ? 'Error de conexión en móvil. Verifica tu conexión a internet y recarga la página.'
-                    : 'Error loading properties. Please try again later or contact support.';
+                        return; // Éxito, salir de la función
+                    } catch (error) {
+                        console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
+                    }
+                }
                 
+                // Si llegamos aquí, todas las URLs fallaron
+                console.error('❌ Todas las URLs fallaron');
                 document.getElementById('properties-container').innerHTML = `
                     <div class="property-card">
                         <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                            ${errorMessage}<br>
-                            <small>Por favor, verifica la consola para más detalles</small>
-                            ${isMobile() ? '<br><small>💡 Tip: Intenta usar WiFi en lugar de datos móviles</small>' : ''}
+                            Error de conexión. No se pudo cargar los datos.<br>
+                            <small>Por favor, verifica tu conexión a internet y recarga la página</small>
                         </div>
                     </div>
                 `;
@@ -1900,7 +1869,7 @@
             function updateSystemInfo() {
                 document.getElementById('totalProperties').textContent = allProperties.length;
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
-                document.getElementById('apiEndpoint').textContent = getAPIURL() + '/data';
+                document.getElementById('apiEndpoint').textContent = 'https://93.189.91.62:8443/data (con fallback automático)';
             }
             
             // Modal functions
@@ -1950,12 +1919,26 @@
                 if (confirmed) {
                     try {
                         const property = allProperties[index];
-                        const response = await fetch(`${getAPIURL()}/data/${property.id}`, {
-                            method: 'DELETE',
-                            headers: { 
-                                'Content-Type': 'application/json' 
+                        const urls = [
+                            `https://93.189.91.62:8443/data/${property.id}`,
+                            `https://93.189.91.62/data/${property.id}`,
+                            `http://93.189.91.62:8080/data/${property.id}`
+                        ];
+                        
+                        let response;
+                        for (const url of urls) {
+                            try {
+                                response = await tryFetch(url, {
+                                    method: 'DELETE',
+                                    headers: { 
+                                        'Content-Type': 'application/json' 
+                                    }
+                                });
+                                break; // Éxito, salir del bucle
+                            } catch (error) {
+                                console.warn('⚠️ URL falló:', url, error.message);
                             }
-                        });
+                        }
 
                         console.log('📡 Status de respuesta DELETE:', response.status);
 
@@ -2051,24 +2034,38 @@
               try {
                 if (editingPropertyIndex !== null) {
                     console.log('📤 Enviando PUT al backend...', propertyData);
-                    const response = await fetch(`${getAPIURL()}/data/${propertyData.id}`, {
-                        method: 'PUT',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            price: propertyData.price,
-                            description: propertyData.description,
-                            ubi: propertyData.ubi,
-                            baños: propertyData.baños,
-                            tamaño: propertyData.tamaño,
-                            construido: propertyData.construido,
-                            terraza: propertyData.terraza,
-                            imagenes: propertyData.imagenes,
-                            name: propertyData.name
-                        })
-                    });
+                    const urls = [
+                        `https://93.189.91.62:8443/data/${propertyData.id}`,
+                        `https://93.189.91.62/data/${propertyData.id}`,
+                        `http://93.189.91.62:8080/data/${propertyData.id}`
+                    ];
+                    
+                    let response;
+                    for (const url of urls) {
+                        try {
+                            response = await tryFetch(url, {
+                                method: 'PUT',
+                                headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    price: propertyData.price,
+                                    description: propertyData.description,
+                                    ubi: propertyData.ubi,
+                                    baños: propertyData.baños,
+                                    tamaño: propertyData.tamaño,
+                                    construido: propertyData.construido,
+                                    terraza: propertyData.terraza,
+                                    imagenes: propertyData.imagenes,
+                                    name: propertyData.name
+                                })
+                            });
+                            break; // Éxito, salir del bucle
+                        } catch (error) {
+                            console.warn('⚠️ URL falló:', url, error.message);
+                        }
+                    }
                     console.log('📡 Status de respuesta PUT:', response.status);
                     if (!response.ok) {
                         const errorText = await response.text();
@@ -2081,25 +2078,39 @@
                     showSuccess('¡Propiedad Actualizada!', 'Los cambios han sido guardados exitosamente.', 5000, '📝');
                 } else {
                     console.log('📤 Enviando POST al backend...', propertyData);
-                    const response = await fetch(`${getAPIURL()}/data`, {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            id: propertyData.id,
-                            price: propertyData.price,
-                            description: propertyData.description,
-                            ubi: propertyData.ubi,
-                            baños: propertyData.baños,
-                            tamaño: propertyData.tamaño,
-                            construido: propertyData.construido,
-                            terraza: propertyData.terraza,
-                            imagenes: propertyData.imagenes,
-                            name: propertyData.name
-                        })
-                    });
+                    const urls = [
+                        'https://93.189.91.62:8443/data',
+                        'https://93.189.91.62/data',
+                        'http://93.189.91.62:8080/data'
+                    ];
+                    
+                    let response;
+                    for (const url of urls) {
+                        try {
+                            response = await tryFetch(url, {
+                                method: 'POST',
+                                headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: propertyData.id,
+                                    price: propertyData.price,
+                                    description: propertyData.description,
+                                    ubi: propertyData.ubi,
+                                    baños: propertyData.baños,
+                                    tamaño: propertyData.tamaño,
+                                    construido: propertyData.construido,
+                                    terraza: propertyData.terraza,
+                                    imagenes: propertyData.imagenes,
+                                    name: propertyData.name
+                                })
+                            });
+                            break; // Éxito, salir del bucle
+                        } catch (error) {
+                            console.warn('⚠️ URL falló:', url, error.message);
+                        }
+                    }
                     console.log('📡 Status de respuesta POST:', response.status);
                     if (!response.ok) {
                         const errorText = await response.text();
