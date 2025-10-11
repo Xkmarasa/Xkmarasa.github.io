@@ -194,8 +194,8 @@
 
         async function loadNewsBackend() {
             try {
-                console.log('🔄 Cargando noticias desde: http://93.189.91.62/news');
-                const res = await fetch('http://93.189.91.62/news');
+                console.log('🔄 Cargando noticias desde: https://mediterranean-blue-api.onrender.com/news');
+                const res = await fetch('https://mediterranean-blue-api.onrender.com/news');
                 console.log('📡 Respuesta del servidor:', res.status, res.statusText);
                 if (!res.ok) throw new Error('HTTP '+res.status);
                 const data = await res.json();

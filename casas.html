@@ -2433,8 +2433,8 @@
             }
             
             // Cargar propiedades si estamos en la página principal
-            console.log('🔄 Cargando propiedades desde: http://93.189.91.62/data');
-            fetch('http://93.189.91.62/data')
+            console.log('🔄 Cargando propiedades desde: https://mediterranean-blue-api.onrender.com/data');
+            fetch('https://mediterranean-blue-api.onrender.com/data')
                 .then(response => {
                     console.log('📡 Respuesta del servidor:', response.status, response.statusText);
                     if (!response.ok) {
@@ -2681,7 +2681,7 @@
             }
             
             function showPropertyDetail(propertyId) {
-                fetch('http://93.189.91.62/data')
+                fetch('https://mediterranean-blue-api.onrender.com/data')
                     .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
