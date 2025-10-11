@@ -2416,28 +2416,15 @@
             }
         }
 
-        // Función para probar múltiples URLs con timeout
+        // Función para probar múltiples URLs
         async function tryFetch(url, options = {}) {
             try {
-                // Crear AbortController para timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
-                
-                const response = await fetch(url, {
-                    ...options,
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                
+                const response = await fetch(url, options);
                 if (response.ok) {
                     return response;
                 }
                 throw new Error(`HTTP ${response.status}`);
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    throw new Error('Timeout - conexión muy lenta');
-                }
                 throw error;
             }
         }
@@ -2452,31 +2439,9 @@
             
             console.log('🔄 Intentando cargar propiedades...');
             
-            // Mostrar indicador de carga
-            document.getElementById('properties-container').innerHTML = `
-                <div class="property-card">
-                    <div class="no-image" style="padding: 40px; text-align: center; color: #20B2AA;">
-                        <div style="font-size: 18px; margin-bottom: 10px;">🔄 Cargando propiedades...</div>
-                        <div style="font-size: 14px; color: #666;">Probando diferentes servidores...</div>
-                        <div style="margin-top: 10px;">
-                            <div style="width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
-                                <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #20B2AA, #48CAE4); transition: width 0.3s ease;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
             for (let i = 0; i < urls.length; i++) {
                 const url = urls[i];
                 console.log(`🔄 Intento ${i + 1}/3: ${url}`);
-                
-                // Actualizar barra de progreso
-                const progress = ((i + 1) / urls.length) * 100;
-                const loadingBar = document.getElementById('loading-bar');
-                if (loadingBar) {
-                    loadingBar.style.width = progress + '%';
-                }
                 
                 try {
                     const response = await tryFetch(url);

@@ -192,28 +192,15 @@
             } catch (_) { return []; }
         }
 
-        // Función para probar múltiples URLs con timeout
+        // Función para probar múltiples URLs
         async function tryFetch(url, options = {}) {
             try {
-                // Crear AbortController para timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
-                
-                const response = await fetch(url, {
-                    ...options,
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                
+                const response = await fetch(url, options);
                 if (response.ok) {
                     return response;
                 }
                 throw new Error(`HTTP ${response.status}`);
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    throw new Error('Timeout - conexión muy lenta');
-                }
                 throw error;
             }
         }
