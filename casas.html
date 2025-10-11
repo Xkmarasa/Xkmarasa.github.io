@@ -2434,15 +2434,37 @@
         }
 
         // Función mejorada para cargar propiedades con fallback para móviles
-        // Función para probar múltiples URLs (igual que casasAdmin)
+        // Función para probar múltiples URLs con soporte para móvil
         async function tryFetch(url, options = {}) {
             try {
-                const response = await fetch(url, options);
+                // Configuración específica para móviles (manejo de SSL)
+                const fetchOptions = {
+                    ...options,
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                };
+                
+                const response = await fetch(url, fetchOptions);
                 if (response.ok) {
                     return response;
                 }
                 throw new Error(`HTTP ${response.status}`);
             } catch (error) {
+                // Manejar errores específicos de móvil
+                if (error.message.includes('ERR_CERT') || error.message.includes('SSL') || error.message.includes('TLS')) {
+                    throw new Error('SSL Certificate Error');
+                }
+                if (error.message.includes('ERR_CONNECTION_REFUSED')) {
+                    throw new Error('Connection Refused');
+                }
+                if (error.message.includes('ERR_CONNECTION_TIMED_OUT')) {
+                    throw new Error('Connection Timeout');
+                }
                 throw error;
             }
         }
