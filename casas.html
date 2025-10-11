@@ -1487,8 +1487,7 @@
             requirements: '',
             aiAnalysis: null
         };
-        // Fuente de datos de propiedades (debe ser global para filtros)
-        let allProperties = [];
+        // Fuente de datos de propiedades (se define dentro de DOMContentLoaded)
         
         // Búsqueda de ubicación con Google Places Autocomplete (ciudades, regiones y países)
         function initLocationSearch() {
@@ -2429,12 +2428,13 @@
             }
         }
 
-        // Función mejorada para cargar propiedades con múltiples intentos
-        async function loadPropertiesWithFallback() {
+        // Función para cargar propiedades (idéntica a casasAdmin.html)
+        async function loadProperties() {
+            console.log('🚀 loadProperties() iniciada');
             const urls = [
-                'https://93.189.91.62:8443/data',  // URL principal
-                'https://93.189.91.62/data',       // HTTPS estándar
-                'http://93.189.91.62:8080/data'    // HTTP fallback
+                'https://93.189.91.62:8443/data',
+                'https://93.189.91.62/data',
+                'http://93.189.91.62:8080/data'
             ];
             
             console.log('🔄 Intentando cargar propiedades...');
@@ -2447,10 +2447,8 @@
                     const response = await tryFetch(url);
                     const properties = await response.json();
                     console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
-                    console.log('📋 Primera propiedad:', properties[0]);
-                    
                     allProperties = properties;
-                    await updatePropertiesDisplay();
+                    updatePropertiesDisplay();
                     setupPagination();
                     return; // Éxito, salir de la función
                 } catch (error) {
@@ -2463,21 +2461,18 @@
             document.getElementById('properties-container').innerHTML = `
                 <div class="property-card">
                     <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                        ❌ Error de conexión. No se pudo cargar los datos.<br>
+                        Error de conexión. No se pudo cargar los datos.<br>
                         <small>Por favor, verifica tu conexión a internet y recarga la página</small>
-                        <br><br>
-                        <button onclick="location.reload()" style="padding: 10px 20px; background: #20B2AA; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            🔄 Recargar página
-                        </button>
                     </div>
                 </div>
             `;
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 DOMContentLoaded ejecutado en casas.html');
             // Inicializar sistema de filtros
             initFilterSystem();
-            allProperties = [];
+            let allProperties = [];
             let currentPage = 1;
             const propertiesPerPage = 10;
             
@@ -2491,7 +2486,7 @@
             }
             
             // Cargar propiedades si estamos en la página principal
-            loadPropertiesWithFallback();
+            loadProperties();
             
             async function updatePropertiesDisplay() {
                 const container = document.getElementById('properties-container');
