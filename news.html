@@ -192,6 +192,32 @@
             } catch (_) { return []; }
         }
 
+        // Función para probar múltiples URLs con timeout
+        async function tryFetch(url, options = {}) {
+            try {
+                // Crear AbortController para timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
+                
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    return response;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    throw new Error('Timeout - conexión muy lenta');
+                }
+                throw error;
+            }
+        }
+
         async function loadNewsBackend() {
             const urls = [
                 'https://93.189.91.62:8443/news',  // URL principal
@@ -206,20 +232,14 @@
                 console.log(`🔄 Intento ${i + 1}/3: ${url}`);
                 
                 try {
-                    const res = await fetch(url);
-                    console.log('📡 Respuesta del servidor:', res.status, res.statusText);
-                    
-                    if (res.ok) {
-                        const data = await res.json();
-                        console.log('✅ Noticias cargadas:', data.length, 'elementos');
-                        console.log('📋 Primera noticia:', data[0]);
-                        if (!Array.isArray(data)) throw new Error('Invalid payload');
-                        return data; // Éxito, devolver datos
-                    } else {
-                        console.warn(`⚠️ URL ${i + 1} falló con status:`, res.status);
-                    }
+                    const res = await tryFetch(url);
+                    const data = await res.json();
+                    console.log('✅ Noticias cargadas:', data.length, 'elementos');
+                    console.log('📋 Primera noticia:', data[0]);
+                    if (!Array.isArray(data)) throw new Error('Invalid payload');
+                    return data; // Éxito, devolver datos
                 } catch (error) {
-                    console.warn(`⚠️ URL ${i + 1} falló con error:`, error.message);
+                    console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
                 }
             }
             

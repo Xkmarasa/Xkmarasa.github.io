@@ -2416,6 +2416,32 @@
             }
         }
 
+        // Función para probar múltiples URLs con timeout
+        async function tryFetch(url, options = {}) {
+            try {
+                // Crear AbortController para timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
+                
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    return response;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    throw new Error('Timeout - conexión muy lenta');
+                }
+                throw error;
+            }
+        }
+
         // Función mejorada para cargar propiedades con múltiples intentos
         async function loadPropertiesWithFallback() {
             const urls = [
@@ -2426,28 +2452,44 @@
             
             console.log('🔄 Intentando cargar propiedades...');
             
+            // Mostrar indicador de carga
+            document.getElementById('properties-container').innerHTML = `
+                <div class="property-card">
+                    <div class="no-image" style="padding: 40px; text-align: center; color: #20B2AA;">
+                        <div style="font-size: 18px; margin-bottom: 10px;">🔄 Cargando propiedades...</div>
+                        <div style="font-size: 14px; color: #666;">Probando diferentes servidores...</div>
+                        <div style="margin-top: 10px;">
+                            <div style="width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
+                                <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #20B2AA, #48CAE4); transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
             for (let i = 0; i < urls.length; i++) {
                 const url = urls[i];
                 console.log(`🔄 Intento ${i + 1}/3: ${url}`);
                 
+                // Actualizar barra de progreso
+                const progress = ((i + 1) / urls.length) * 100;
+                const loadingBar = document.getElementById('loading-bar');
+                if (loadingBar) {
+                    loadingBar.style.width = progress + '%';
+                }
+                
                 try {
-                    const response = await fetch(url);
-                    console.log('📡 Respuesta del servidor:', response.status, response.statusText);
+                    const response = await tryFetch(url);
+                    const properties = await response.json();
+                    console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
+                    console.log('📋 Primera propiedad:', properties[0]);
                     
-                    if (response.ok) {
-                        const properties = await response.json();
-                        console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
-                        console.log('📋 Primera propiedad:', properties[0]);
-                        
-                        allProperties = properties;
-                        await updatePropertiesDisplay();
-                        setupPagination();
-                        return; // Éxito, salir de la función
-                    } else {
-                        console.warn(`⚠️ URL ${i + 1} falló con status:`, response.status);
-                    }
+                    allProperties = properties;
+                    await updatePropertiesDisplay();
+                    setupPagination();
+                    return; // Éxito, salir de la función
                 } catch (error) {
-                    console.warn(`⚠️ URL ${i + 1} falló con error:`, error.message);
+                    console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
                 }
             }
             
@@ -2456,8 +2498,12 @@
             document.getElementById('properties-container').innerHTML = `
                 <div class="property-card">
                     <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                        Error de conexión. No se pudo cargar los datos.<br>
+                        ❌ Error de conexión. No se pudo cargar los datos.<br>
                         <small>Por favor, verifica tu conexión a internet y recarga la página</small>
+                        <br><br>
+                        <button onclick="location.reload()" style="padding: 10px 20px; background: #20B2AA; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Recargar página
+                        </button>
                     </div>
                 </div>
             `;
