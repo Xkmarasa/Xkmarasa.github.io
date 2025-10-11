@@ -1333,7 +1333,7 @@
                 <div style="background-color: var(--light-blue); padding: 15px; border-radius: 6px; margin-top: 10px;">
                     <p><strong>Total Properties:</strong> <span id="totalProperties">-</span></p>
                     <p><strong>Last Updated:</strong> <span id="lastUpdated">-</span></p>
-                    <p><strong>API Endpoint:</strong> https://93.189.91.62:8443/data</p>
+                    <p><strong>API Endpoint:</strong> <span id="apiEndpoint">-</span></p>
                 </div>
             </div>
             
@@ -1348,6 +1348,24 @@
     </footer>
     
     <script>
+        // Detección de móvil y configuración de URLs
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function getAPIURL() {
+            const isMobileDevice = isMobile();
+            console.log('📱 Es dispositivo móvil:', isMobileDevice);
+            
+            if (isMobileDevice) {
+                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
+                return 'https://93.189.91.62';
+            } else {
+                // Para desktop, usar HTTPS con puerto específico
+                return 'https://93.189.91.62:8443';
+            }
+        }
+
         // Custom Message System
         // Cloudinary Config (rellenar con tus valores de Cloudinary - unsigned preset)
         const CLOUDINARY_CLOUD_NAME = 'dy2mavovq';// Ej: 'demo'
@@ -1602,30 +1620,68 @@
             }
             
             function loadProperties() {
-                fetch('https://93.189.91.62:8443/data')
+                const apiURL = getAPIURL();
+                console.log('🔄 Cargando propiedades desde:', apiURL + '/data');
+                
+                fetch(apiURL + '/data')
                     .then(response => {
+                        console.log('📡 Respuesta del servidor:', response.status, response.statusText);
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         return response.json();
                     })
                     .then(properties => {
+                        console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
                         allProperties = properties;
                         updatePropertiesDisplay();
                         setupPagination();
                         updateSystemInfo();
                     })
                     .catch(error => {
-                        console.error('Error loading properties:', error);
-                        document.getElementById('properties-container').innerHTML = `
-                            <div class="property-card">
-                                <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                                    Error loading properties<br>
-                                    <small>Please try again later or contact support</small>
-                                </div>
-                            </div>
-                        `;
+                        console.error('❌ Error loading properties:', error);
+                        
+                        // Si es móvil y falló HTTPS, probar HTTP
+                        if (isMobile() && apiURL.includes('https')) {
+                            console.log('🔄 Probando fallback HTTP para móvil...');
+                            fetch('http://93.189.91.62:8080/data')
+                                .then(response => {
+                                    if (response.ok) {
+                                        return response.json();
+                                    }
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                })
+                                .then(properties => {
+                                    console.log('✅ Propiedades cargadas via HTTP:', properties.length, 'elementos');
+                                    allProperties = properties;
+                                    updatePropertiesDisplay();
+                                    setupPagination();
+                                    updateSystemInfo();
+                                })
+                                .catch(httpError => {
+                                    console.error('❌ Fallback HTTP también falló:', httpError);
+                                    showError();
+                                });
+                        } else {
+                            showError();
+                        }
                     });
+            }
+
+            function showError() {
+                const errorMessage = isMobile() 
+                    ? 'Error de conexión en móvil. Verifica tu conexión a internet y recarga la página.'
+                    : 'Error loading properties. Please try again later or contact support.';
+                
+                document.getElementById('properties-container').innerHTML = `
+                    <div class="property-card">
+                        <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
+                            ${errorMessage}<br>
+                            <small>Por favor, verifica la consola para más detalles</small>
+                            ${isMobile() ? '<br><small>💡 Tip: Intenta usar WiFi en lugar de datos móviles</small>' : ''}
+                        </div>
+                    </div>
+                `;
             }
             
             function updatePropertiesDisplay() {
@@ -1844,6 +1900,7 @@
             function updateSystemInfo() {
                 document.getElementById('totalProperties').textContent = allProperties.length;
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+                document.getElementById('apiEndpoint').textContent = getAPIURL() + '/data';
             }
             
             // Modal functions
@@ -1893,7 +1950,7 @@
                 if (confirmed) {
                     try {
                         const property = allProperties[index];
-                        const response = await fetch(`https://93.189.91.62:8443/data/${property.id}`, {
+                        const response = await fetch(`${getAPIURL()}/data/${property.id}`, {
                             method: 'DELETE',
                             headers: { 
                                 'Content-Type': 'application/json' 
@@ -1994,7 +2051,7 @@
               try {
                 if (editingPropertyIndex !== null) {
                     console.log('📤 Enviando PUT al backend...', propertyData);
-                    const response = await fetch(`https://93.189.91.62:8443/data/${propertyData.id}`, {
+                    const response = await fetch(`${getAPIURL()}/data/${propertyData.id}`, {
                         method: 'PUT',
                         headers: { 
                             'Content-Type': 'application/json',
@@ -2024,7 +2081,7 @@
                     showSuccess('¡Propiedad Actualizada!', 'Los cambios han sido guardados exitosamente.', 5000, '📝');
                 } else {
                     console.log('📤 Enviando POST al backend...', propertyData);
-                    const response = await fetch('https://93.189.91.62:8443/data', {
+                    const response = await fetch(`${getAPIURL()}/data`, {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',

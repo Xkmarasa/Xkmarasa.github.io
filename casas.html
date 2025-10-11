@@ -2416,6 +2416,83 @@
             }
         }
 
+        // Detección de móvil y configuración de URLs
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function getAPIURL() {
+            const isMobileDevice = isMobile();
+            console.log('📱 Es dispositivo móvil:', isMobileDevice);
+            
+            if (isMobileDevice) {
+                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
+                return 'https://93.189.91.62';
+            } else {
+                // Para desktop, usar HTTPS con puerto específico
+                return 'https://93.189.91.62:8443';
+            }
+        }
+
+        // Función mejorada para cargar propiedades con fallback para móviles
+        async function loadPropertiesWithFallback() {
+            const apiURL = getAPIURL();
+            console.log('🔄 Cargando propiedades desde:', apiURL + '/data');
+            
+            try {
+                const response = await fetch(apiURL + '/data');
+                console.log('📡 Respuesta del servidor:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const properties = await response.json();
+                console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
+                console.log('📋 Primera propiedad:', properties[0]);
+                
+                allProperties = properties;
+                await updatePropertiesDisplay();
+                setupPagination();
+                
+            } catch (error) {
+                console.error('❌ Error loading properties:', error);
+                
+                // Si es móvil y falló HTTPS, probar HTTP
+                if (isMobile() && apiURL.includes('https')) {
+                    console.log('🔄 Probando fallback HTTP para móvil...');
+                    try {
+                        const httpResponse = await fetch('http://93.189.91.62:8080/data');
+                        if (httpResponse.ok) {
+                            const properties = await httpResponse.json();
+                            console.log('✅ Propiedades cargadas via HTTP:', properties.length, 'elementos');
+                            allProperties = properties;
+                            await updatePropertiesDisplay();
+                            setupPagination();
+                            return;
+                        }
+                    } catch (httpError) {
+                        console.error('❌ Fallback HTTP también falló:', httpError);
+                    }
+                }
+                
+                // Mostrar error
+                const errorMessage = isMobile() 
+                    ? 'Error de conexión en móvil. Verifica tu conexión a internet y recarga la página.'
+                    : `Error loading properties: ${error.message}`;
+                
+                document.getElementById('properties-container').innerHTML = `
+                    <div class="property-card">
+                        <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
+                            ${errorMessage}<br>
+                            <small>Por favor, verifica la consola para más detalles</small>
+                            ${isMobile() ? '<br><small>💡 Tip: Intenta usar WiFi en lugar de datos móviles</small>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar sistema de filtros
             initFilterSystem();
@@ -2433,33 +2510,7 @@
             }
             
             // Cargar propiedades si estamos en la página principal
-            console.log('🔄 Cargando propiedades desde: https://93.189.91.62:8443/data');
-            fetch('https://93.189.91.62:8443/data')
-                .then(response => {
-                    console.log('📡 Respuesta del servidor:', response.status, response.statusText);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(async properties => {
-                    console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
-                    console.log('📋 Primera propiedad:', properties[0]);
-                    allProperties = properties;
-                    await updatePropertiesDisplay();
-                    setupPagination();
-                })
-                .catch(error => {
-                    console.error('❌ Error loading properties:', error);
-                    document.getElementById('properties-container').innerHTML = `
-                        <div class="property-card">
-                            <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                                Error loading properties: ${error.message}<br>
-                                <small>Please check the console for more details</small>
-                            </div>
-                        </div>
-                    `;
-                });
+            loadPropertiesWithFallback();
             
             async function updatePropertiesDisplay() {
                 const container = document.getElementById('properties-container');

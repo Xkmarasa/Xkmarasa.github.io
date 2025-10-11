@@ -333,15 +333,105 @@
 
     <script>
         const KEY = 'mbi_news_items';
-        const NEWS_API = 'https://93.189.91.62:8443/news';
         let editingIndex = null;
+
+        // Detección de móvil y configuración de URLs
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function getNewsAPIURL() {
+            const isMobileDevice = isMobile();
+            console.log('📱 Es dispositivo móvil:', isMobileDevice);
+            
+            if (isMobileDevice) {
+                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
+                return 'https://93.189.91.62';
+            } else {
+                // Para desktop, usar HTTPS con puerto específico
+                return 'https://93.189.91.62:8443';
+            }
+        }
 
         function loadNews(){ try{ const raw=localStorage.getItem(KEY); const arr = raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(_){ return []; } }
         function saveNewsArray(arr){ localStorage.setItem(KEY, JSON.stringify(arr)); }
-        async function fetchAll(){ try{ const r=await fetch(NEWS_API); if(!r.ok) throw 0; const d=await r.json(); if(Array.isArray(d)){ saveNewsArray(d); return d; } }catch(_){ } return loadNews(); }
-        async function createNews(obj){ try{ const r=await fetch(NEWS_API,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); if(!r.ok) throw 0; const d=await r.json(); const arr=loadNews(); arr.unshift(d); saveNewsArray(arr); return d; }catch(_){ const arr=loadNews(); arr.unshift(obj); saveNewsArray(arr); return obj; } }
-        async function updateNewsAt(index,obj){ const items=loadNews(); const id=items[index]&&items[index].id; try{ const r=await fetch(`${NEWS_API}/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); if(!r.ok) throw 0; const d=await r.json(); items[index]=d; saveNewsArray(items); return d; }catch(_){ items[index]=Object.assign({id},obj); saveNewsArray(items); return items[index]; } }
-        async function deleteNewsAt(index){ const items=loadNews(); const id=items[index]&&items[index].id; try{ const r=await fetch(`${NEWS_API}/${id}`,{method:'DELETE'}); if(!r.ok) throw 0; items.splice(index,1); saveNewsArray(items); }catch(_){ items.splice(index,1); saveNewsArray(items); } }
+        
+        async function fetchAll(){ 
+            try{ 
+                const apiURL = getNewsAPIURL();
+                console.log('🔄 Cargando noticias desde:', apiURL + '/news');
+                const r=await fetch(apiURL + '/news'); 
+                if(!r.ok) throw 0; 
+                const d=await r.json(); 
+                if(Array.isArray(d)){ saveNewsArray(d); return d; } 
+            }catch(_){ 
+                // Si es móvil y falló HTTPS, probar HTTP
+                if (isMobile() && getNewsAPIURL().includes('https')) {
+                    try {
+                        console.log('🔄 Probando fallback HTTP para móvil...');
+                        const httpRes = await fetch('http://93.189.91.62:8080/news');
+                        if (httpRes.ok) {
+                            const d = await httpRes.json();
+                            if (Array.isArray(d)) { saveNewsArray(d); return d; }
+                        }
+                    } catch (httpError) {
+                        console.error('❌ Fallback HTTP también falló:', httpError);
+                    }
+                }
+            } 
+            return loadNews(); 
+        }
+        
+        async function createNews(obj){ 
+            try{ 
+                const apiURL = getNewsAPIURL();
+                const r=await fetch(apiURL + '/news',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); 
+                if(!r.ok) throw 0; 
+                const d=await r.json(); 
+                const arr=loadNews(); 
+                arr.unshift(d); 
+                saveNewsArray(arr); 
+                return d; 
+            }catch(_){ 
+                const arr=loadNews(); 
+                arr.unshift(obj); 
+                saveNewsArray(arr); 
+                return obj; 
+            } 
+        }
+        
+        async function updateNewsAt(index,obj){ 
+            const items=loadNews(); 
+            const id=items[index]&&items[index].id; 
+            try{ 
+                const apiURL = getNewsAPIURL();
+                const r=await fetch(`${apiURL}/news/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(obj)}); 
+                if(!r.ok) throw 0; 
+                const d=await r.json(); 
+                items[index]=d; 
+                saveNewsArray(items); 
+                return d; 
+            }catch(_){ 
+                items[index]=Object.assign({id},obj); 
+                saveNewsArray(items); 
+                return items[index]; 
+            } 
+        }
+        
+        async function deleteNewsAt(index){ 
+            const items=loadNews(); 
+            const id=items[index]&&items[index].id; 
+            try{ 
+                const apiURL = getNewsAPIURL();
+                const r=await fetch(`${apiURL}/news/${id}`,{method:'DELETE'}); 
+                if(!r.ok) throw 0; 
+                items.splice(index,1); 
+                saveNewsArray(items); 
+            }catch(_){ 
+                items.splice(index,1); 
+                saveNewsArray(items); 
+            } 
+        }
 
         function clearForm(){ document.getElementById('newsTitle').value=''; document.getElementById('newsLink').value=''; document.getElementById('newsDesc').value=''; editingIndex=null; }
 
