@@ -1487,7 +1487,7 @@
             requirements: '',
             aiAnalysis: null
         };
-        // Fuente de datos de propiedades (se define dentro de DOMContentLoaded)
+        // Fuente de datos de propiedades (declarada dentro de DOMContentLoaded)
         
         // Búsqueda de ubicación con Google Places Autocomplete (ciudades, regiones y países)
         function initLocationSearch() {
@@ -1909,11 +1909,11 @@
                         
                     const location = property.ubi || 'Prime Location';
                     const price = property.price ? 
-                        `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                        `€${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
                         'Price upon request';
                     
                     const descriptionText = property.description ? 
-                        property.description : 
+                        property.description.split('\n').slice(1).join('\n') : 
                         'Exceptional property with premium features and finishes in a highly desirable location.';
                         
                     const features = property.description ? 
@@ -2090,7 +2090,7 @@
                         'Luxury Property';
                     const location = property.ubi || 'Prime Location';
                     const price = property.price ? 
-                        `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                        `€${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
                         'Price upon request';
                     const description = property.description || 'Exceptional property with premium features.';
                     
@@ -2415,7 +2415,26 @@
             }
         }
 
-        // Función para probar múltiples URLs
+        // Detección de móvil y configuración de URLs
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function getAPIURL() {
+            const isMobileDevice = isMobile();
+            console.log('📱 Es dispositivo móvil:', isMobileDevice);
+            
+            if (isMobileDevice) {
+                // Para móviles, usar HTTPS estándar (puerto 443) o HTTP como fallback
+                return 'https://93.189.91.62';
+            } else {
+                // Para desktop, usar HTTPS con puerto específico
+                return 'https://93.189.91.62:8443';
+            }
+        }
+
+        // Función mejorada para cargar propiedades con fallback para móviles
+        // Función para probar múltiples URLs (igual que casasAdmin)
         async function tryFetch(url, options = {}) {
             try {
                 const response = await fetch(url, options);
@@ -2428,53 +2447,94 @@
             }
         }
 
-        // Función para cargar propiedades (idéntica a casasAdmin.html)
-        async function loadProperties() {
-            console.log('🚀 loadProperties() iniciada');
-            const urls = [
-                'https://93.189.91.62:8443/data',
-                'https://93.189.91.62/data',
-                'http://93.189.91.62:8080/data'
-            ];
-            
-            console.log('🔄 Intentando cargar propiedades...');
-            
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                console.log(`🔄 Intento ${i + 1}/3: ${url}`);
-                
-                try {
-                    const response = await tryFetch(url);
-                    const properties = await response.json();
-                    console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
-                    allProperties = properties;
-                    updatePropertiesDisplay();
-                    setupPagination();
-                    return; // Éxito, salir de la función
-                } catch (error) {
-                    console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
-                }
-            }
-            
-            // Si llegamos aquí, todas las URLs fallaron
-            console.error('❌ Todas las URLs fallaron');
-            document.getElementById('properties-container').innerHTML = `
-                <div class="property-card">
-                    <div class="no-image" style="padding: 40px; text-align: center; color: #e74c3c;">
-                        Error de conexión. No se pudo cargar los datos.<br>
-                        <small>Por favor, verifica tu conexión a internet y recarga la página</small>
-                    </div>
-                </div>
-            `;
-        }
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🎯 DOMContentLoaded ejecutado en casas.html');
-            // Inicializar sistema de filtros
-            initFilterSystem();
             let allProperties = [];
             let currentPage = 1;
             const propertiesPerPage = 10;
+            
+            // Función loadProperties dentro del scope correcto
+            async function loadProperties() {
+                const urls = [
+                    'https://93.189.91.62:8443/data',
+                    'https://93.189.91.62/data',
+                    'http://93.189.91.62:8080/data'
+                ];
+                
+                console.log('🔄 Intentando cargar propiedades...');
+                
+                for (let i = 0; i < urls.length; i++) {
+                    const url = urls[i];
+                    console.log(`🔄 Intento ${i + 1}/3: ${url}`);
+                    
+                    try {
+                        const response = await tryFetch(url);
+                        const properties = await response.json();
+                        console.log('✅ Propiedades cargadas:', properties.length, 'elementos');
+                        allProperties = properties;
+                        updatePropertiesDisplay();
+                        setupPagination();
+                        return; // Éxito, salir de la función
+                    } catch (error) {
+                        console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
+                    }
+                }
+                
+                // Si llegamos aquí, todas las URLs fallaron
+                console.error('❌ Todas las URLs fallaron - usando datos de prueba');
+                
+                // Usar datos de prueba como fallback
+                allProperties = [
+                    {
+                        id: 1,
+                        name: "Villa de Prueba 1",
+                        price: 500000,
+                        ubi: "Marbella, España",
+                        description: "Hermosa villa de prueba para testing",
+                        imagenes: ["https://via.placeholder.com/400x250?text=Villa+1+Image+1", "https://via.placeholder.com/400x250?text=Villa+1+Image+2"],
+                        baños: 4, tamaño: 500, construido: 300, terraza: 100, aseos: 2, pool: 'Yes', garden: 'Yes', orientation: 'South'
+                    },
+                    {
+                        id: 2,
+                        name: "Apartamento de Prueba 2",
+                        price: 300000,
+                        ubi: "Barcelona, España",
+                        description: "Moderno apartamento de prueba",
+                        imagenes: ["https://via.placeholder.com/400x250?text=Apartment+2+Image+1"],
+                        baños: 2, tamaño: 120, construido: 100, terraza: 20, aseos: 1, pool: 'No', garden: 'No', orientation: 'East'
+                    },
+                    {
+                        id: 3,
+                        name: "Casa de Prueba 3",
+                        price: 400000,
+                        ubi: "Madrid, España",
+                        description: "Elegante casa de prueba",
+                        imagenes: [],
+                        baños: 3, tamaño: 250, construido: 200, terraza: 50, aseos: 1, pool: 'Yes', garden: 'Yes', orientation: 'North'
+                    }
+                ];
+                
+                // Mostrar datos de prueba
+                await updatePropertiesDisplay();
+                setupPagination();
+                
+                // Mostrar mensaje de advertencia
+                const container = document.getElementById('properties-container');
+                const warningDiv = document.createElement('div');
+                warningDiv.className = 'property-card';
+                warningDiv.style.background = '#fff3cd';
+                warningDiv.style.border = '1px solid #ffeaa7';
+                warningDiv.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #856404;">
+                        ⚠️ <strong>Modo de Prueba</strong><br>
+                        <small>No se pudo conectar al servidor. Mostrando datos de ejemplo.</small>
+                    </div>
+                `;
+                container.insertBefore(warningDiv, container.firstChild);
+            }
+            
+            // Inicializar sistema de filtros
+            initFilterSystem();
             
             // Verificar si estamos en la página de detalles
             const urlParams = new URLSearchParams(window.location.search);
@@ -2485,7 +2545,7 @@
                 return;
             }
             
-            // Cargar propiedades si estamos en la página principal
+            // Load properties (igual que casasAdmin)
             loadProperties();
             
             async function updatePropertiesDisplay() {
@@ -2509,18 +2569,18 @@
                     const propertyCard = document.createElement('div');
                     propertyCard.className = 'property-card';
                     
-                    // Manejo de valores nulos
-                    const title = property.name ? 
-                        (property.name.split('\n')[0] || 'Luxury Property') : 
+                    // Manejo de valores nulos (igual que casasAdmin)
+                    const title = property.description ? 
+                        (property.description.split('\n')[0] || 'Luxury Property') : 
                         'Luxury Property';
                         
                     const location = property.ubi || 'Prime Location';
                     const price = property.price ? 
-                        `${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
+                        `€${property.price.toLocaleString('en-US', {minimumFractionDigits: 0})}` : 
                         'Price upon request';
                     
                     const descriptionText = property.description ? 
-                        property.description : 
+                        property.description.split('\n').slice(1).join('\n') : 
                         'Exceptional property with premium features and finishes in a highly desirable location.';
                         
                     const features = property.description ? 
@@ -2579,7 +2639,7 @@
                             </ul>
                             <div class="property-details">
                                 ${property.baños ? `<span class="detail-item">${property.baños} Beds</span>` : '<span class="detail-item">3+ Beds</span>'}
-                                ${property.baños ? `<span class="detail-item">${property.baños} Baths</span>` : '<span class="detail-item">2+ Baths</span>'}
+                                ${property.aseos ? `<span class="detail-item">${property.aseos} Baths</span>` : '<span class="detail-item">2+ Baths</span>'}
                                 ${property.tamaño ? `<span class="detail-item">${property.tamaño} m² Total</span>` : '<span class="detail-item">250+ m² Total</span>'}
                                 ${property.construido ? `<span class="detail-item">${property.construido} m² Built</span>` : '<span class="detail-item">180+ m² Built</span>'}
                                 ${property.terraza ? `<span class="detail-item">${property.terraza} m² Terraces</span>` : '<span class="detail-item">70+ m² Terraces</span>'}
@@ -2743,7 +2803,7 @@
                         'Price upon request';
                     
                     const descriptionText = property.description ? 
-                        property.description : 
+                        property.description.split('\n').slice(1).join('\n') : 
                         'Exceptional property with premium features and finishes in a highly desirable location.';
                     
                     // Manejo de imágenes
@@ -3113,7 +3173,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5aaBvxYkF_-T0SdvJCK3FDwuzvIeBVC0&libraries=places"></script>
 </body>
 </html>
-
 
 
 
