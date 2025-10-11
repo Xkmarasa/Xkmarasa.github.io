@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors'); // Añade esta línea
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
-const http = require('http');
 const pool = require('./db.js');
 
 const app = express();
@@ -237,80 +235,8 @@ app.delete('/news/:id', async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 });
-// Configuración SSL para HTTPS (Let's Encrypt)
-let sslOptions = null;
-
-// Intentar cargar certificados de Let's Encrypt
-try {
-  sslOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/93.189.91.62/privkey.pem', 'utf8'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/93.189.91.62/fullchain.pem', 'utf8')
-  };
-  console.log('✅ Certificados SSL cargados correctamente');
-} catch (error) {
-  console.log('⚠️  No se encontraron certificados de Let\'s Encrypt');
-  console.log('💡 Para habilitar HTTPS, ejecuta:');
-  console.log('   sudo certbot certonly --standalone -d 93.189.91.62');
-}
-
-// Función para crear servidor HTTP/HTTPS
-function createServer() {
-  const PORT = process.env.PORT || 8080;  // Puerto 8080 para HTTP
-  const HTTPS_PORT = process.env.HTTPS_PORT || 8443;  // Puerto 8443 para HTTPS
-  
-  // Redirección HTTP -> HTTPS
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https' && sslOptions) {
-      res.redirect(`https://${req.header('host')}${req.url}`);
-    } else {
-      next();
-    }
-  });
-  
-  // Crear servidor HTTP con manejo de errores
-  const httpServer = http.createServer(app);
-  httpServer.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-      console.log(`⚠️  Puerto ${PORT} ocupado. Probando puerto ${PORT + 1}...`);
-      httpServer.listen(PORT + 1, '0.0.0.0', () => {
-        console.log(`🌐 Servidor HTTP corriendo en puerto ${PORT + 1}`);
-      });
-    } else {
-      console.error('❌ Error en servidor HTTP:', err.message);
-    }
-  });
-  
-  httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`🌐 Servidor HTTP corriendo en puerto ${PORT}`);
-  });
-  
-  // Crear servidor HTTPS si los certificados existen
-  if (sslOptions) {
-    try {
-      const httpsServer = https.createServer(sslOptions, app);
-      httpsServer.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          console.log(`⚠️  Puerto ${HTTPS_PORT} ocupado. Probando puerto ${HTTPS_PORT + 1}...`);
-          httpsServer.listen(HTTPS_PORT + 1, '0.0.0.0', () => {
-            console.log(`🔒 Servidor HTTPS corriendo en puerto ${HTTPS_PORT + 1}`);
-            console.log(`🔗 Accede a: https://93.189.91.62:${HTTPS_PORT + 1}`);
-          });
-        } else {
-          console.error('❌ Error en servidor HTTPS:', err.message);
-        }
-      });
-      
-      httpsServer.listen(HTTPS_PORT, '0.0.0.0', () => {
-        console.log(`🔒 Servidor HTTPS corriendo en puerto ${HTTPS_PORT}`);
-        console.log(`🔗 Accede a: https://93.189.91.62:${HTTPS_PORT}`);
-      });
-    } catch (error) {
-      console.error('❌ Error creando servidor HTTPS:', error.message);
-    }
-  } else {
-    console.log('⚠️  Solo HTTP disponible. Configura Let\'s Encrypt para HTTPS');
-  }
-}
-
 // Iniciar servidor
-createServer();
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
