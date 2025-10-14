@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ 
+  <link rel="icon" type="image/jpg" href="logo.jpg" />
+  <style>
+    :root {
+      --primary-blue: #0066cc;
+      --dark-blue: #1a2a4a;
+      --light-blue: #e6f2ff;
+      --soft-blue: #b3d9ff;
+      --bg-blue-1: #f5f9ff;
+      --bg-blue-2: #e6f0fa;
+      --white: #ffffff;
+      --dark-gray: #333333;
+      --text-gray: #555555;
+      --medium-gray: #e0e0e0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--white) 0%, var(--dark-blue) 100%);
+      color: var(--dark-gray);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background-color: var(--white);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid var(--medium-gray);
+      flex-wrap: wrap;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      width: 100px;
+      height: auto;
+      margin-right: 15px;
+    }
+
+    .logo-texts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-main {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: var(--dark-blue);
+    }
+
+    .logo-sub {
+      font-size: 0.8em;
+      color: var(--primary-blue);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-section {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .nav-item {
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--dark-gray);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      color: var(--primary-blue);
+    }
+
+    .property-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .property-card {
+      background-color: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .property-image-container {
+      position: relative;
+      height: 250px;
+    }
+
+    .property-details-container {
+      padding: 25px;
+    }
+
+    .image-carousel {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+    }
+
+    .carousel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .carousel-image.active {
+      opacity: 1;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 10px;
+      z-index: 10;
+    }
+
+    .carousel-btn {
+      background: rgba(0, 102, 204, 0.8);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-indicators {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background-color: var(--white);
+      transform: scale(1.2);
+    }
+
+    .property-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: var(--dark-blue);
+      font-weight: 600;
+    }
+
+    .property-location {
+      font-size: 1em;
+      color: var(--text-gray);
+      margin-bottom: 15px;
+    }
+
+    .property-location:before {
+      content: '📍';
+      margin-right: 8px;
+    }
+
+    .property-description {
+      margin-bottom: 15px;
+      color: var(--text-gray);
+    }
+
+    .property-features li {
+      list-style-type: disc;
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .property-price {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: var(--primary-blue);
+      margin-bottom: 15px;
+    }
+
+    .property-details {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.8em;
+    }
+
+    .detail-item {
+      font-weight: bold;
+      color: var(--dark-blue);
+      background-color: var(--light-blue);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .view-details {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--primary-blue);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.8em;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .page-btn {
+      padding: 8px 15px;
+      background-color: var(--white);
+      color: var(--dark-blue);
+      border: 1px solid var(--medium-gray);
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .page-btn.active {
+      background-color: var(--primary-blue);
+      color: var(--white);
+      border-color: var(--primary-blue);
+    }
+
+    footer {
+      background-color: var(--dark-blue);
+      color: var(--white);
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="logo.jpg" alt="Logo" class="logo-img" />
+      <div class="logo-texts">
+        <span class="logo-main">Mediterranean Blue International</span>
+        <span class="logo-sub">LLC Realty</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-item">Buy</div>
+      <div class="nav-item">Sell</div>
+      <div class="nav-item">Rent</div>
+      <div class="nav-item">About</div>
+      <div class="nav-item">Contact</div>
+    </div>
+  </header>
+
+  <div class="property-container" id="properties-container">
+    <div class="loading">Loading properties...</div>
+  </div>
+
+  <div class="pagination" id="pagination-container"></div>
+
+  <footer>
+    © 2025 Mediterranean Blue International LLC. All rights reserved.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let allProperties = [];
+      let currentPage = 1;
+      const propertiesPerPage = 10;
+
+      fetch('https://xkmarasa-github-io.onrender.com/data')
+        .then(response => response.json())
+        .then(properties => {
+          allProperties = properties;
+          renderProperties();
+          setupPagination();
+        });
+
+      function renderProperties() {
+        const container = document.getElementById('properties-container');
+        container.innerHTML = '';
+        const start = (currentPage - 1) * propertiesPerPage;
+        const end = start + propertiesPerPage;
+        const props = allProperties.slice(start, end);
+
+        props.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'property-card';
+          const title = p.description?.split('\n')[0] || 'Luxury Property';
+          const location = p.ubi || 'Prime Location';
+          const price = p.price || 'N/A';
+          const features = p.description?.split('\n').slice(1, 4) || ['Feature 1', 'Feature 2'];
+
+          div.innerHTML = `
+            <div class="property-details-container">
+              <h1 class="property-title">${title}</h1>
+              <div class="property-location">${location}</div>
+              <p class="property-description">${features.join('<br>')}</p>
+              <ul class="property-features">
+                ${features.map(f => `<li>${f}</li>`).join('')}
+              </ul>
+              <div class="property-price">€${price}</div>
+              <div class="property-details">
+                <span class="detail-item">3+ Beds</span>
+                <span class="detail-item">2+ Baths</span>
+                <span class="detail-item">250+ m²</span>
+              </div>
+              <a href="#" class="view-details">View Details</a>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      function setupPagination() {
+        const totalPages = Math.ceil(allProperties.length / propertiesPerPage);
+        const pag = document.getElementById('pagination-container');
+        pag.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = document.createElement('button');
+          btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+          btn.textContent = i;
+          btn.onclick = () => {
+            currentPage = i;
+            renderProperties();
+            setupPagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          pag.appendChild(btn);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
