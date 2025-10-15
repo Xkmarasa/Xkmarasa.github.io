@@ -302,7 +302,7 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 15px;
-        }
+http://93.189.91.62/        }
         
         .property-card {
             background-color: var(--white);
@@ -1638,9 +1638,9 @@
             
             async function loadProperties() {
                 const urls = [
-                    
-                    'http://93.189.91.62:3000/data',
-                   
+                    'https://mediterraneanbi.com:443/data',
+                    'https://mediterraneanbi.com:3000/data',
+                ];
                 
                 console.log('🔄 Intentando cargar propiedades...');
                 
@@ -1890,7 +1890,7 @@
             function updateSystemInfo() {
                 document.getElementById('totalProperties').textContent = allProperties.length;
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
-                document.getElementById('apiEndpoint').textContent = 'https://93.189.91.62:8443/data (con fallback automático)';
+                document.getElementById('apiEndpoint').textContent = 'https://mediterraneanbi.com:3000/data (con fallback automático)';
             }
             
             // Modal functions
@@ -1941,9 +1941,9 @@
                     try {
                         const property = allProperties[index];
                         const urls = [
-                            `https://93.189.91.62:8443/data/${property.id}`,
+                            `https://mediterraneanbi.com:3000/data/${property.id}`,
                             `https://93.189.91.62/data/${property.id}`,
-                            `http://93.189.91.62:8080/data/${property.id}`
+                            `http://93.189.91.62:443/data/${property.id}`
                         ];
                         
                         let response;
@@ -2056,9 +2056,9 @@
                 if (editingPropertyIndex !== null) {
                     console.log('📤 Enviando PUT al backend...', propertyData);
                     const urls = [
-                        `https://93.189.91.62:8443/data/${propertyData.id}`,
+                        `https://mediterraneanbi.com:3000/data/${propertyData.id}`,
                         `https://93.189.91.62/data/${propertyData.id}`,
-                        `http://93.189.91.62:8080/data/${propertyData.id}`
+                        `http://93.189.91.62:443/data/${propertyData.id}`
                     ];
                     
                     let response;
@@ -2100,9 +2100,9 @@
                 } else {
                     console.log('📤 Enviando POST al backend...', propertyData);
                     const urls = [
-                        'https://93.189.91.62:8443/data',
+                        'https://mediterraneanbi.com:3000/data',
                         'https://93.189.91.62/data',
-                        'http://93.189.91.62:8080/data'
+                        'http://93.189.91.62:443/data'
                     ];
                     
                     let response;

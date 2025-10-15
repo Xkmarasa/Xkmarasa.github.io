@@ -353,9 +353,8 @@
         
         async function fetchAll(){ 
             const urls = [
-                'https://93.189.91.62:8443/news',
-                'https://93.189.91.62/news',
-                'http://93.189.91.62:8080/news'
+                'https://mediterraneanbi.com:443/news',
+                'https://mediterraneanbi.com:3000/news',
             ];
             
             for (const url of urls) {
@@ -376,7 +375,7 @@
         
         async function createNews(obj){ 
             const urls = [
-                'https://93.189.91.62:8443/news',
+                'https://93.189.91.62:443/news',
                 'https://93.189.91.62/news',
                 'http://93.189.91.62:8080/news'
             ];
@@ -441,10 +440,10 @@
             const id = items[index] && items[index].id;
             const urls = [
                 `https://93.189.91.62:8443/news/${id}`,
-                `https://93.189.91.62:3000/news/${id}`,
+                `https://93.189.91.62/news/${id}`,
                 `http://93.189.91.62:8080/news/${id}`,
-                `https://93.189.91.62:8443/news/${id}`,
-                `http://93.189.91.62:3000/news/${id}`
+                `https://mediterraneanbi.com:8443/news/${id}`,
+                `http://93.189.91.62:8080/news/${id}`
             ];
             
             for (const url of urls) {
