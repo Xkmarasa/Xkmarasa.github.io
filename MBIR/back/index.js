@@ -3,6 +3,7 @@ const cors = require('cors'); // Añade esta línea
 const fs = require('fs');
 const path = require('path');
 const pool = require('./db.js');
+const https = require('https');
 
 const app = express();
 app.use(cors()); // Añade esta línea
@@ -237,6 +238,11 @@ app.delete('/news/:id', async (req, res) => {
 });
 // Iniciar servidor
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+const options = {
+key: fs.readFileSync('/etc/letsencrypt/live/mediterraneanbi.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/mediterraneanbi.com/fullchain.pem')};
+
+// Crear servidor HTTPS
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`✅ Servidor HTTPS corriendo en https://localhost:${PORT}`);
 });
