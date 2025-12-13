@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News | Mediterranean Blue International</title>
+    <style>
+        :root {
+            --primary-turquoise: #20B2AA;
+            --dark-turquoise: #008B8B;
+            --light-turquoise: #E0FFFF;
+            --soft-turquoise: #B0E0E6;
+            --pale-turquoise: #F0FFFF;
+            --medium-turquoise: #48CAE4;
+            --deep-turquoise: #007F7F;
+            --white: #FFFFFF;
+            --cream: #FDFDFD;
+            --light-gray: #F8F9FA;
+            --medium-gray: #E9ECEF;
+            --text-gray: #495057;
+            --dark-gray: #212529;
+            --charcoal: #343A40;
+            --header-bg: linear-gradient(135deg, var(--pale-turquoise) 0%, var(--light-turquoise) 50%, var(--soft-turquoise) 100%);
+            --body-bg: linear-gradient(180deg, var(--pale-turquoise) 0%, var(--light-turquoise) 100%);
+            --card-bg: var(--white);
+            --hover-bg: var(--light-gray);
+            --logo-accent: var(--primary-turquoise);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background: var(--body-bg); color: var(--text-gray); line-height: 1.7; min-height: 100vh; font-weight: 400; }
+        header { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 15px 20px; background: #fff !important; position: relative; z-index: 100; max-height: 230px; overflow: visible; }
+        .header-content { display: flex; flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+        .logo-section { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; width: auto; height: 200px; overflow: hidden; }
+        .logo-section img { max-height: 200px; height: auto; width: auto; display: block; object-fit: contain; }
+        .logo-graphic { position: relative; width: 100%; max-width: 400px; height: 160px; background: transparent; display: flex; align-items: flex-start; justify-content: flex-start; padding: 10px; overflow: visible; }
+        .semicircle { position: absolute; bottom: 60px; left: 0; width: 100px; height: 100px; border: 4px solid #1e3a8a; border-radius: 50%; background: transparent; z-index: 20; }
+        .horizon-line { position: absolute; bottom: 60px; left: 0; width: 100%; height: 2px; background-color: #1e3a8a; border-top-left-radius: 100px; border-top-right-radius: 100px; z-index: 20; }
+        .semicircle-underline { position: absolute; bottom: 50px; left: 8px; width: 85px; height: 2px; background-color: #1e3a8a; border-radius: 4px; z-index: 20; }
+        .logo-text { position: absolute; z-index: 5; top: 120px; left: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; white-space: nowrap; height: auto; pointer-events: none; }
+        .logo-main { font-size: 1.1em; font-weight: 700; color: #7dd3fc; text-shadow: none; letter-spacing: -0.5px; line-height: 1.2; }
+        .logo-sub{display:block;font-weight:800;color:#7dd3fc;margin-top:2px;text-align:center}
+        .nav-section { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; padding: 10px 15px; background: transparent; position: relative; }
+        .nav-item { font-weight: 600; cursor: pointer; color: var(--dark-turquoise); transition: all 0.4s ease; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1.2px; padding: 10px 18px; text-decoration: none; border-radius: 8px; background: var(--white); box-shadow: 0 2px 8px rgba(32, 178, 170, 0.2); border: 2px solid var(--primary-turquoise); }
+        .nav-item:hover { color: var(--white); background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(32, 178, 170, 0.4); border-color: var(--dark-turquoise); }
+        .nav-item.active { background: linear-gradient(135deg, var(--primary-turquoise) 0%, var(--dark-turquoise) 100%); color: var(--white); box-shadow: 0 4px 12px rgba(32, 178, 170, 0.3); }
+        .lang-selector { position: relative; margin-left: auto; z-index: 10000; }
+        .lang-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--white); border-radius: 4px; box-shadow: none; border: none; cursor: pointer; font-weight: 700; }
+        .lang-menu { position: absolute; right: 0; top: 110%; background: var(--white); border: 1px solid var(--medium-gray); border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); display: none; min-width: 160px; z-index: 9999; }
+        .lang-menu.open { display: block; }
+        .lang-option { display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; color: var(--dark-gray); }
+        .lang-option:hover { background: var(--light-gray); }
+        .news-container { max-width: 1200px; margin: 0 auto 20px auto; padding: 0 15px; }
+        .news-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        .news-card { background: var(--card-bg); border: 1px solid var(--medium-gray); border-radius: 10px; box-shadow: 0 3px 18px rgba(0,0,0,0.06); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+        .news-title { font-weight: 700; color: var(--dark-turquoise); }
+        .news-meta { font-size: 0.85em; color: var(--text-gray); opacity: 0.85; }
+        .news-link { color: var(--primary-turquoise); text-decoration: none; word-break: break-word; }
+        .news-image { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid var(--medium-gray); }
+        .preview { margin-top: 8px; }
+        .news-empty { text-align: center; color: var(--text-gray); padding: 40px; }
+        footer { background-color: #1a1a2e; color: var(--white); padding: 20px 0; text-align: center; font-size: 0.8em; margin-top: 40px; }
+        @media (max-width: 767px) {
+            header { padding: 15px 20px; max-height: 230px; overflow: visible; align-items: center; }
+            .logo-section { height: auto; overflow: visible; min-width: 150px; }
+            .logo-section img { max-height: 220px; width: auto; height: auto; display: block; object-fit: contain; }
+            .logo-graphic { transform: scale(0.85); transform-origin: left center; }
+            .header-content{display:flex;align-items:center}
+            .logo-section{flex:0 0 auto}
+            .horizon-line{width:240px}
+            .logo-text{white-space:normal}
+            .logo-main .logo-chunk{ display:block; text-align:left; white-space:nowrap; }
+            .logo-main .logo-chunk:last-child{ text-align:center; }
+            .nav-section { gap: 10px; padding: 8px 10px; margin-left:auto; justify-content:flex-start; align-items:flex-end; flex-direction:column; flex-wrap:nowrap; }
+            .nav-item { font-size: 0.75em; padding: 6px 10px; }
+            .news-container { margin: 16px auto; padding: 0 12px; }
+            .news-list { grid-template-columns: 1fr; gap: 14px; }
+            .news-card { padding: 14px; }
+            .news-image { max-height: 160px; }
+            
+            /* Ocultar elementos de email en móviles, solo mostrar teléfono */
+            .email-item {
+                display: none !important;
+            }
+            
+            /* Ocultar SVG de banderas en móviles */
+            .lang-btn::before,
+            .lang-option::before {
+                display: none !important;
+            }
+        }
+
+        /* Language selector styles */
+        .lang-selector {
+            position: relative;
+            margin-left: auto;
+        }
+        
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: none;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            line-height: 1.2;
+            font-family: 'Arial', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif !important;
+        }
+        
+        .lang-btn * {
+            font-family: 'Arial', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif !important;
+        }
+        
+        .lang-option[data-lang="en"]::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDAyNzY4Ii8+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjIuMzEiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjQuNjIiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjYuOTMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjkuMjQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjExLjU1IiB3aWR0aD0iMjAiIGhlaWdodD0iMS4xNSIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB5PSIxMy44NiIgd2lkdGg9IjIwIiBoZWlnaHQ9IjEuMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iNy42OSIgeT0iMCIgd2lkdGg9IjQuNjIiIGhlaWdodD0iOC4wOCIgZmlsbD0iIzAwMjc2OCIvPgo8cmVjdCB4PSI3LjY5IiB5PSIxLjE1IiB3aWR0aD0iNC42MiIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHg9IjcuNjkiIHk9IjMuNDYiIHdpZHRoPSI0LjYyIiBoZWlnaHQ9IjEuMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iNy42OSIgeT0iNS43NyIgd2lkdGg9IjQuNjIiIGhlaWdodD0iMS4xNSIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB4PSI3LjY5IiB5PSI4LjA4IiB3aWR0aD0iNC42MiIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 8px;
+        }
+        
+        .lang-option[data-lang="es"]::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 8px;
+        }
+        
+        .lang-option[data-lang="fr"]::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDI3NjgiLz4KPHJlY3QgeD0iNi42NyIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTMuMzMiIHk9IjAiIHdpZHRoPSI2LjY3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 8px;
+        }
+        
+        .lang-option[data-lang="de"]::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiMwMDAwMDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 8px;
+        }
+        
+        
+        .lang-btn:hover {
+            background: var(--light-turquoise);
+            transform: translateY(-1px);
+        }
+        
+        .lang-menu {
+            position: absolute;
+            right: 0;
+            top: 110%;
+            background: #fff;
+            border: 1px solid #E9ECEF;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            display: none;
+            min-width: 160px;
+            z-index: 9999;
+        }
+        
+        .lang-option {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            font-size: 14px;
+            font-family: 'Arial', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif !important;
+        }
+        
+        .lang-option:hover {
+            background: var(--light-turquoise);
+        }
+        
+        /* Desktop: SVG flags, Mobile: emoji flags */
+        @media (min-width: 768px) {
+            .lang-btn[data-lang="en"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="%23b22234"/><path fill="%23fff" d="M0,3h60v3H0zm0,6h60v3H0zm0,6h60v3H0zm0,6h60v3H0zm0,6h60v3H0z"/><rect width="24" height="15" fill="%23002b7f"/><g fill="%23fff"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="2" r="1"/><circle cx="10" cy="2" r="1"/><circle cx="14" cy="2" r="1"/><circle cx="18" cy="2" r="1"/><circle cx="4" cy="4" r="1"/><circle cx="8" cy="4" r="1"/><circle cx="12" cy="4" r="1"/><circle cx="16" cy="4" r="1"/><circle cx="20" cy="4" r="1"/></g></svg>');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-btn[data-lang="es"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQwMDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-btn[data-lang="fr"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDI3NjgiLz4KPHJlY3QgeD0iNi42NyIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTMuMzMiIHk9IjAiIHdpZHRoPSI2LjY3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-btn[data-lang="de"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiMwMDAwMDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-option[data-lang="en"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDAyNzY4Ii8+CjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjIuMzEiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjQuNjIiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjYuOTMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjkuMjQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHk9IjExLjU1IiB3aWR0aD0iMjAiIGhlaWdodD0iMS4xNSIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB5PSIxMy44NiIgd2lkdGg9IjIwIiBoZWlnaHQ9IjEuMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iNy42OSIgeT0iMCIgd2lkdGg9IjQuNjIiIGhlaWdodD0iOC4wOCIgZmlsbD0iIzAwMjc2OCIvPgo8cmVjdCB4PSI3LjY5IiB5PSIxLjE1IiB3aWR0aD0iNC42MiIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHg9IjcuNjkiIHk9IjMuNDYiIHdpZHRoPSI0LjYyIiBoZWlnaHQ9IjEuMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iNy42OSIgeT0iNS43NyIgd2lkdGg9IjQuNjIiIGhlaWdodD0iMS4xNSIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB4PSI3LjY5IiB5PSI4LjA4IiB3aWR0aD0iNC42MiIgaGVpZ2h0PSIxLjE1IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-option[data-lang="es"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQwMDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-option[data-lang="fr"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDI3NjgiLz4KPHJlY3QgeD0iNi42NyIgeT0iMCIgd2lkdGg9IjYuNjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTMuMzMiIHk9IjAiIHdpZHRoPSI2LjY3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+            
+            .lang-option[data-lang="de"]::before {
+                content: '';
+                display: inline-block;
+                width: 20px;
+                height: 15px;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiMwMDAwMDAiLz4KPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkQ3MDAiLz4KPHJlY3QgeD0iMCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiBmaWxsPSIjRkZEMDAwIi8+Cjwvc3ZnPgo=');
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 8px;
+            }
+        }
+
+        /* Media queries para tablets y desktop (alinear con casas.html) */
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px 40px;
+            }
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .logo-section {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 0;
+                width: auto;
+            }
+            .logo-graphic { margin: 0 20px 0 0; width: 350px; }
+            .nav-section { width: auto; padding: 8px 18px; gap: 10px; }
+            .nav-item { font-size: 0.85em; padding: 8px 15px; }
+        }
+        @media (min-width: 1024px) { .logo-graphic { width: 400px; } .nav-section { gap: 15px; }         }
+        
+        .legal-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+        
+        .legal-modal-backdrop[aria-hidden="false"] {
+            display: flex;
+        }
+        
+        .legal-modal {
+            background: #fff;
+            border-radius: 10px;
+            max-width: 820px;
+            width: 100%;
+            max-height: 85vh;
+            overflow: auto;
+            box-shadow: 0 12px 40px rgba(0,0,0,.25);
+            padding: 20px;
+        }
+        
+        .legal-close {
+            position: sticky;
+            top: 0;
+            left: 100%;
+            transform: translateX(-100%);
+            border: none;
+            background: transparent;
+            font-size: 28px;
+            cursor: pointer;
+            color: #888;
+        }
+        
+        .legal-title {
+            margin: 4px 0 12px 0;
+            color: var(--dark-turquoise);
+        }
+        
+        .legal-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .legal-tab {
+            border: 1px solid var(--medium-gray);
+            background: var(--light-gray);
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+        
+        .legal-tab.active {
+            background: var(--primary-turquoise);
+            color: #fff;
+            border-color: var(--dark-turquoise);
+        }
+        
+        .legal-content {
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+        
+        .legal-section h3 {
+            color: var(--dark-turquoise);
+            margin: 6px 0 8px;
+        }
+        
+        .cookie-banner {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            border-top: 2px solid var(--medium-gray);
+            box-shadow: 0 -6px 20px rgba(0,0,0,.12);
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+        
+        .cookie-text {
+            font-size: .95em;
+            color: var(--charcoal);
+        }
+        
+        .cookie-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .cookie-btn {
+            background: var(--primary-turquoise);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
+        .cookie-link-btn {
+            background: transparent;
+            border: 1px solid var(--primary-turquoise);
+            color: var(--primary-turquoise);
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 600px) {
+            .cookie-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        /* 🇺🇸 English (Estados Unidos) */
+        .lang-btn[data-lang="en"]::before,
+        .lang-option[data-lang="en"]::before {
+          content: '';
+          display: inline-block;
+          width: 20px;
+          height: 15px;
+          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="%23b22234"/><path fill="%23fff" d="M0,3h60v3H0zm0,6h60v3H0zm0,6h60v3H0zm0,6h60v3H0zm0,6h60v3H0z"/><rect width="24" height="15" fill="%23002b7f"/><g fill="%23fff"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="2" r="1"/><circle cx="10" cy="2" r="1"/><circle cx="14" cy="2" r="1"/><circle cx="18" cy="2" r="1"/><circle cx="4" cy="4" r="1"/><circle cx="8" cy="4" r="1"/><circle cx="12" cy="4" r="1"/><circle cx="16" cy="4" r="1"/><circle cx="20" cy="4" r="1"/></g></svg>');
+          background-size: contain;
+          background-repeat: no-repeat;
+          margin-right: 8px;
+        }
+
+        /* 🇪🇸 Español (España) */
+        .lang-btn[data-lang="es"]::before,
+        .lang-option[data-lang="es"]::before {
+          content: '';
+          display: inline-block;
+          width: 20px;
+          height: 15px;
+          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="40" fill="%23AA151B"/><rect y="10" width="60" height="20" fill="%23F1BF00"/></svg>');
+          background-size: contain;
+          background-repeat: no-repeat;
+          margin-right: 8px;
+        }
+
+        /* 🇫🇷 Français (Francia) */
+        .lang-btn[data-lang="fr"]::before,
+        .lang-option[data-lang="fr"]::before {
+          content: '';
+          display: inline-block;
+          width: 20px;
+          height: 15px;
+          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="20" height="40" fill="%23005EB8"/><rect x="20" width="20" height="40" fill="%23fff"/><rect x="40" width="20" height="40" fill="%23EF4135"/></svg>');
+          background-size: contain;
+          background-repeat: no-repeat;
+          margin-right: 8px;
+        }
+
+        /* 🇩🇪 Deutsch (Alemania) */
+        .lang-btn[data-lang="de"]::before,
+        .lang-option[data-lang="de"]::before {
+          content: '';
+          display: inline-block;
+          width: 20px;
+          height: 15px;
+          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40"><rect width="60" height="13.33" fill="%23000000"/><rect y="13.33" width="60" height="13.33" fill="%23DD0000"/><rect y="26.66" width="60" height="13.33" fill="%23FFCE00"/></svg>');
+          background-size: contain;
+          background-repeat: no-repeat;
+          margin-right: 8px;
+        }
+        
+        /* Desktop: Hide emoji flags, show only SVG */
+        @media (min-width: 768px) {
+            .lang-btn {
+                font-size: 0; /* Hide emoji text on desktop */
+            }
+            
+            .lang-btn span {
+                font-size: 14px; /* Show language name */
+            }
+        }
+        
+        /* Móvil en horizontal - reducir botones de navegación (pestañas) un 15% y desplazarlos para evitar solapamiento */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            /* Reducir botones un 15% */
+            .nav-item {
+                padding: 8.5px 15.3px !important;
+                font-size: 0.7225em !important;
+                letter-spacing: 1.02px !important;
+                border-radius: 6.8px !important;
+            }
+            
+            .nav-section {
+                gap: 12.75px !important;
+                padding: 8.5px 12.75px !important;
+                flex-wrap: nowrap !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                margin-left: 0px !important;
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+            
+            /* Asegurar que el header-content distribuya bien el espacio */
+            .header-content {
+                gap: 20px !important;
+                align-items: center !important;
+            }
+            
+            /* Asegurar que el selector de idiomas esté alineado */
+            .lang-selector {
+                margin-left: auto !important;
+                align-self: center !important;
+                flex-shrink: 0 !important;
+            }
+            
+            .lang-btn {
+                display: inline-flex !important;
+                align-items: center !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="logo.png" alt="Mediterranean Blue International LLC Realty"/>
+            </div>
+            <div class="nav-section">
+                <a href="home.html" class="nav-item" data-i18n="nav.home">Home</a>
+                <a href="casas.html" class="nav-item" data-i18n="nav.properties">Properties</a>
+                <a href="news.html" class="nav-item active" data-i18n="nav.news">News</a>
+                <a href="Contact.html" class="nav-item" data-i18n="nav.contact">Contact</a>
+                <div class="lang-selector" id="langSelector">
+                    <div class="lang-btn" id="langBtn">🇺🇸 <span id="langLabel">English</span></div>
+                    <div class="lang-menu" id="langMenu">
+                        <div class="lang-option" data-lang="en">🇺🇸 English</div>
+                        <div class="lang-option" data-lang="es">🇪🇸 Español</div>
+                        <div class="lang-option" data-lang="fr">🇫🇷 Français</div>
+                        <div class="lang-option" data-lang="de">🇩🇪 Deutsch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="news-container">
+        <div id="newsList" class="news-list"></div>
+        <div id="newsEmpty" class="news-empty" style="display:none;">No news yet</div>
+    </main>
+
+    <footer>
+        <a href="mailto:mblueinter@gmail.com" style="color: var(--white); text-decoration: underline;">mblueinter@gmail.com</a>
+        <span style="margin:0 6px;"> </span>
+        © 2025 Mediterranean Blue International LLC Realty. Todos los derechos reservados ·
+        <a href="#" id="footerLegalLink" style="color: var(--white); text-decoration:underline; font-weight:700">Cookies y términos</a>
+        <div style="text-align:center; margin-top:6px;">
+            <a href="https://xkmarasa.github.io/rxdev-presentation.html" target="_blank" rel="noopener noreferrer" style="color: var(--white); text-decoration: underline;">@https://www.RXDev.com/es</a>
+        </div>
+    </footer>
+    
+    <!-- Modal legal: Aviso, Términos y Cookies -->
+    <div class="legal-modal-backdrop" id="legalModal" aria-hidden="true">
+        <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+            <button class="legal-close" id="legalClose" aria-label="Cerrar">×</button>
+            <h2 class="legal-title" id="legalModalTitle">Información legal</h2>
+            <div class="legal-tabs">
+                <button class="legal-tab" data-target="aviso" id="tabAviso">Aviso legal</button>
+                <button class="legal-tab" data-target="terminos" id="tabTerminos">Términos y condiciones</button>
+                <button class="legal-tab" data-target="cookies" id="tabCookies">Política de cookies</button>
+            </div>
+            <div class="legal-content">
+                <section class="legal-section" id="sec-aviso">
+                    <h3>Aviso legal</h3>
+                    <p>Este sitio web pertenece a Mediterranean Blue International LLC (MBI). La información mostrada tiene carácter meramente informativo y no constituye asesoramiento profesional ni oferta vinculante. MBI procura que los datos de las propiedades sean exactos y actualizados, sin garantizar su exhaustividad o exactitud. Las imágenes pueden ser ilustrativas. El usuario debe verificar la información y disponibilidad.</p>
+                    <p>Queda prohibida la reproducción total o parcial de los contenidos sin autorización. Para consultas o notificaciones legales, utilice los datos de contacto publicados en la sección Contacto.</p>
+                </section>
+                <section class="legal-section" id="sec-terminos" hidden>
+                    <h3>Términos y condiciones</h3>
+                    <p>El uso de este sitio implica la aceptación de estos términos: (i) el usuario se compromete a realizar un uso lícito y conforme a la buena fe; (ii) MBI podrá actualizar contenidos y funcionalidades sin previo aviso; (iii) los enlaces externos se facilitan como cortesía y MBI no es responsable de su contenido; (iv) la propiedad intelectual del sitio y su diseño pertenece a MBI o a sus licenciantes.</p>
+                    <p>La contratación de servicios o la intermediación inmobiliaria, en su caso, quedará sujeta a condiciones particulares que se proporcionarán al cliente antes de su formalización.</p>
+                </section>
+                <section class="legal-section" id="sec-cookies" hidden>
+                    <h3>Política de cookies</h3>
+                    <p>Utilizamos cookies técnicas necesarias para el funcionamiento básico del sitio (por ejemplo, recordar el idioma o la sesión de navegación). Estas cookies no requieren consentimiento. Si en el futuro utilizamos cookies adicionales (analíticas o publicitarias), se solicitará su consentimiento explícito y podrá configurarlas o revocarlas en cualquier momento.</p>
+                    <p>Puede gestionar las cookies desde la configuración de su navegador. Para más información, contacte con nosotros.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Banner de cookies -->
+    <div class="cookie-banner" id="cookieBanner" aria-live="polite" hidden>
+        <div class="cookie-text">Usamos cookies técnicas necesarias para que el sitio funcione. Al continuar, acepta su uso.</div>
+        <div class="cookie-actions">
+            <button class="cookie-btn" id="cookieAccept">Aceptar</button>
+            <button class="cookie-link-btn" id="cookieMore">Más información</button>
+        </div>
+    </div>
+
+    <script>
+        // i18n simple basado en diccionarios
+        const I18N = {
+            en: {
+                'nav.home': 'Home', 'nav.properties': 'Properties', 'nav.news': 'News', 'nav.contact': 'Contact',
+                'news.empty': 'No news yet'
+            },
+            es: {
+                'nav.home': 'Inicio', 'nav.properties': 'Propiedades', 'nav.news': 'Noticias', 'nav.contact': 'Contacto',
+                'news.empty': 'No hay noticias'
+            },
+            fr: {
+                'nav.home': 'Accueil', 'nav.properties': 'Propriétés', 'nav.news': 'Actualités', 'nav.contact': 'Contact',
+                'news.empty': 'Pas encore de nouvelles'
+            },
+            de: {
+                'nav.home': 'Start', 'nav.properties': 'Immobilien', 'nav.news': 'News', 'nav.contact': 'Kontakt',
+                'news.empty': 'Noch keine Nachrichten'
+            }
+        };
+        function setLang(lang){
+            const fallback = 'en';
+            const dict = I18N[lang] || I18N[fallback];
+            document.documentElement.lang = lang;
+            localStorage.setItem('mbi_lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el=>{
+                const key = el.getAttribute('data-i18n');
+                if(dict[key]) el.textContent = dict[key];
+            });
+            const label = {en:'English', es:'Español', fr:'Français', de:'Deutsch'}[lang] || 'English';
+            const flag = {en:'🇺🇸', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪'}[lang] || '🇺🇸';
+            const langBtn = document.getElementById('langBtn');
+            const langLabel = document.getElementById('langLabel');
+            if(langBtn){ 
+                langBtn.setAttribute('data-lang', lang); 
+                // Asegurar que siempre se muestre la bandera
+                langBtn.innerHTML = flag + ' <span id="langLabel">' + label + '</span>';
+                // Forzar el renderizado de emojis
+                langBtn.style.fontFamily = 'Arial, "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+            }
+            
+            // Update dropdown options for desktop SVG flags
+            if (window.innerWidth >= 768) {
+                document.querySelectorAll('.lang-option').forEach(option => {
+                    const langCode = option.getAttribute('data-lang');
+                    const labels = {en:'English', es:'Español', fr:'Français', de:'Deutsch'};
+                    option.innerHTML = labels[langCode] || 'English';
+                });
+            }
+            // actualizar textos vacíos
+            const empty = document.getElementById('newsEmpty');
+            if(empty){ empty.textContent = dict['news.empty'] || I18N[fallback]['news.empty']; }
+        }
+        function initLang(){
+            const saved = localStorage.getItem('mbi_lang') || 'en';
+            setLang(saved);
+            const btn = document.getElementById('langBtn');
+            const menu = document.getElementById('langMenu');
+            if(btn && menu){
+                btn.addEventListener('click', ()=> menu.classList.toggle('open'));
+                menu.querySelectorAll('.lang-option').forEach(opt=>{
+                    opt.addEventListener('click', ()=>{ setLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+                });
+                document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('open'); });
+            }
+        }
+
+        // Fuente de datos simple usando localStorage (clave: 'mbi_news_items')
+        function loadNewsLocal() {
+            try {
+                const raw = localStorage.getItem('mbi_news_items');
+                if (!raw) return [];
+                const arr = JSON.parse(raw);
+                return Array.isArray(arr) ? arr : [];
+            } catch (_) { return []; }
+        }
+
+        // Función para probar múltiples URLs
+        async function tryFetch(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                if (response.ok) {
+                    return response;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        async function loadNewsBackend() {
+            const urls = [
+                'https://mediterraneanbi.com:443/news',  // URL principal
+                'https://mediterraneanbi.com:3000/news'    // HTTP fallback
+            ];
+            
+            console.log('🔄 Intentando cargar noticias...');
+            
+            for (let i = 0; i < urls.length; i++) {
+                const url = urls[i];
+                console.log(`🔄 Intento ${i + 1}/3: ${url}`);
+                
+                try {
+                    const res = await tryFetch(url);
+                    const data = await res.json();
+                    console.log('✅ Noticias cargadas:', data.length, 'elementos');
+                    console.log('📋 Primera noticia:', data[0]);
+                    if (!Array.isArray(data)) throw new Error('Invalid payload');
+                    return data; // Éxito, devolver datos
+                } catch (error) {
+                    console.warn(`⚠️ URL ${i + 1} falló:`, error.message);
+                }
+            }
+            
+            // Si llegamos aquí, todas las URLs fallaron
+            console.error('❌ Todas las URLs de noticias fallaron');
+            return null;
+        }
+
+        async function renderNews() {
+            const list = document.getElementById('newsList');
+            const empty = document.getElementById('newsEmpty');
+            let items = await loadNewsBackend();
+            if (!items) items = loadNewsLocal();
+            list.innerHTML = '';
+            if (!items.length) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                if (item.link) {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => {
+                        window.open(item.link, '_blank', 'noopener,noreferrer');
+                    });
+                }
+                card.innerHTML = `
+                    <div class="news-title">${item.title || 'Untitled'}</div>
+                    ${item.image ? `<img class=\"news-image\" src=\"${item.image}\" alt=\"news image\">` : ''}
+                    ${item.description ? `<div class=\"news-desc\">${(item.description||'').replace(/\n/g,'<br>')}</div>` : ''}
+                    ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="news-link" onclick="event.stopPropagation();">${item.link}</a>` : ''}
+                    ${item.link ? `<div class="preview"><a class="mclink" href="${item.link}" target="_blank" rel="noopener"></a></div>` : ''}
+                `;
+                list.appendChild(card);
+            });
+            try { if (window.microlink) { window.microlink('.mclink'); } } catch (_) {}
+            try { await translateDynamicNews(); } catch (_) {}
+        }
+
+        // Traducción dinámica de contenido de noticias
+        function hashCode(str){ let h=0,i=0, len=str.length; while(i<len){ h=(h<<5)-h+str.charCodeAt(i++)|0; } return h.toString(); }
+        async function mtTranslate(text, to){
+            if(!text) return text;
+            const key='mbi_mt_'+to+'_'+hashCode(text);
+            const cached=localStorage.getItem(key); if(cached) return cached;
+            const candidates = ['en','es','fr','de'].filter(s=>s!==to);
+            let best = { out:text, score:-1 };
+            for(const src of candidates){
+                try{
+                    const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair='+encodeURIComponent(src+'|'+to);
+                    const res=await fetch(url);
+                    const json=await res.json();
+                    const out=(json&&json.responseData&&json.responseData.translatedText)?json.responseData.translatedText:text;
+                    const score = (json&&Array.isArray(json.matches)&&json.matches.length)? Math.max(...json.matches.map(m=>Number(m.match)||0)) : (Number(json.responseData.match)||0);
+                    if(score>best.score){ best={ out, score }; }
+                    if(best.score>=0.9) break; // suficientemente buena
+                }catch(_){}
+            }
+            localStorage.setItem(key,best.out);
+            return best.out;
+        }
+        async function translateDynamicNews(){ const lang=localStorage.getItem('mbi_lang')||'en'; if(lang==='en') return; const titles=[...document.querySelectorAll('.news-title')]; const descs=[...document.querySelectorAll('.news-desc')]; for(const el of titles){ el.textContent = await mtTranslate(el.textContent.trim(), lang); } for(const el of descs){ el.innerHTML = (await mtTranslate(el.textContent.trim(), lang)).replace(/\n/g,'<br>'); } }
+
+        document.addEventListener('DOMContentLoaded', ()=>{ initLang(); renderNews(); });
+        // Logo responsive: en móvil 3 palabras en la primera línea y el resto centrado debajo
+        (function responsiveLogo(){
+            function apply(){
+                document.querySelectorAll('.logo-text .logo-main').forEach(el=>{
+                    const isMobile = window.innerWidth <= 767;
+                    let original = el.getAttribute('data-original');
+                    if(!original){ original = (el.textContent||'').trim().replace(/\s+/g,' '); el.setAttribute('data-original', original); }
+                    if(isMobile){
+                        if(!el.querySelector('.logo-chunk')){
+                            const words = original.split(' ');
+                            const first = words.slice(0,3).join(' ');
+                            const rest = words.slice(3).join(' ');
+                            el.innerHTML = `<span class="logo-chunk">${first}</span>` + (rest ? ` <span class="logo-chunk last">${rest}</span>` : '');
+                        }
+                    } else {
+                        el.textContent = original;
+                    }
+                });
+            }
+            apply();
+            window.addEventListener('resize', apply);
+        })();
+        
+        (function legalAndCookies(){
+            const modal = document.getElementById('legalModal');
+            const closeBtn = document.getElementById('legalClose');
+            const tabs = Array.from(document.querySelectorAll('.legal-tab'));
+            const sections = {
+                aviso: document.getElementById('sec-aviso'),
+                terminos: document.getElementById('sec-terminos'),
+                cookies: document.getElementById('sec-cookies')
+            };
+            function openModal(section){
+                Object.values(sections).forEach(s=> s.hidden = true);
+                if(section && sections[section]) sections[section].hidden = false; else sections.aviso.hidden = false;
+                tabs.forEach(t=> t.classList.toggle('active', t.getAttribute('data-target') === (section||'aviso')));
+                modal.setAttribute('aria-hidden','false');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeModal(){
+                modal.setAttribute('aria-hidden','true');
+                document.body.style.overflow = '';
+            }
+            // Tabs internas
+            tabs.forEach(btn=> btn.addEventListener('click', ()=> openModal(btn.getAttribute('data-target'))));
+            // Cerrar
+            closeBtn?.addEventListener('click', closeModal);
+            modal?.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+            // Cookie banner: persistencia con localStorage + sincronización entre pestañas
+            const banner = document.getElementById('cookieBanner');
+            const accept = document.getElementById('cookieAccept');
+            const more = document.getElementById('cookieMore');
+            const cookieChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('mbi_cookie_channel') : null;
+            function hideCookie(){ banner.hidden = true; banner.style.display = 'none'; }
+            function showCookieBannerIfNeeded(){
+                try{
+                    const consent = localStorage.getItem('cookies_accepted');
+                    if(consent === 'true') {
+                        banner.hidden = true;
+                        banner.style.display = 'none';
+                    } else {
+                        banner.hidden = false;
+                    }
+                }catch(e){ 
+                    banner.hidden = false; 
+                }
+            }
+            function acceptCookies(){
+                try{ 
+                    localStorage.setItem('cookies_accepted', 'true');
+                    cookieChannel?.postMessage({type:'mbi_cookie_accept'});
+                    hideCookie();
+                }catch(e){
+                    console.error('Error saving cookie consent:', e);
+                }
+            }
+            cookieChannel?.addEventListener('message', (e)=>{
+                if(e?.data?.type === 'mbi_cookie_accept'){
+                    try{ localStorage.setItem('cookies_accepted', 'true'); }catch(e){}
+                    hideCookie();
+            }
+            });
+            accept?.addEventListener('click', acceptCookies);
+            more?.addEventListener('click', ()=> openModal('cookies'));
+            // Footer link opens cookies section
+            document.getElementById('footerLegalLink')?.addEventListener('click', (e)=>{ e.preventDefault(); openModal('cookies'); });
+            // Verificar inmediatamente al cargar
+            showCookieBannerIfNeeded();
+            
+            // También en DOMContentLoaded como respaldo
+            document.addEventListener('DOMContentLoaded', showCookieBannerIfNeeded);
+            
+            // Verificar también cuando la página se vuelve visible (cambio de pestaña)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    showCookieBannerIfNeeded();
+                }
+            });
+            // Exponer utilidad para otras páginas si hiciera falta
+            window.mbiOpenLegal = openModal;
+        })();
+    </script>
+    <script src="https://cdn.microlink.io/microlink.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediterranean Blue International | Iniciar sesión</title>
+    <style>
+        :root {
+            --primary-turquoise: #20B2AA; --dark-turquoise: #008B8B; --light-turquoise: #E0FFFF; --soft-turquoise: #B0E0E6; --pale-turquoise: #F0FFFF; --medium-turquoise: #48CAE4; --deep-turquoise: #007F7F; --white: #FFFFFF; --cream: #FDFDFD; --light-gray: #F8F9FA; --medium-gray: #E9ECEF; --text-gray: #495057; --dark-gray: #212529; --charcoal: #343A40; --header-bg: linear-gradient(135deg, var(--pale-turquoise) 0%, var(--light-turquoise) 50%, var(--soft-turquoise) 100%); --body-bg: linear-gradient(180deg, var(--pale-turquoise) 0%, var(--light-turquoise) 100%); --card-bg: var(--white);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif}
+        body{background:var(--body-bg);color:var(--text-gray);line-height:1.7;min-height:100vh}
+        header{display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:15px 20px;background:#fff !important;position:relative;z-index:100;max-height:230px;overflow:hidden}
+        .header-content{display:flex;flex-direction:row;align-items:center;justify-content:space-between;width:100%}
+        .logo-section{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;width:auto;height:200px;overflow:hidden}
+        .logo-graphic{position:relative;width:100%;max-width:400px;height:120px;background:transparent;display:flex;align-items:center;justify-content:center;padding:10px}
+        .semicircle{position:absolute;bottom:40px;left:0;width:100px;height:100px;border:5px solid var(--primary-turquoise);border-radius:50%;background:transparent;z-index:1}
+        .semicircle-underline{position:absolute;bottom:24px;left:8px;width:85px;height:5px;background-color:var(--primary-turquoise);border-radius:4px;z-index:1}
+        .horizon-line{position:absolute;bottom:40px;left:0;width:100%;height:5px;background-color:var(--primary-turquoise);border-top-left-radius:100px;border-top-right-radius:100px;z-index:1}
+        .logo-text{position:relative;z-index:2;margin-left:110px;display:flex;flex-direction:column;justify-content:center;height:100%;align-items:center;text-align:center}
+        .logo-main{font-size:1.1em;font-weight:700;color:var(--dark-turquoise);text-shadow:0 2px 4px rgba(255,255,255,.8);letter-spacing:-.5px;line-height:1.2}
+        .nav-section{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;width:100%;padding:10px 15px;background:transparent}
+        .nav-item{font-weight:600;cursor:pointer;color:var(--dark-turquoise);transition:all .4s ease;text-transform:uppercase;font-size:.85em;letter-spacing:1.2px;padding:10px 18px;text-decoration:none;border-radius:8px;background:var(--white);box-shadow:0 2px 8px rgba(32,178,170,.2);border:2px solid var(--primary-turquoise)}
+        .nav-item:hover{color:#fff;background:linear-gradient(135deg,var(--primary-turquoise) 0%,var(--dark-turquoise) 100%);transform:translateY(-3px);box-shadow:0 6px 20px rgba(32,178,170,.4);border-color:var(--dark-turquoise)}
+        .nav-item.active{background:linear-gradient(135deg,var(--primary-turquoise) 0%,var(--dark-turquoise) 100%);color:#fff;box-shadow:0 4px 12px rgba(32,178,170,.3)}
+        .page-container{max-width:1200px;margin:40px auto;padding:0 20px}
+        .card{background:var(--card-bg);border:1px solid var(--medium-gray);border-radius:12px;box-shadow:0 10px 30px rgba(32,178,170,.08);padding:26px;max-width:520px;margin:0 auto}
+        .card h1{color:var(--dark-turquoise);font-size:1.6em;margin-bottom:14px;letter-spacing:-.3px}
+        .lead{color:var(--charcoal);margin-bottom:14px}
+        .form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+        .form-row label{font-weight:700;color:var(--charcoal)}
+        .form-input{width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--medium-gray);outline:none;transition:border-color .2s ease,box-shadow .2s ease;font-size:1em}
+        .form-input:focus{border-color:var(--primary-turquoise);box-shadow:0 0 0 3px rgba(32,178,170,.15)}
+        .submit-btn{display:inline-block;padding:12px 24px;background:linear-gradient(135deg,var(--primary-turquoise) 0%,var(--dark-turquoise) 100%);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;letter-spacing:1.1px;box-shadow:0 4px 15px rgba(32,178,170,.3)}
+        .submit-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(32,178,170,.4)}
+        .error{color:#a60000;background:#ffeaea;border:1px solid #ffb3b3;padding:8px 10px;border-radius:8px;display:none}
+        .aux-links{margin-top:10px;font-size:.95em}
+        .aux-links a{color:var(--dark-turquoise);text-decoration:underline;font-weight:700}
+        /* Cookie Banner */
+        .cookie-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,var(--dark-turquoise) 0%,var(--deep-turquoise) 100%);color:#fff;padding:15px 20px;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,.3);display:none}
+        .cookie-banner.show{display:block}
+        .cookie-content{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;gap:15px}
+        .cookie-text{flex:1;font-size:.9em;line-height:1.4}
+        .cookie-buttons{display:flex;gap:10px}
+        .cookie-btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:.85em;transition:all .3s ease}
+        .cookie-accept{background:#fff;color:var(--dark-turquoise)}
+        .cookie-accept:hover{background:var(--light-turquoise);transform:translateY(-1px)}
+        .cookie-decline{background:transparent;color:#fff;border:1px solid #fff}
+        .cookie-decline:hover{background:rgba(255,255,255,.1)}
+        @media (max-width:767px){.cookie-content{flex-direction:column;text-align:center}.cookie-buttons{justify-content:center}}
+        footer{background:linear-gradient(135deg,var(--dark-turquoise) 0%,var(--deep-turquoise) 100%);color:#fff;padding:25px 0;text-align:center;font-size:.85em;box-shadow:0 -2px 10px rgba(32,178,170,.1)}
+        @media (max-width:767px){header{padding:12px 14px}.logo-graphic{transform:scale(.85);transform-origin:left center}.nav-section{gap:8px;padding:8px 10px}.nav-item{font-size:.75em;padding:6px 10px}.page-container{margin:28px auto;padding:0 14px}.card{padding:20px}}
+    </style>
+    <script>
+        // Base API detrás de Nginx
+        const API_BASE = window.location.origin + '/api';
+        const NEON_LOGIN_API = API_BASE + '/login';
+
+        function initLogin(){
+            const form = document.getElementById('loginForm');
+            const error = document.getElementById('formError');
+            form.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                error.style.display='none';
+                const username = document.getElementById('user').value.trim();
+                const password = document.getElementById('password').value;
+                if(!username || !password){ error.textContent='Introduce usuario y contraseña.'; error.style.display='block'; return; }
+                try{
+                    const res = await fetch(NEON_LOGIN_API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+                    if(!res.ok){ throw new Error('Credenciales inválidas'); }
+                    const data = await res.json().catch(()=>({}));
+                    // Guarda sesión (token/flag) y redirige
+                    localStorage.setItem('mbi_session', JSON.stringify({ username, token: data.token || 'ok', ts: Date.now() }));
+                    // Cookie para que Nginx permita admin
+                    document.cookie = 'mbi_session=1; Path=/; Max-Age=86400; Secure; SameSite=Lax';
+                    // Redirección con soporte de parámetro ?next
+                    const params = new URLSearchParams(window.location.search);
+                    const next = params.get('next') || 'casasAdmin.html';
+                    const target = new URL(next, window.location.href).toString();
+                    console.log('Login OK, redirigiendo a:', target);
+                    window.location.assign(target);
+                    setTimeout(()=>{ if (window.location.href.indexOf('casasAdmin.html') === -1) { window.location.href = target; } }, 200);
+                }catch(err){ error.textContent = err.message || 'Error al iniciar sesión'; error.style.display='block'; }
+            });
+        }
+        // Cookie Banner
+        function initCookieBanner(){
+            const banner = document.getElementById('cookieBanner');
+            if (!banner) return;
+            
+            // Mostrar si no hay consentimiento previo
+            if (localStorage.getItem('cookies_accepted') !== 'true') {
+                banner.classList.add('show');
+            } else {
+                banner.classList.remove('show');
+            }
+            
+            // Aceptar cookies
+            document.getElementById('acceptCookies')?.addEventListener('click', ()=>{
+                localStorage.setItem('cookies_accepted', 'true');
+                banner.classList.remove('show');
+            });
+            
+            // Rechazar cookies
+            document.getElementById('declineCookies')?.addEventListener('click', ()=>{
+                localStorage.setItem('cookie_consent', 'declined');
+                banner.classList.remove('show');
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', ()=>{
+            initLogin();
+            initCookieBanner();
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-graphic">
+                    <div class="semicircle"></div>
+                    <div class="semicircle-underline"></div>
+                    <div class="horizon-line"></div>
+                    <div class="logo-text"><div class="logo-main">Mediterranean Blue International LLC Realty</div></div>
+                </div>
+            </div>
+            <div class="nav-section">
+                <a href="home.html" class="nav-item" data-i18n="nav.home">Home</a>
+                <a href="casas.html" class="nav-item" data-i18n="nav.properties">Properties</a>
+                <a href="news.html" class="nav-item" data-i18n="nav.news">News</a>
+                <a href="Contact.html" class="nav-item" data-i18n="nav.contact">Contact</a>
+                <a href="login.html" class="nav-item active">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <div class="card" role="form" aria-labelledby="loginTitle">
+            <h1 id="loginTitle">Iniciar sesión</h1>
+            <p class="lead">Accede con tu usuario y contraseña.</p>
+            <div id="formError" class="error" role="alert"></div>
+            <form id="loginForm" novalidate>
+                <div class="form-row">
+                    <label for="user">Usuario (id)</label>
+                    <input id="user" type="text" class="form-input" autocomplete="username" placeholder="Tu usuario" required>
+                </div>
+                <div class="form-row">
+                    <label for="password">Contraseña</label>
+                    <input id="password" type="password" class="form-input" autocomplete="current-password" placeholder="Tu contraseña" required>
+                </div>
+                <button type="submit" class="submit-btn">Entrar</button>
+            </form>
+            <div class="aux-links" style="margin-top:12px">¿Olvidaste la contraseña? <a href="#" onclick="alert('Contacta con soporte.'); return false;">Contacta con soporte</a></div>
+        </div>
+    </main>
+
+    <footer>
+        © 2023 Mediterranean Blue International LLC. All rights reserved.
+        <br>
+        <a href="https://www.RXDev.com/es" target="_blank" style="color: var(--white); text-decoration: underline; margin-top: 10px; display: inline-block;">@https://www.RXDev.com/es</a>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                🍪 Utilizamos cookies para mejorar tu experiencia en nuestro sitio web. Al continuar navegando, aceptas nuestro uso de cookies.
+            </div>
+            <div class="cookie-buttons">
+                <button id="acceptCookies" class="cookie-btn cookie-accept">Aceptar</button>
+                <button id="declineCookies" class="cookie-btn cookie-decline">Rechazar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
