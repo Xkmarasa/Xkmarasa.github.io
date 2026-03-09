@@ -1,24 +1,37 @@
+require('dotenv').config();
 const { Pool } = require('pg');
 
 // =============================================================================
-// ⚠️ IMPORTANTE: NO BORRAR - Connection String anterior (Neon US - nuevo)
+// CONFIGURACIÓN DE BASE DE DATOS - NEON
 // =============================================================================
-// const pool = new Pool({
-//   connectionString: "postgresql://neondb_owner:npg_oiAv5KWEBXO0@ep-quiet-wind-abn3d35x-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-//   ssl: {
-//     rejectUnauthorized: false,
-//     searchPath: ['public', 'neondb']
-//   },
-// });
+//
+// Para desarrollo local: usa el archivo .env
+// Para producción (Render): configura las variables en el dashboard de Render
+//
+// Variables necesarias:
+// - DATABASE_URL: Connection string completa de Neon
 // =============================================================================
-// ⚠️ IMPORTANTE: NO BORRAR - Connection String anterior (Neon EU - tiene los datos)
-// =============================================================================
+
+// Determinar si estamos en producción (Render)
+const isProduction = process.env.RENDER || process.env.NODE_ENV === 'production';
+
 const pool = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_7Hzmx4YIwdin@ep-orange-heart-adbyxiqq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-  ssl: {
-    rejectUnauthorized: false,
-    searchPath: ['public', 'neondb']
-  },
+  connectionString: process.env.DATABASE_URL,
+  ssl: isProduction ? {
+    rejectUnauthorized: true
+  } : {
+    rejectUnauthorized: false
+  }
 });
+
+// Manejo de errores de conexión
+pool.on('error', (err) => {
+  console.error('Error inesperado en la conexión a la base de datos:', err);
+});
+
+// Verificar conexión al iniciar
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ Conexión a Neon establecida correctamente'))
+  .catch((err) => console.error('❌ Error al conectar con la base de datos:', err));
 
 module.exports = pool;
