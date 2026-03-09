@@ -20,7 +20,8 @@ const FILES = {
   platos_combinados: 'platos_combinados.json',
   postres: 'postres.json',
   refrescos: 'refrescos.json',
-  sandwich: 'sandwich.json'
+  sandwich: 'sandwich.json',
+  usuarios: 'usuarios.json'
 };
 
 async function clearTable(tableName) {
@@ -53,18 +54,35 @@ async function importTable(tableName, filename) {
 
     // Insertar cada registro
     for (const row of data) {
+      // Manejo especial para la tabla usuarios
+      if (tableName === 'usuarios') {
+        const { Usuario, contrasena } = row;
+        await pool.query(
+          `INSERT INTO ${tableName} ("Usuario", "contrasena") VALUES ($1, $2) RETURNING *`,
+          [Usuario, contrasena]
+        );
+        continue;
+      }
+      
       // Extraer campos - el esquema real tiene: id, price, name, por_unidad
       const { id, name, price, por_unidad, description, image, ...extra } = row;
       
+      // Convertir price a número o null
+      let priceValue = null;
+      if (price !== null && price !== undefined && price !== '') {
+        priceValue = parseFloat(price);
+        if (isNaN(priceValue)) priceValue = null;
+      }
+      
       let query, params;
       
-      // Todos los registros tienen name y price
+      // Todos los registros tienen name y price puede ser null
       if (por_unidad !== undefined) {
         query = `INSERT INTO ${tableName} (name, price, por_unidad) VALUES ($1, $2, $3) RETURNING *`;
-        params = [name, price, por_unidad];
+        params = [name, priceValue, por_unidad];
       } else {
         query = `INSERT INTO ${tableName} (name, price) VALUES ($1, $2) RETURNING *`;
-        params = [name, price];
+        params = [name, priceValue];
       }
       
       await pool.query(query, params);
