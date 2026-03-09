@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "price": 15,
+    "name": "CHIPIRONES CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "2",
+    "price": 16,
+    "name": "CORDERO CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "3",
+    "price": 15,
+    "name": "EMPERADOR CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "4",
+    "price": 18,
+    "name": "ENTRECOT CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "5",
+    "price": 9,
+    "name": "LOMO CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "6",
+    "price": 9,
+    "name": "PECHUGA CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "7",
+    "price": 15,
+    "name": "SEPIA CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": "8",
+    "price": 11,
+    "name": "TERNERA CON GUARNICIÓN",
+    "image": null,
+    "por_unidad": false
+  }
+]

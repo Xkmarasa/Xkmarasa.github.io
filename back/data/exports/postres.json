@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "price": 6.5,
+    "name": "BROWNIE CON HELADO DE VAINILLA",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 2,
+    "price": 4.5,
+    "name": "COULANT BLANCO",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 4.5,
+    "name": "COULANT NEGRO",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": 4.5,
+    "name": "TARTA KINDER",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 4.5,
+    "name": "TARTA LOTUS",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 6,
+    "price": 4.5,
+    "name": "TARTA CONTESA",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 7,
+    "price": 321,
+    "name": "32",
+    "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    "por_unidad": false
+  }
+]

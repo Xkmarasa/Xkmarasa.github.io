@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "price": 2,
+    "name": "AQUARIUS NARANJA",
+    "por_unidad": false
+  },
+  {
+    "id": 2,
+    "price": 2,
+    "name": "AQUARIUS LIMÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 2,
+    "name": "BITTER",
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": 2,
+    "name": "CHOLECK CHOCOLATE",
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 2,
+    "name": "COCACOLA",
+    "por_unidad": false
+  },
+  {
+    "id": 6,
+    "price": 2,
+    "name": "COCACOLA ZERO",
+    "por_unidad": false
+  },
+  {
+    "id": 7,
+    "price": 2,
+    "name": "COCACOLA ZERO ZERO",
+    "por_unidad": false
+  },
+  {
+    "id": 8,
+    "price": 2,
+    "name": "FANTA LIMÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 9,
+    "price": 2,
+    "name": "FANTA NARANJA",
+    "por_unidad": false
+  },
+  {
+    "id": 10,
+    "price": 1.5,
+    "name": "GASEOSA",
+    "por_unidad": false
+  },
+  {
+    "id": 11,
+    "price": 2,
+    "name": "LADRÓN DE MANZANAS",
+    "por_unidad": false
+  },
+  {
+    "id": 12,
+    "price": 2,
+    "name": "NESTEA",
+    "por_unidad": false
+  },
+  {
+    "id": 13,
+    "price": 2.5,
+    "name": "RED BULL",
+    "por_unidad": false
+  },
+  {
+    "id": 14,
+    "price": 2,
+    "name": "SEVEN UP",
+    "por_unidad": false
+  },
+  {
+    "id": 15,
+    "price": 2,
+    "name": "TINTO DE VERANO",
+    "por_unidad": false
+  },
+  {
+    "id": 16,
+    "price": 2,
+    "name": "TÓNICA SUSE EPS LIMÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 17,
+    "price": 2,
+    "name": "Zumo MELOCOTÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 18,
+    "price": 2,
+    "name": "Zumo PIÑA",
+    "por_unidad": false
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "price": null,
+    "description": "HAMBURGUESA ANGUS, MAYORESA, LECHUGA, TOMATE, QUESO Y HUEVO. (PAN BRIOCHE)",
+    "name": "DE LA CASA",
+    "image": null
+  },
+  {
+    "id": 2,
+    "price": null,
+    "description": "HAMBURGUESA DE POLLO REBOZADO, SALSA CASTELLÓ, RÚCULA, TOMATE Y QUESO. (PAN BRIOCHE)",
+    "name": "CASTELLÓ",
+    "image": null
+  },
+  {
+    "id": 3,
+    "price": "5.50",
+    "description": "HAMBURGUESA Y QUESO",
+    "name": "INFANTIL",
+    "image": null
+  }
+]

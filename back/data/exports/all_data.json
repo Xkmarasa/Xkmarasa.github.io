@@ -1,0 +1,751 @@
+{
+  "tapas": [
+    {
+      "id": 2,
+      "price": 2,
+      "name": "BROCHETA DE SECRETO CON BOLETUS (4 UNIDADES)",
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 9.5,
+      "name": "CALAMAR",
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 7.5,
+      "name": "CHAMPIÑÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 13.5,
+      "name": "CHIPIRÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 9,
+      "name": "CLOCHINA",
+      "por_unidad": false
+    },
+    {
+      "id": 8,
+      "price": 17,
+      "name": "ENTRECOT TRINCHADO",
+      "por_unidad": false
+    },
+    {
+      "id": 9,
+      "price": 9.5,
+      "name": "FINGERS POLLO",
+      "por_unidad": false
+    },
+    {
+      "id": 10,
+      "price": 1.8,
+      "name": "FINGERS QUESO (4 UNIDADES)",
+      "por_unidad": false
+    },
+    {
+      "id": 11,
+      "price": 14,
+      "name": "FRITURA DE MAR",
+      "por_unidad": false
+    },
+    {
+      "id": 12,
+      "price": 14,
+      "name": "GAMBA ALISTADA",
+      "por_unidad": false
+    },
+    {
+      "id": 13,
+      "price": 12,
+      "name": "HUEVAS",
+      "por_unidad": false
+    },
+    {
+      "id": 14,
+      "price": 9.5,
+      "name": "HUEVOS ROTOS JAMÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 15,
+      "price": 7.5,
+      "name": "MORRO",
+      "por_unidad": false
+    },
+    {
+      "id": 16,
+      "price": 3.5,
+      "name": "PAN, TOMATE Y ALLIOLI",
+      "por_unidad": false
+    },
+    {
+      "id": 17,
+      "price": 2,
+      "name": "PINCHO MORUNO",
+      "por_unidad": false
+    },
+    {
+      "id": 18,
+      "price": 1.5,
+      "name": "PIRULETA DE GAMBA (4 UNIDADES)",
+      "por_unidad": false
+    },
+    {
+      "id": 19,
+      "price": 10,
+      "name": "PUNTILLA",
+      "por_unidad": false
+    },
+    {
+      "id": 20,
+      "price": 12,
+      "name": "QUISQUILLA",
+      "por_unidad": false
+    },
+    {
+      "id": 21,
+      "price": 7.5,
+      "name": "RABA CALAMAR",
+      "por_unidad": false
+    },
+    {
+      "id": 22,
+      "price": 13,
+      "name": "SEPIA",
+      "por_unidad": false
+    },
+    {
+      "id": 23,
+      "price": 10,
+      "name": "TELLINAS",
+      "por_unidad": false
+    },
+    {
+      "id": 7,
+      "price": 0.7,
+      "name": "CROQUETA DE PUCHERO (4 UNIDADES)",
+      "por_unidad": false
+    },
+    {
+      "id": 1,
+      "price": 7.5,
+      "name": "BRAVAS CASTELLÓ (SALSA CASTELLÓ)",
+      "por_unidad": false
+    }
+  ],
+  "hamburguesas": [
+    {
+      "id": 1,
+      "price": null,
+      "description": "HAMBURGUESA ANGUS, MAYORESA, LECHUGA, TOMATE, QUESO Y HUEVO. (PAN BRIOCHE)",
+      "name": "DE LA CASA",
+      "image": null
+    },
+    {
+      "id": 2,
+      "price": null,
+      "description": "HAMBURGUESA DE POLLO REBOZADO, SALSA CASTELLÓ, RÚCULA, TOMATE Y QUESO. (PAN BRIOCHE)",
+      "name": "CASTELLÓ",
+      "image": null
+    },
+    {
+      "id": 3,
+      "price": "5.50",
+      "description": "HAMBURGUESA Y QUESO",
+      "name": "INFANTIL",
+      "image": null
+    }
+  ],
+  "bocadillos": [
+    {
+      "id": 2,
+      "price": 7.5,
+      "description": "PECHUGA REBOZADA, CEBOLLA, QUESO BRIE Y TORTILLADA APARTE",
+      "name": "ÁLVARO",
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 7,
+      "description": "LOMO, CEBOLLA, JAMÓN, PICADILLO Y QUESO DE CABRA",
+      "name": "BENIFAVÓ",
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 6.5,
+      "description": "CEBOLLA, TERNERA Y JAMÓN",
+      "name": "BRASCADA",
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 7.5,
+      "description": null,
+      "name": "CALAMARES A LA ROMANA",
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 5,
+      "description": "Tomate y Jamón",
+      "name": "CATALANA",
+      "por_unidad": false
+    },
+    {
+      "id": 7,
+      "price": 7.5,
+      "description": null,
+      "name": "CHIPIRONES",
+      "por_unidad": false
+    },
+    {
+      "id": 8,
+      "price": 7,
+      "description": "MAYONESA, LECHUGA, TOMATE, LOMO, QUESO, BACON Y HUEVO",
+      "name": "CHIVITO",
+      "por_unidad": false
+    },
+    {
+      "id": 9,
+      "price": 7.5,
+      "description": "TOMATE, CEBOLLA, QUESO CURADO, TERNERA Y JAMÓN A LA PLANCHA",
+      "name": "DE LA CASA",
+      "por_unidad": false
+    },
+    {
+      "id": 10,
+      "price": 6,
+      "description": "TORTILLA A LA FRANCESA CON LONGANIZA",
+      "name": "FRANCESA",
+      "por_unidad": false
+    },
+    {
+      "id": 11,
+      "price": 7,
+      "description": "PECHUGA, PIMIENTO, QUESO CURADO Y HUEVO",
+      "name": "MELÓ",
+      "por_unidad": false
+    },
+    {
+      "id": 12,
+      "price": 7,
+      "description": "HABAS Y EMBUTIDO",
+      "name": "PRADO",
+      "por_unidad": false
+    },
+    {
+      "id": 13,
+      "price": 7.5,
+      "description": null,
+      "name": "PUNTILLA",
+      "por_unidad": false
+    },
+    {
+      "id": 14,
+      "price": 6.5,
+      "description": "PISTO Y EMBUTIDO",
+      "name": "RANCHO",
+      "por_unidad": false
+    },
+    {
+      "id": 15,
+      "price": 6,
+      "description": null,
+      "name": "RABA DE CALAMAR",
+      "por_unidad": false
+    },
+    {
+      "id": 16,
+      "price": 7,
+      "description": "SOLOMILLO, CEBOLLA Y QUESO BRIE",
+      "name": "CASTELLÓ",
+      "por_unidad": false
+    },
+    {
+      "id": 17,
+      "price": 8,
+      "description": null,
+      "name": "SEPIA",
+      "por_unidad": false
+    },
+    {
+      "id": 18,
+      "price": 6.5,
+      "description": "MAYONESA, TOMATE, ATÚN, HUEVO DURO Y ESPÁRRAGOS BLANCOS",
+      "name": "VEGETAL",
+      "por_unidad": false
+    },
+    {
+      "id": 1,
+      "price": 6,
+      "description": "FRANCESA DE QUESO, SOBRASADA Y BACON",
+      "name": "ALMUSSAFES",
+      "por_unidad": false
+    }
+  ],
+  "cervezas": [
+    {
+      "id": 1,
+      "price": 1.3,
+      "name": "CAÑA",
+      "type": "Tirador",
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": 1.5,
+      "name": "CAÑA FRÍA",
+      "type": "Tirador",
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 2,
+      "name": "DOBLE",
+      "type": "Tirador",
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 2.5,
+      "name": "TANQUE",
+      "type": "Tirador",
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 1.3,
+      "name": "QUINTO ALHAMBRA",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 1.3,
+      "name": "QUINTO SAN MIGUEL",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 7,
+      "price": 2,
+      "name": "TERCIO ALHAMBRA",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 8,
+      "price": 2,
+      "name": "TERCIO AMSTEL",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 9,
+      "price": 2,
+      "name": "TERCIO MAHOU",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 10,
+      "price": 2,
+      "name": "TERCIO SAN MIGUEL",
+      "type": "Botellín",
+      "por_unidad": false
+    },
+    {
+      "id": 11,
+      "price": 2.5,
+      "name": "TERCIO ALHAMBRA VERDE",
+      "type": "Especial",
+      "por_unidad": false
+    },
+    {
+      "id": 12,
+      "price": 2.5,
+      "name": "TERCIO AMSTEL ORO",
+      "type": "Especial",
+      "por_unidad": false
+    },
+    {
+      "id": 13,
+      "price": 2.5,
+      "name": "TERCIO DESPERADOS",
+      "type": "Especial",
+      "por_unidad": false
+    },
+    {
+      "id": 14,
+      "price": 2.5,
+      "name": "TERCIO HEINEKEN",
+      "type": "Especial",
+      "por_unidad": false
+    },
+    {
+      "id": 15,
+      "price": 1.5,
+      "name": "BOTE",
+      "type": "Otros",
+      "por_unidad": false
+    },
+    {
+      "id": 16,
+      "price": 6,
+      "name": "JARRA",
+      "type": "Otros",
+      "por_unidad": false
+    },
+    {
+      "id": 17,
+      "price": 3.5,
+      "name": "LITRONA",
+      "type": "Otros",
+      "por_unidad": false
+    }
+  ],
+  "ensaladas": [
+    {
+      "id": 1,
+      "price": null,
+      "description": "LECHUGA, TOMATE, CEBOLLA, ATÚN, HUEVO Y ACEITUNAS",
+      "name": "VALENCIANA",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": null,
+      "description": "LECHUGA, TOMATE, CEBOLLA CRUJIENTE, QUESO, PECHUGA A LA PLANCHA, PICATOSTES Y ACEITUNAS. (SALSA CÉSAR)",
+      "name": "CÉSAR",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": null,
+      "description": "MIX LECHUGA, CEBOLLA CRUJIENTE, POLLO MARINADO, NUECES, PASAS, QUESO DE CABRA, REMOLACHA, TOMATE DESHIDRATADO, ESPÁRRAGO BLANCO Y ALIÑADO.",
+      "name": "CASTELLÓ",
+      "image": null,
+      "por_unidad": false
+    }
+  ],
+  "menu_infantil": [
+    {
+      "id": 1,
+      "price": 4.5,
+      "name": "Longaniza con Patatas",
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": 4.5,
+      "name": "Nuggets con Patatas",
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 5.5,
+      "name": "Hamburguesa con Patatas",
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 4.5,
+      "name": "Sándwich Mixto con Patatas",
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 6.5,
+      "name": "Calamares a la Romana con Patatas",
+      "por_unidad": false
+    }
+  ],
+  "platos_combinados": [
+    {
+      "id": "1",
+      "price": 15,
+      "name": "CHIPIRONES CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "2",
+      "price": 16,
+      "name": "CORDERO CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "3",
+      "price": 15,
+      "name": "EMPERADOR CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "4",
+      "price": 18,
+      "name": "ENTRECOT CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "5",
+      "price": 9,
+      "name": "LOMO CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "6",
+      "price": 9,
+      "name": "PECHUGA CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "7",
+      "price": 15,
+      "name": "SEPIA CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": "8",
+      "price": 11,
+      "name": "TERNERA CON GUARNICIÓN",
+      "image": null,
+      "por_unidad": false
+    }
+  ],
+  "postres": [
+    {
+      "id": 1,
+      "price": 6.5,
+      "name": "BROWNIE CON HELADO DE VAINILLA",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": 4.5,
+      "name": "COULANT BLANCO",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 4.5,
+      "name": "COULANT NEGRO",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 4.5,
+      "name": "TARTA KINDER",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 4.5,
+      "name": "TARTA LOTUS",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 4.5,
+      "name": "TARTA CONTESA",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 7,
+      "price": 321,
+      "name": "32",
+      "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "por_unidad": false
+    }
+  ],
+  "refrescos": [
+    {
+      "id": 1,
+      "price": 2,
+      "name": "AQUARIUS NARANJA",
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": 2,
+      "name": "AQUARIUS LIMÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 2,
+      "name": "BITTER",
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": 2,
+      "name": "CHOLECK CHOCOLATE",
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 2,
+      "name": "COCACOLA",
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 2,
+      "name": "COCACOLA ZERO",
+      "por_unidad": false
+    },
+    {
+      "id": 7,
+      "price": 2,
+      "name": "COCACOLA ZERO ZERO",
+      "por_unidad": false
+    },
+    {
+      "id": 8,
+      "price": 2,
+      "name": "FANTA LIMÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 9,
+      "price": 2,
+      "name": "FANTA NARANJA",
+      "por_unidad": false
+    },
+    {
+      "id": 10,
+      "price": 1.5,
+      "name": "GASEOSA",
+      "por_unidad": false
+    },
+    {
+      "id": 11,
+      "price": 2,
+      "name": "LADRÓN DE MANZANAS",
+      "por_unidad": false
+    },
+    {
+      "id": 12,
+      "price": 2,
+      "name": "NESTEA",
+      "por_unidad": false
+    },
+    {
+      "id": 13,
+      "price": 2.5,
+      "name": "RED BULL",
+      "por_unidad": false
+    },
+    {
+      "id": 14,
+      "price": 2,
+      "name": "SEVEN UP",
+      "por_unidad": false
+    },
+    {
+      "id": 15,
+      "price": 2,
+      "name": "TINTO DE VERANO",
+      "por_unidad": false
+    },
+    {
+      "id": 16,
+      "price": 2,
+      "name": "TÓNICA SUSE EPS LIMÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 17,
+      "price": 2,
+      "name": "Zumo MELOCOTÓN",
+      "por_unidad": false
+    },
+    {
+      "id": 18,
+      "price": 2,
+      "name": "Zumo PIÑA",
+      "por_unidad": false
+    }
+  ],
+  "sandwich": [
+    {
+      "id": 1,
+      "price": null,
+      "description": "LECHUGA, TOMATE, ATÚN, QUESO, HUEVO Y ESPÁRRAGO BLANCO Y MAYORESA.",
+      "name": "VEGETAL",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 2,
+      "price": 3,
+      "description": "JAMÓN YORK Y QUESO",
+      "name": "MIXTO",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 3,
+      "price": 7,
+      "description": "MAYORESA, TOMATE, SOLOMILLO, QUESO, JAMÓN Y HUEVO. (PAN BRIOCHE)",
+      "name": "CASTELLÓ",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 4,
+      "price": null,
+      "description": "LECHUGA, TOMATE, ATÚN, QUESO, HUEVO Y ESPÁRRAGO BLANCO Y MAYORESA.",
+      "name": "VEGETAL",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 5,
+      "price": 3,
+      "description": "JAMÓN YORK Y QUESO",
+      "name": "MIXTO",
+      "image": null,
+      "por_unidad": false
+    },
+    {
+      "id": 6,
+      "price": 7,
+      "description": "MAYORESA, TOMATE, SOLOMILLO, QUESO, JAMÓN Y HUEVO. (PAN BRIOCHE)",
+      "name": "CASTELLÓ",
+      "image": null,
+      "por_unidad": false
+    }
+  ],
+  "usuarios": [
+    {
+      "Usuario": "Alvaro",
+      "contrasena": "Facha"
+    },
+    {
+      "Usuario": "XK",
+      "contrasena": "King"
+    }
+  ]
+}

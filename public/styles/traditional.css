@@ -1,0 +1,502 @@
+/* ========================================
+   BAR CASTELLÓ - Estilo Tradicional Español
+   Diseño de taberna/restaurante español auténtico
+   ======================================== */
+
+/* ===== TEXTURAS TRADICIONALES ===== */
+body {
+    background-color: var(--light-cream);
+    background-image: 
+        radial-gradient(ellipse at top left, rgba(90, 45, 7, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(123, 79, 44, 0.03) 0%, transparent 50%);
+}
+
+/* ===== ELEMENTOS DECORATIVOS TRADICIONALES ===== */
+.traditional-ornament {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+    color: var(--accent-gold);
+    font-size: 1.5rem;
+    letter-spacing: 15px;
+}
+
+.traditional-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: var(--spacing-lg) 0;
+}
+
+.traditional-divider::before,
+.traditional-divider::after {
+    content: '';
+    height: 1px;
+    width: 100px;
+    background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+}
+
+.traditional-divider .ornament-icon {
+    color: var(--accent-gold);
+    font-size: 1.2rem;
+}
+
+/* ===== CABECERA ESPECIAL ===== */
+.hero-section {
+    position: relative;
+    padding: var(--spacing-xxl) var(--spacing-md);
+    background: linear-gradient(135deg, var(--primary-brown) 0%, #3d1e02 100%);
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #ffffff;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--accent-gold);
+    font-style: italic;
+}
+
+/* ===== SECCIÓN BIENVENIDA ===== */
+.welcome-section {
+    background: linear-gradient(to bottom, #ffffff, var(--cream));
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xxl);
+    margin: var(--spacing-xl) auto;
+    max-width: 1000px;
+    box-shadow: var(--shadow-medium);
+    position: relative;
+}
+
+.welcome-section::before {
+    content: '❧';
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 2rem;
+    color: var(--accent-gold);
+    opacity: 0.5;
+}
+
+.welcome-section::after {
+    content: '❧';
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 2rem;
+    color: var(--accent-gold);
+    opacity: 0.5;
+    transform: rotate(180deg);
+}
+
+.welcome-title {
+    font-size: 2.8rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.welcome-text {
+    font-size: 1.1rem;
+    color: var(--medium-text);
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+/* ===== TARJETAS DE MENÚ CON IMAGEN ===== */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.menu-card {
+    background: #ffffff;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-normal);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.menu-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+    border-color: var(--accent-gold);
+}
+
+.menu-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.menu-card-body {
+    padding: var(--spacing-md);
+}
+
+.menu-card-title {
+    font-size: 1.3rem;
+    color: var(--primary-brown);
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-card-price {
+    color: var(--accent-gold);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.menu-card-description {
+    font-size: 0.9rem;
+    color: var(--medium-text);
+    line-height: 1.5;
+}
+
+/* ===== LISTA DE MENÚ SIMPLE ===== */
+.simple-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.simple-menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px dashed rgba(90, 45, 7, 0.2);
+    transition: all var(--transition-fast);
+}
+
+.simple-menu-item:hover {
+    background-color: var(--cream);
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    margin-left: calc(-1 * var(--spacing-sm));
+    margin-right: calc(-1 * var(--spacing-sm));
+}
+
+.simple-menu-item:last-child {
+    border-bottom: none;
+}
+
+.simple-menu-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--dark-text);
+}
+
+.simple-menu-price {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--primary-brown);
+}
+
+/* ===== CATEGORÍAS CON ICONOS ===== */
+.category-card {
+    background: linear-gradient(145deg, #ffffff, var(--cream));
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--accent-gold);
+}
+
+.category-card-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.category-card-title {
+    font-size: 1.4rem;
+    color: var(--primary-brown);
+    margin-bottom: var(--spacing-xs);
+}
+
+.category-card-count {
+    font-size: 0.9rem;
+    color: var(--medium-text);
+}
+
+/* ===== INSIGNIAS Y ETIQUETAS ===== */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-gold {
+    background-color: var(--accent-gold);
+    color: var(--primary-brown);
+}
+
+.badge-brown {
+    background-color: var(--primary-brown);
+    color: #ffffff;
+}
+
+.badge-red {
+    background-color: var(--wine-red);
+    color: #ffffff;
+}
+
+.badge-green {
+    background-color: var(--olive-green);
+    color: #ffffff;
+}
+
+/* ===== ELEMENTOS ESPECIALES ===== */
+.special-box {
+    background: linear-gradient(135deg, var(--primary-brown), #3d1e02);
+    color: #ffffff;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    margin: var(--spacing-lg) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.special-box::before {
+    content: '★';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+    opacity: 0.5;
+}
+
+.special-box::after {
+    content: '★';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+    opacity: 0.5;
+}
+
+.special-box-title {
+    color: var(--accent-gold);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.special-box-text {
+    color: var(--cream);
+    margin: 0;
+}
+
+/* ===== PRECIOS ESPECIALES ===== */
+.price-tag {
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+    color: var(--primary-brown);
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+/* ===== CONTACTO Y LOCALIZACIÓN ===== */
+.contact-section {
+    background-color: #ffffff;
+    padding: var(--spacing-xxl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-medium);
+    margin-top: var(--spacing-xl);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.contact-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.contact-details h4 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.contact-details p {
+    color: var(--medium-text);
+    margin: 0;
+}
+
+/* ===== GALERÍA DE IMÁGENES ===== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-light);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(90, 45, 7, 0.8));
+    padding: var(--spacing-md);
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+}
+
+.gallery-item:hover .gallery-overlay {
+    transform: translateY(0);
+}
+
+.gallery-overlay p {
+    color: #ffffff;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ===== PANTALLA DE CARGA TRADICIONAL ===== */
+.traditional-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xxl);
+}
+
+.traditional-loader-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--primary-brown);
+    margin-top: var(--spacing-md);
+}
+
+.traditional-loader-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.traditional-loader-dots span {
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent-gold);
+    border-radius: 50%;
+    animation: pulse 1.4s infinite ease-in-out both;
+}
+
+.traditional-loader-dots span:nth-child(1) { animation-delay: -0.32s; }
+.traditional-loader-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes pulse {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* ===== NOTAS Y CITAS ===== */
+.quote-box {
+    background: linear-gradient(to right, var(--cream), #ffffff, var(--cream));
+    border-left: 4px solid var(--accent-gold);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+    font-style: italic;
+    position: relative;
+}
+
+.quote-box::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--accent-gold);
+    opacity: 0.3;
+    position: absolute;
+    top: -10px;
+    left: 20px;
+}
+
+.quote-text {
+    font-size: 1.2rem;
+    color: var(--medium-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.quote-author {
+    font-size: 0.9rem;
+    color: var(--primary-brown);
+    font-weight: 600;
+}
+
+/* ===== EFECTO PAPEL ANTIGUO ===== */
+.paper-texture {
+    background-color: var(--cream);
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+

@@ -1,0 +1,128 @@
+[
+  {
+    "id": 2,
+    "price": 7.5,
+    "description": "PECHUGA REBOZADA, CEBOLLA, QUESO BRIE Y TORTILLADA APARTE",
+    "name": "ÁLVARO",
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 7,
+    "description": "LOMO, CEBOLLA, JAMÓN, PICADILLO Y QUESO DE CABRA",
+    "name": "BENIFAVÓ",
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": 6.5,
+    "description": "CEBOLLA, TERNERA Y JAMÓN",
+    "name": "BRASCADA",
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 7.5,
+    "description": null,
+    "name": "CALAMARES A LA ROMANA",
+    "por_unidad": false
+  },
+  {
+    "id": 6,
+    "price": 5,
+    "description": "Tomate y Jamón",
+    "name": "CATALANA",
+    "por_unidad": false
+  },
+  {
+    "id": 7,
+    "price": 7.5,
+    "description": null,
+    "name": "CHIPIRONES",
+    "por_unidad": false
+  },
+  {
+    "id": 8,
+    "price": 7,
+    "description": "MAYONESA, LECHUGA, TOMATE, LOMO, QUESO, BACON Y HUEVO",
+    "name": "CHIVITO",
+    "por_unidad": false
+  },
+  {
+    "id": 9,
+    "price": 7.5,
+    "description": "TOMATE, CEBOLLA, QUESO CURADO, TERNERA Y JAMÓN A LA PLANCHA",
+    "name": "DE LA CASA",
+    "por_unidad": false
+  },
+  {
+    "id": 10,
+    "price": 6,
+    "description": "TORTILLA A LA FRANCESA CON LONGANIZA",
+    "name": "FRANCESA",
+    "por_unidad": false
+  },
+  {
+    "id": 11,
+    "price": 7,
+    "description": "PECHUGA, PIMIENTO, QUESO CURADO Y HUEVO",
+    "name": "MELÓ",
+    "por_unidad": false
+  },
+  {
+    "id": 12,
+    "price": 7,
+    "description": "HABAS Y EMBUTIDO",
+    "name": "PRADO",
+    "por_unidad": false
+  },
+  {
+    "id": 13,
+    "price": 7.5,
+    "description": null,
+    "name": "PUNTILLA",
+    "por_unidad": false
+  },
+  {
+    "id": 14,
+    "price": 6.5,
+    "description": "PISTO Y EMBUTIDO",
+    "name": "RANCHO",
+    "por_unidad": false
+  },
+  {
+    "id": 15,
+    "price": 6,
+    "description": null,
+    "name": "RABA DE CALAMAR",
+    "por_unidad": false
+  },
+  {
+    "id": 16,
+    "price": 7,
+    "description": "SOLOMILLO, CEBOLLA Y QUESO BRIE",
+    "name": "CASTELLÓ",
+    "por_unidad": false
+  },
+  {
+    "id": 17,
+    "price": 8,
+    "description": null,
+    "name": "SEPIA",
+    "por_unidad": false
+  },
+  {
+    "id": 18,
+    "price": 6.5,
+    "description": "MAYONESA, TOMATE, ATÚN, HUEVO DURO Y ESPÁRRAGOS BLANCOS",
+    "name": "VEGETAL",
+    "por_unidad": false
+  },
+  {
+    "id": 1,
+    "price": 6,
+    "description": "FRANCESA DE QUESO, SOBRASADA Y BACON",
+    "name": "ALMUSSAFES",
+    "por_unidad": false
+  }
+]
