@@ -1,0 +1,140 @@
+[
+  {
+    "id": 2,
+    "price": 2,
+    "name": "BROCHETA DE SECRETO CON BOLETUS (4 UNIDADES)",
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 9.5,
+    "name": "CALAMAR",
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": 7.5,
+    "name": "CHAMPIÑÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 13.5,
+    "name": "CHIPIRÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 6,
+    "price": 9,
+    "name": "CLOCHINA",
+    "por_unidad": false
+  },
+  {
+    "id": 8,
+    "price": 17,
+    "name": "ENTRECOT TRINCHADO",
+    "por_unidad": false
+  },
+  {
+    "id": 9,
+    "price": 9.5,
+    "name": "FINGERS POLLO",
+    "por_unidad": false
+  },
+  {
+    "id": 10,
+    "price": 1.8,
+    "name": "FINGERS QUESO (4 UNIDADES)",
+    "por_unidad": false
+  },
+  {
+    "id": 11,
+    "price": 14,
+    "name": "FRITURA DE MAR",
+    "por_unidad": false
+  },
+  {
+    "id": 12,
+    "price": 14,
+    "name": "GAMBA ALISTADA",
+    "por_unidad": false
+  },
+  {
+    "id": 13,
+    "price": 12,
+    "name": "HUEVAS",
+    "por_unidad": false
+  },
+  {
+    "id": 14,
+    "price": 9.5,
+    "name": "HUEVOS ROTOS JAMÓN",
+    "por_unidad": false
+  },
+  {
+    "id": 15,
+    "price": 7.5,
+    "name": "MORRO",
+    "por_unidad": false
+  },
+  {
+    "id": 16,
+    "price": 3.5,
+    "name": "PAN, TOMATE Y ALLIOLI",
+    "por_unidad": false
+  },
+  {
+    "id": 17,
+    "price": 2,
+    "name": "PINCHO MORUNO",
+    "por_unidad": false
+  },
+  {
+    "id": 18,
+    "price": 1.5,
+    "name": "PIRULETA DE GAMBA (4 UNIDADES)",
+    "por_unidad": false
+  },
+  {
+    "id": 19,
+    "price": 10,
+    "name": "PUNTILLA",
+    "por_unidad": false
+  },
+  {
+    "id": 20,
+    "price": 12,
+    "name": "QUISQUILLA",
+    "por_unidad": false
+  },
+  {
+    "id": 21,
+    "price": 7.5,
+    "name": "RABA CALAMAR",
+    "por_unidad": false
+  },
+  {
+    "id": 22,
+    "price": 13,
+    "name": "SEPIA",
+    "por_unidad": false
+  },
+  {
+    "id": 23,
+    "price": 10,
+    "name": "TELLINAS",
+    "por_unidad": false
+  },
+  {
+    "id": 7,
+    "price": 0.7,
+    "name": "CROQUETA DE PUCHERO (4 UNIDADES)",
+    "por_unidad": false
+  },
+  {
+    "id": 1,
+    "price": 7.5,
+    "name": "BRAVAS CASTELLÓ (SALSA CASTELLÓ)",
+    "por_unidad": false
+  }
+]

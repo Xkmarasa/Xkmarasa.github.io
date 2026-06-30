@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "price": null,
+    "description": "LECHUGA, TOMATE, CEBOLLA, ATÚN, HUEVO Y ACEITUNAS",
+    "name": "VALENCIANA",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 2,
+    "price": null,
+    "description": "LECHUGA, TOMATE, CEBOLLA CRUJIENTE, QUESO, PECHUGA A LA PLANCHA, PICATOSTES Y ACEITUNAS. (SALSA CÉSAR)",
+    "name": "CÉSAR",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": null,
+    "description": "MIX LECHUGA, CEBOLLA CRUJIENTE, POLLO MARINADO, NUECES, PASAS, QUESO DE CABRA, REMOLACHA, TOMATE DESHIDRATADO, ESPÁRRAGO BLANCO Y ALIÑADO.",
+    "name": "CASTELLÓ",
+    "image": null,
+    "por_unidad": false
+  }
+]

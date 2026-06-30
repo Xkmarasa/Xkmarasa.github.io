@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Castelló - Carta Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/traditional.css">
+    <link rel="stylesheet" href="/styles/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-background"></div>
+        <div class="header-content">
+            <div class="logo-container">
+                <h1 class="logo-title">BAR CASTELLÓ</h1>
+                <div class="logo-divider"></div>
+                <p class="logo-subtitle">Tu lugar de encuentro en L'Alcúdia, Valencia</p>
+            </div>
+        </div>
+        <div class="header-decoration">
+            <span class="decoration-left">❧</span>
+            <span class="decoration-right">❧</span>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav class="main-navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">
+                        <span class="nav-icon">🏠</span>
+                        Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/carta" class="nav-link">
+                        <span class="nav-icon">📜</span>
+                        Nuestra Carta
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/carta-dinamica" class="nav-link">
+                        <span class="nav-icon">📱</span>
+                        Carta Digital
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <span class="nav-icon">📍</span>
+                        Contacto
+                    </a>
+                </li>
+            </ul>
+            <div class="nav-decoration"></div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Título -->
+            <section class="welcome-section">
+                <h1 class="welcome-title text-center" style="font-size: 2.5rem;">Carta Digital</h1>
+                <div class="traditional-divider">
+                    <span class="ornament-icon">📱</span>
+                </div>
+                <p class="welcome-text text-center">
+                    Explora nuestro menú actualizado en tiempo real. 
+                    Encuentra todas nuestras especialidades y precios.
+                </p>
+            </section>
+
+            <!-- Loading -->
+            <div id="loading" class="traditional-loader">
+                <div class="traditional-loader-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <p class="traditional-loader-text">Cargando carta...</p>
+            </div>
+
+            <!-- Error message (hidden by default) -->
+            <div id="error-message" class="error-message" style="display: none;">
+                <p>Error al cargar el menú. Por favor, inténtalo más tarde.</p>
+                <button class="btn btn-primary" onclick="loadAllMenu()">Reintentar</button>
+            </div>
+
+            <!-- Contenido del menú -->
+            <div id="menu-content" style="display: none;">
+                <!-- TAPAS -->
+                <section class="menu-section" id="tapas-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🍤</span>
+                            <h2 class="category-title">Tapas</h2>
+                        </div>
+                        <div class="menu-items" id="tapas"></div>
+                    </div>
+                </section>
+
+                <!-- ENSALADAS -->
+                <section class="menu-section" id="ensaladas-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🥗</span>
+                            <h2 class="category-title">Ensaladas</h2>
+                        </div>
+                        <div class="menu-items" id="ensaladas"></div>
+                    </div>
+                </section>
+
+                <!-- BOCADILLOS -->
+                <section class="menu-section" id="bocadillos-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🥖</span>
+                            <h2 class="category-title">Bocadillos</h2>
+                        </div>
+                        <div class="menu-items" id="bocadillos"></div>
+                    </div>
+                </section>
+
+                <!-- SANDWICHES -->
+                <section class="menu-section" id="sandwich-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🥪</span>
+                            <h2 class="category-title">Sándwiches</h2>
+                        </div>
+                        <div class="menu-items" id="sandwich"></div>
+                    </div>
+                </section>
+
+                <!-- MENÚ INFANTIL -->
+                <section class="menu-section" id="infantil-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">👶</span>
+                            <h2 class="category-title">Menú Infantil</h2>
+                        </div>
+                        <div class="menu-items" id="menu_infantil"></div>
+                    </div>
+                </section>
+
+                <!-- PLATOS COMBINADOS -->
+                <section class="menu-section" id="combinados-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🍽️</span>
+                            <h2 class="category-title">Platos Combinados</h2>
+                        </div>
+                        <div class="menu-items" id="platos_combinados"></div>
+                    </div>
+                </section>
+
+                <!-- POSTRES -->
+                <section class="menu-section" id="postres-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🍰</span>
+                            <h2 class="category-title">Postres</h2>
+                        </div>
+                        <div class="menu-items" id="postres"></div>
+                    </div>
+                </section>
+
+                <!-- REFRESCOS -->
+                <section class="menu-section" id="refrescos-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🥤</span>
+                            <h2 class="category-title">Refrescos</h2>
+                        </div>
+                        <div class="menu-items" id="refrescos"></div>
+                    </div>
+                </section>
+
+                <!-- CERVEZAS -->
+                <section class="menu-section" id="cervezas-section">
+                    <div class="category">
+                        <div class="category-header">
+                            <span class="category-icon">🍺</span>
+                            <h2 class="category-title">Cervezas</h2>
+                        </div>
+                        <div class="menu-items" id="cervezas"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-wave"></div>
+        <div class="footer-content">
+            <div class="footer-section footer-info">
+                <h3 class="footer-title">Bar Castelló</h3>
+                <p class="footer-text">Tradición gastronómica desde 1985</p>
+                <div class="footer-ornament">✦ ✦ ✦</div>
+            </div>
+            
+            <div class="footer-section footer-contact">
+                <h4 class="footer-subtitle">Encuéntranos</h4>
+                <p class="footer-text">
+                    <strong>Dirección:</strong><br>
+                    PLZ. PAÍS VALENCIÀ, 13<br>
+                    46250 L'ALCÚDIA
+                </p>
+                <p class="footer-text">
+                    <strong>Teléfono:</strong><br>
+                    96 254 07 53
+                </p>
+            </div>
+            
+            <div class="footer-section footer-hours">
+                <h4 class="footer-subtitle">Horarios</h4>
+                <p class="footer-text">
+                    Lunes a Domingo<br>
+                    08:00 - 00:00
+                </p>
+            </div>
+            
+            <div class="footer-section footer-social">
+                <h4 class="footer-subtitle">Síguenos</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">Facebook</a>
+                    <a href="#" class="social-link">Instagram</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="copyright">© 2025 Bar Castelló. Todos los derechos reservados.</p>
+            <div class="footer-seal">
+                <span>🍷</span> Tradición Valenciana <span>🍷</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para crear elemento de menú
+        function createMenuItem(item) {
+            const div = document.createElement('div');
+            div.className = 'menu-item';
+            
+            let content = `<div><span class="item-name">${item.name}</span>`;
+            if (item.description) {
+                content += `<p class="item-description">${item.description}</p>`;
+            }
+            content += `</div>`;
+            
+            if (item.price) {
+                content += `<span class="item-price">${item.price}€</span>`;
+            }
+            
+            div.innerHTML = content;
+            return div;
+        }
+
+        // Función para cargar menú simple (solo nombre y precio)
+        async function loadSimpleMenu(endpoint, containerId) {
+            try {
+                const response = await fetch(`/api/${endpoint}`);
+                if (!response.ok) throw new Error('Error loading data');
+                
+                const items = await response.json();
+                const container = document.getElementById(containerId);
+                
+                if (items.length === 0) {
+                    container.innerHTML = '<p style="color: var(--medium-text);">Próximamente...</p>';
+                    return;
+                }
+                
+                items.forEach(item => {
+                    container.appendChild(createMenuItem(item));
+                });
+            } catch (error) {
+                console.error(`Error loading ${endpoint}:`, error);
+                document.getElementById(containerId).innerHTML = 
+                    '<p style="color: var(--light-text);">Error al cargar</p>';
+            }
+        }
+
+        // Función para cargar menú con imagen
+        async function loadMenuWithImage(endpoint, containerId, defaultImage) {
+            try {
+                const response = await fetch(`/api/${endpoint}`);
+                if (!response.ok) throw new Error('Error loading data');
+                
+                const items = await response.json();
+                const container = document.getElementById(containerId);
+                
+                if (items.length === 0) {
+                    container.innerHTML = '<p style="color: var(--medium-text);">Próximamente...</p>';
+                    return;
+                }
+                
+                // Cambiar a diseño de grid con tarjetas
+                container.style.display = 'grid';
+                container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+                container.style.gap = '1rem';
+                
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-card';
+                    card.innerHTML = `
+                        <img src="${item.image || defaultImage}" alt="${item.name}" class="menu-card-image">
+                        <div class="menu-card-body">
+                            <h3 class="menu-card-title">${item.name} <span class="menu-card-price">${item.price}€</span></h3>
+                            ${item.description ? `<p class="menu-card-description">${item.description}</p>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(`Error loading ${endpoint}:`, error);
+                document.getElementById(containerId).innerHTML = 
+                    '<p style="color: var(--light-text);">Error al cargar</p>';
+            }
+        }
+
+        // Cargar todos los menús
+        async function loadAllMenu() {
+            const loading = document.getElementById('loading');
+            const errorMsg = document.getElementById('error-message');
+            const content = document.getElementById('menu-content');
+            
+            loading.style.display = 'flex';
+            errorMsg.style.display = 'none';
+            content.style.display = 'none';
+            
+            try {
+                // Cargar menús simples
+                await loadSimpleMenu('cervezas', 'cervezas');
+                await loadSimpleMenu('refrescos', 'refrescos');
+                await loadSimpleMenu('bocadillos', 'bocadillos');
+                
+                // Cargar menús con imágenes
+                const tapasImage = 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=600&q=80';
+                const ensaladaImage = 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=600&q=80';
+                const sandwichImage = 'https://images.unsplash.com/photo-461198/pexels-photo-461198.jpeg?auto=format&fit=crop&w=600&q=80';
+                const infantilImage = 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80';
+                const combinadosImage = 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=80';
+                const postreImage = 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80';
+                
+                await loadMenuWithImage('tapas', 'tapas', tapasImage);
+                await loadMenuWithImage('ensaladas', 'ensaladas', ensaladaImage);
+                await loadMenuWithImage('sandwich', 'sandwich', sandwichImage);
+                await loadMenuWithImage('menu_infantil', 'menu_infantil', infantilImage);
+                await loadMenuWithImage('platos_combinados', 'platos_combinados', combinadosImage);
+                await loadMenuWithImage('postres', 'postres', postreImage);
+                
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                loading.style.display = 'none';
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // Inicializar al cargar la página
+        document.addEventListener('DOMContentLoaded', loadAllMenu);
+    </script>
+</body>
+</html>
+

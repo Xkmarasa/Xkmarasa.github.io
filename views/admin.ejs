@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Castelló - Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/traditional.css">
+    <link rel="stylesheet" href="/styles/responsive.css">
+    <style>
+        /* Estilos específicos para login */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-brown) 0%, #3d1e02 100%);
+            padding: 2rem;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-heavy);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+
+        .login-header-custom {
+            background: linear-gradient(rgba(90, 45, 7, 0.9), rgba(90, 45, 7, 0.9)),
+                        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .login-header-custom h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header-custom p {
+            color: var(--accent-gold);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .login-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius-sm);
+            transition: all var(--transition-fast);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-gold);
+            color: var(--primary-brown);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .btn-login:hover {
+            background-color: var(--accent-gold-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-login:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid #f5c6cb;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 1rem 2rem 2rem;
+            color: var(--medium-text);
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .loading-spinner-custom {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(90, 45, 7, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-brown);
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Panel de admin (visible después del login) */
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, #3d1e02 100%);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            color: #ffffff;
+            font-size: 1.5rem;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-tabs {
+            display: flex;
+            background: var(--cream);
+            border-bottom: 2px solid var(--accent-gold);
+            overflow-x: auto;
+        }
+
+        .admin-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--medium-text);
+            border-bottom: 3px solid transparent;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .admin-tab:hover {
+            color: var(--primary-brown);
+        }
+
+        .admin-tab.active {
+            color: var(--primary-brown);
+            border-bottom-color: var(--accent-gold);
+            background: #ffffff;
+        }
+
+        .admin-content {
+            padding: 2rem;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            background: var(--primary-brown);
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .admin-table tr:hover {
+            background: var(--cream);
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .btn-edit {
+            background-color: var(--accent-gold);
+            color: var(--primary-brown);
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .add-item-form {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 2rem;
+        }
+
+        .add-item-form h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-brown);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add {
+            background-color: var(--olive-green);
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-add:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <div class="login-header-custom">
+                <h1>BAR CASTELLÓ</h1>
+                <p>Panel de Administración</p>
+            </div>
+            
+            <div class="login-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" id="usuario" name="usuario" class="form-input" required autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contrasena" class="form-label">Contraseña</label>
+                        <input type="password" id="contrasena" name="contrasena" class="form-input" required autocomplete="current-password">
+                    </div>
+                    
+                    <div id="error-msg" class="error-message"></div>
+                    
+                    <button type="submit" class="btn-login" id="submit-btn">Iniciar Sesión</button>
+                </form>
+            </div>
+            
+            <div class="login-footer">
+                ¿Necesitas acceso? <a href="mailto:admin@barcastello.com">Contacta al administrador</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de Administración (visible después del login) -->
+    <div id="admin-panel" class="admin-panel">
+        <div class="admin-header">
+            <h1>BAR CASTELLÓ - Admin</h1>
+            <div>
+                <span id="user-display" style="margin-right: 1rem;"></span>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+        
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="tapas">Tapas</div>
+            <div class="admin-tab" data-tab="bocadillos">Bocadillos</div>
+            <div class="admin-tab" data-tab="ensaladas">Ensaladas</div>
+            <div class="admin-tab" data-tab="hamburguesas">Hamburgesas</div>
+            <div class="admin-tab" data-tab="postres">Postres</div>
+            <div class="admin-tab" data-tab="refrescos">Refrescos</div>
+            <div class="admin-tab" data-tab="cervezas">Cervezas</div>
+        </div>
+        
+        <div class="admin-content">
+            <!-- Tabs -->
+            <div id="tab-tapas" class="admin-section active">
+                <div class="add-item-form">
+                    <h3>Agregar Tapa</h3>
+                    <form onsubmit="addItem(event, 'tapas')">
+                        <div class="form-row">
+                            <input type="text" id="tapa-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="tapa-price" class="form-input" placeholder="Precio (ej: 7.50)" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tapas-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-bocadillos" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Bocadillo</h3>
+                    <form onsubmit="addItem(event, 'bocadillos')">
+                        <div class="form-row">
+                            <input type="text" id="bocadillo-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="bocadillo-price" class="form-input" placeholder="Precio" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bocadillos-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-ensaladas" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Ensalada</h3>
+                    <form onsubmit="addItem(event, 'ensaladas')">
+                        <div class="form-row">
+                            <input type="text" id="ensalada-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="ensalada-price" class="form-input" placeholder="Precio" required>
+                            <input type="text" id="ensalada-desc" class="form-input" placeholder="Descripción">
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ensaladas-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-hamburguesas" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Hamburguesa</h3>
+                    <form onsubmit="addItem(event, 'hamburguesas')">
+                        <div class="form-row">
+                            <input type="text" id="hamburguesa-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="hamburguesa-price" class="form-input" placeholder="Precio" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hamburguesas-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-postres" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Postre</h3>
+                    <form onsubmit="addItem(event, 'postres')">
+                        <div class="form-row">
+                            <input type="text" id="postre-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="postre-price" class="form-input" placeholder="Precio" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postres-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-refrescos" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Refresco</h3>
+                    <form onsubmit="addItem(event, 'refrescos')">
+                        <div class="form-row">
+                            <input type="text" id="refresco-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="refresco-price" class="form-input" placeholder="Precio" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="refrescos-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-cervezas" class="admin-section">
+                <div class="add-item-form">
+                    <h3>Agregar Cerveza</h3>
+                    <form onsubmit="addItem(event, 'cervezas')">
+                        <div class="form-row">
+                            <input type="text" id="cerveza-name" class="form-input" placeholder="Nombre" required>
+                            <input type="text" id="cerveza-price" class="form-input" placeholder="Precio" required>
+                            <button type="submit" class="btn-add">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cervezas-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si ya está autenticado
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const usuario = localStorage.getItem('usuario');
+            
+            if (token && usuario) {
+                showAdminPanel(usuario);
+                loadAllItems();
+            }
+        });
+
+        // Manejar login
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const usuario = document.getElementById('usuario').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (!usuario || !contrasena) {
+                errorMsg.textContent = 'Usuario y contraseña son requeridos';
+                errorMsg.classList.add('show');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner-custom"></span>Verificando...';
+            
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Usuario: usuario, contrasena: contrasena })
+                });
+
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    throw new Error(data.error || 'Error en el login');
+                }
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('usuario', data.Usuario);
+                
+                showAdminPanel(data.Usuario);
+                loadAllItems();
+                
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Iniciar Sesión';
+            }
+        });
+
+        function showAdminPanel(usuario) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('admin-panel').classList.add('active');
+            document.getElementById('user-display').textContent = `Bienvenido, ${usuario}`;
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('admin-panel').classList.remove('active');
+            document.getElementById('login-form').reset();
+        }
+
+        // Cambiar tabs
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        // Cargar elementos
+        async function loadAllItems() {
+            const categories = ['tapas', 'bocadillos', 'ensaladas', 'hamburguesas', 'postres', 'refrescos', 'cervezas'];
+            
+            for (const cat of categories) {
+                try {
+                    const res = await fetch(`/api/${cat}`);
+                    const items = await res.json();
+                    renderItems(cat, items);
+                } catch (error) {
+                    console.error(`Error loading ${cat}:`, error);
+                }
+            }
+        }
+
+        function renderItems(category, items) {
+            const tbody = document.getElementById(`${category}-list`);
+            tbody.innerHTML = '';
+            
+            items.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.price}€</td>
+                    <td>
+                        <button class="btn-edit" onclick="editItem(${item.id}, '${category}')">Editar</button>
+                        <button class="btn-delete" onclick="deleteItem(${item.id}, '${category}')">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function addItem(e, category) {
+            e.preventDefault();
+            const nameInput = document.getElementById(`${category.slice(0, -1)}-name`);
+            const priceInput = document.getElementById(`${category.slice(0, -1)}-price`);
+            
+            const name = nameInput.value.trim();
+            const price = priceInput.value.trim();
+            
+            if (!name || !price) return;
+            
+            try {
+                const res = await fetch(`/api/${category}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, price })
+                });
+                
+                if (res.ok) {
+                    nameInput.value = '';
+                    priceInput.value = '';
+                    loadAllItems();
+                }
+            } catch (error) {
+                console.error('Error adding item:', error);
+            }
+        }
+
+        async function deleteItem(id, category) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este elemento?')) return;
+            
+            try {
+                const res = await fetch(`/api/${category}/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (res.ok) {
+                    loadAllItems();
+                }
+            } catch (error) {
+                console.error('Error deleting item:', error);
+            }
+        }
+
+        function editItem(id, category) {
+            alert(`Función de edición para ${category} ID: ${id} - Implementar según necesidades`);
+        }
+    </script>
+</body>
+</html>
+

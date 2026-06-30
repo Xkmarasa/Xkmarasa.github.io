@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "price": null,
+    "description": "LECHUGA, TOMATE, ATÚN, QUESO, HUEVO Y ESPÁRRAGO BLANCO Y MAYORESA.",
+    "name": "VEGETAL",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 2,
+    "price": 3,
+    "description": "JAMÓN YORK Y QUESO",
+    "name": "MIXTO",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 7,
+    "description": "MAYORESA, TOMATE, SOLOMILLO, QUESO, JAMÓN Y HUEVO. (PAN BRIOCHE)",
+    "name": "CASTELLÓ",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": null,
+    "description": "LECHUGA, TOMATE, ATÚN, QUESO, HUEVO Y ESPÁRRAGO BLANCO Y MAYORESA.",
+    "name": "VEGETAL",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 3,
+    "description": "JAMÓN YORK Y QUESO",
+    "name": "MIXTO",
+    "image": null,
+    "por_unidad": false
+  },
+  {
+    "id": 6,
+    "price": 7,
+    "description": "MAYORESA, TOMATE, SOLOMILLO, QUESO, JAMÓN Y HUEVO. (PAN BRIOCHE)",
+    "name": "CASTELLÓ",
+    "image": null,
+    "por_unidad": false
+  }
+]

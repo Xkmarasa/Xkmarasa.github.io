@@ -1,0 +1,23 @@
+{
+  "database": {
+    "currentConnectionString": "postgresql://neondb_owner:npg_oiAv5KWEBXO0@ep-quiet-wind-abn3d35x-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+    "newConnectionString": "postgresql://neondb_owner:npg_7Hzmx4YIwdin@ep-orange-heart-adbyxiqq-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+    "provider": "Neon (AWS EU West-2)",
+    "exportDate": "2025-01-20",
+    "note": "La base de datos actual tiene los datos. Para cambiar al nuevo Neon US, descomenta el connection string en db.js"
+  },
+  "tables": [
+    "tapas",
+    "hamburguesas",
+    "bocadillos",
+    "cervezas",
+    "ensaladas",
+    "menu_infantil",
+    "platos_combinados",
+    "postres",
+    "refrescos",
+    "sandwich",
+    "usuarios"
+  ]
+}
+

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "price": 4.5,
+    "name": "Longaniza con Patatas",
+    "por_unidad": false
+  },
+  {
+    "id": 2,
+    "price": 4.5,
+    "name": "Nuggets con Patatas",
+    "por_unidad": false
+  },
+  {
+    "id": 3,
+    "price": 5.5,
+    "name": "Hamburguesa con Patatas",
+    "por_unidad": false
+  },
+  {
+    "id": 4,
+    "price": 4.5,
+    "name": "Sándwich Mixto con Patatas",
+    "por_unidad": false
+  },
+  {
+    "id": 5,
+    "price": 6.5,
+    "name": "Calamares a la Romana con Patatas",
+    "por_unidad": false
+  }
+]

@@ -1,0 +1,384 @@
+/* ========================================
+   BAR CASTELLÓ - Componentes Reutilizables
+   ======================================== */
+
+/* ===== HEADER PRINCIPAL ===== */
+.main-header {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-brown) 0%, var(--secondary-brown) 100%);
+    padding: var(--spacing-xxl) var(--spacing-md);
+    text-align: center;
+    overflow: hidden;
+}
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1500&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.logo-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.logo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #ffffff;
+    letter-spacing: 4px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: var(--spacing-xs);
+}
+
+.logo-divider {
+    width: 150px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+    margin: var(--spacing-sm) auto;
+}
+
+.logo-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--cream);
+    font-style: italic;
+}
+
+.header-decoration {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.decoration-left,
+.decoration-right {
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+}
+
+/* ===== NAVEGACIÓN ===== */
+.main-navbar {
+    background-color: var(--secondary-brown);
+    box-shadow: var(--shadow-medium);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.nav-menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-normal);
+}
+
+.nav-link:hover {
+    background-color: var(--accent-gold);
+    color: var(--primary-brown);
+}
+
+.nav-item.active .nav-link {
+    background-color: var(--accent-gold);
+    color: var(--primary-brown);
+}
+
+.nav-icon {
+    font-size: 1.1rem;
+}
+
+.nav-decoration {
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-brown), var(--accent-gold), var(--primary-brown));
+}
+
+/* ===== MENÚ ITEM ===== */
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+    transition: background-color var(--transition-fast);
+}
+
+.menu-item:hover {
+    background-color: var(--cream);
+    margin: 0 -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--dark-text);
+    flex: 1;
+}
+
+.item-description {
+    font-size: 0.9rem;
+    color: var(--medium-text);
+    margin-top: 4px;
+}
+
+.item-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-brown);
+    white-space: nowrap;
+    margin-left: var(--spacing-sm);
+}
+
+/* ===== CATEGORÍA ===== */
+.category {
+    background-color: #ffffff;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-light);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--accent-gold);
+}
+
+.category-icon {
+    font-size: 2rem;
+    margin-right: var(--spacing-sm);
+}
+
+.category-title {
+    font-size: 1.8rem;
+    color: var(--primary-brown);
+    margin: 0;
+}
+
+.category-description {
+    color: var(--medium-text);
+    font-style: italic;
+    margin-bottom: var(--spacing-md);
+}
+
+/* ===== TARJETAS ===== */
+.card {
+    background-color: #ffffff;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: var(--spacing-md);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.card-text {
+    color: var(--medium-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+/* ===== FOOTER ===== */
+.main-footer {
+    background-color: var(--primary-brown);
+    color: #ffffff;
+    position: relative;
+    margin-top: var(--spacing-xxl);
+}
+
+.footer-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23f8f8f8' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,122.7C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom;
+    background-size: cover;
+    transform: translateY(-99%);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xxl) var(--spacing-md) var(--spacing-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: var(--accent-gold);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-title {
+    font-size: 1.8rem;
+}
+
+.footer-subtitle {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-text {
+    color: var(--cream);
+    line-height: 1.8;
+}
+
+.footer-ornament {
+    color: var(--accent-gold);
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+    margin-top: var(--spacing-sm);
+}
+
+.social-links {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.social-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.social-link:hover {
+    background-color: var(--accent-gold);
+    color: var(--primary-brown);
+}
+
+.footer-bottom {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.copyright {
+    color: var(--cream);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-seal {
+    color: var(--accent-gold);
+    font-size: 0.9rem;
+}
+
+/* ===== FORMULARIOS ===== */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: var(--dark-text);
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: var(--border-radius-sm);
+    transition: border-color var(--transition-fast);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+/* ===== MAPA ===== */
+.map-container {
+    width: 100%;
+    height: 400px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
