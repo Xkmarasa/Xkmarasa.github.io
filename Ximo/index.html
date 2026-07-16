@@ -278,6 +278,17 @@
             margin-top: 16px;
         }
 
+        @media (min-width: 700px) {
+            .trust-line {
+                font-size: 0.85rem;
+                margin-top: 16px;
+                text-align: center;
+                grid-column: 1;
+                grid-row: 2;
+                align-self: start;
+            }
+        }
+
         .contact-stack {
             display: grid;
             grid-template-columns: 1fr;
@@ -410,16 +421,19 @@
             .contact-layout {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 48px;
+                grid-template-rows: auto auto;
+                gap: 0 48px;
                 align-items: start;
             }
 
             .contact-left {
                 grid-column: 1;
+                grid-row: 1;
             }
 
             .contact-right {
                 grid-column: 2;
+                grid-row: 1 / 3;
             }
 
             .contact-stack {
@@ -486,7 +500,7 @@
     </div>
 
     <h1 class="hero-name">Ximo Marqués</h1>
-    <p class="hero-role">Fisioterapeuta</p>
+    <p class="hero-role">Fisioterapeuta NºColegiado ICOFCV: 10485</p>
 
     <span class="hero-tag">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -563,11 +577,26 @@
                     ¿Tienes alguna lesión, dolor o simplemente quieres mejorar tu rendimiento físico o tu calidad de vida?
                     Estaré encantado de ayudarte y valorar tu caso de forma personalizada.
                 </p>
-
             </div>
 
             <div class="contact-right">
                 <div class="contact-stack">
+
+                    <!-- Teléfono -->
+                    <a href="tel:+34666864715" class="cbtn cbtn-phone">
+                        <div class="cbtn-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="cbtn-body">
+                            <span class="cbtn-sublabel">Llámame</span>
+                            <span class="cbtn-main">+34 666 86 47 15</span>
+                        </div>
+                        <svg class="cbtn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
 
                     <!-- Email -->
                     <a href="mailto:fisio.ximomarques@gmail.com" class="cbtn cbtn-email">
@@ -578,7 +607,7 @@
                             </svg>
                         </div>
                         <div class="cbtn-body">
-                            <span class="cbtn-sublabel">Reserva tu sesión</span>
+                            <span class="cbtn-sublabel">Contáctame</span>
                             <span class="cbtn-main">fisio.ximomarques@gmail.com</span>
                         </div>
                         <svg class="cbtn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -602,10 +631,9 @@
                         </svg>
                     </a>
 
-                    <p class="trust-line">Atención personalizada &middot; Evidencia científica &middot; Resultados reales</p>
-
                 </div>
             </div>
+            <p class="trust-line">Atención personalizada &middot; Evidencia científica &middot; Resultados reales</p>
         </div>
     </section>
 
