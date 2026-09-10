@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maquinaria · Marketplace B2B</title>
+    <meta
+      name="description"
+      content="Marketplace B2B de subcontratación de maquinaria industrial para obras en España. Monolito modular con NestJS, Next.js y PostgreSQL + PostGIS."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ---------------------------------------------------------------
+         Paleta: acero galvanizado y ámbar de seguridad.
+         El ámbar no es decorativo — es el color con el que se pinta la
+         maquinaria de obra, y el de la propia aplicación.
+         --------------------------------------------------------------- */
+      :root {
+        --ground: #f5f7f8;
+        --surface: #ffffff;
+        --surface-sunk: #eef1f3;
+        --ink: #131a20;
+        --ink-soft: #3d4a56;
+        --muted: #64717e;
+        --rule: #d9e0e6;
+        --rule-strong: #b9c4cd;
+        --accent: #c47f06;
+        --accent-ink: #8a5a04;
+        --accent-soft: #fdf4e3;
+        --steel: #1b242d;
+        --steel-ink: #e6ecf1;
+        --steel-muted: #93a3b1;
+        --steel-rule: #2e3a45;
+        --ok: #2f7d4f;
+        --wait: #9a6a10;
+        --stop: #a03d3d;
+
+        --measure: 66ch;
+        --step-0: 1rem;
+        --step-1: 1.15rem;
+        --step-2: 1.45rem;
+        --step-3: 2rem;
+        --step-4: 2.9rem;
+        --step-5: clamp(3.2rem, 9vw, 5.4rem);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --ground: #0e1317;
+          --surface: #151c22;
+          --surface-sunk: #111820;
+          --ink: #e9eff4;
+          --ink-soft: #bcc8d2;
+          --muted: #8b9aa8;
+          --rule: #222d36;
+          --rule-strong: #35434f;
+          --accent: #eda92e;
+          --accent-ink: #f3c168;
+          --accent-soft: #2a2012;
+          --steel: #0a0e12;
+          --steel-ink: #e9eff4;
+          --steel-muted: #8b9aa8;
+          --steel-rule: #1e272f;
+          --ok: #5aa878;
+          --wait: #d3a13c;
+          --stop: #cf6f6f;
+        }
+      }
+
+      :root[data-theme='dark'] {
+        --ground: #0e1317;
+        --surface: #151c22;
+        --surface-sunk: #111820;
+        --ink: #e9eff4;
+        --ink-soft: #bcc8d2;
+        --muted: #8b9aa8;
+        --rule: #222d36;
+        --rule-strong: #35434f;
+        --accent: #eda92e;
+        --accent-ink: #f3c168;
+        --accent-soft: #2a2012;
+        --steel: #0a0e12;
+        --steel-ink: #e9eff4;
+        --steel-muted: #8b9aa8;
+        --steel-rule: #1e272f;
+        --ok: #5aa878;
+        --wait: #d3a13c;
+        --stop: #cf6f6f;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: var(--step-0);
+        line-height: 1.62;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+        font-weight: 600;
+        line-height: 1.04;
+        letter-spacing: 0.005em;
+        text-wrap: balance;
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        color: var(--accent-ink);
+        text-underline-offset: 0.18em;
+        text-decoration-thickness: 1px;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      code,
+      .mono {
+        font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      code {
+        font-size: 0.87em;
+        background: var(--surface-sunk);
+        padding: 0.1em 0.34em;
+        border-radius: 2px;
+      }
+
+      .wrap {
+        width: min(100% - 2.5rem, 68rem);
+        margin-inline: auto;
+      }
+
+      .eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* --- Cabecera: la chapa de datos de una máquina ------------------ */
+
+      .plate {
+        background: var(--steel);
+        color: var(--steel-ink);
+        padding-block: clamp(3rem, 8vw, 5.5rem) 0;
+        border-bottom: 3px solid var(--accent);
+      }
+
+      .plate .eyebrow {
+        color: var(--accent);
+      }
+
+      .plate__title {
+        font-size: var(--step-5);
+        font-weight: 700;
+        letter-spacing: -0.012em;
+        text-transform: uppercase;
+        margin-block: 0.5rem 0.75rem;
+      }
+
+      .plate__lede {
+        max-width: 46ch;
+        color: var(--steel-muted);
+        font-size: var(--step-1);
+        line-height: 1.5;
+      }
+
+      .plate__lede strong {
+        color: var(--steel-ink);
+        font-weight: 450;
+      }
+
+      /* Franja de cifras, como los datos estampados en el chasis. */
+      .specs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+        margin-top: clamp(2.5rem, 6vw, 4rem);
+        border-top: 1px solid var(--steel-rule);
+      }
+
+      .spec {
+        padding: 1.15rem 1.2rem 1.35rem 0;
+        border-right: 1px solid var(--steel-rule);
+      }
+
+      .spec:last-child {
+        border-right: 0;
+      }
+
+      .spec__n {
+        font-family: 'IBM Plex Mono', monospace;
+        font-variant-numeric: tabular-nums;
+        font-size: 1.75rem;
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        color: var(--steel-ink);
+        display: block;
+      }
+
+      .spec__k {
+        font-size: 0.72rem;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        color: var(--steel-muted);
+      }
+
+      /* --- Secciones --------------------------------------------------- */
+
+      section {
+        padding-block: clamp(3rem, 7vw, 5rem);
+      }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        border-bottom: 1px solid var(--rule-strong);
+        padding-bottom: 0.7rem;
+        margin-bottom: 2rem;
+      }
+
+      .section-head h2 {
+        font-size: var(--step-3);
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+      }
+
+      .section-head .eyebrow {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+
+      .prose {
+        max-width: var(--measure);
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+        color: var(--ink-soft);
+      }
+
+      .prose strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+        gap: clamp(1.5rem, 4vw, 3rem);
+        align-items: start;
+      }
+
+      /* --- Diagrama ---------------------------------------------------- */
+
+      .diagram {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        padding: 1.5rem 1.25rem;
+        overflow-x: auto;
+      }
+
+      .diagram svg {
+        display: block;
+        min-width: 40rem;
+        width: 100%;
+        height: auto;
+      }
+
+      .diagram figcaption {
+        margin-top: 1rem;
+        font-size: 0.86rem;
+        color: var(--muted);
+        max-width: 62ch;
+      }
+
+      /* --- Decisiones -------------------------------------------------- */
+
+      .decisions {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border-top: 1px solid var(--rule);
+      }
+
+      .decision {
+        display: grid;
+        grid-template-columns: 5.5rem 1fr;
+        gap: 0 1.5rem;
+        padding-block: 1.6rem;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .decision__ref {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--accent-ink);
+        letter-spacing: 0.03em;
+        padding-top: 0.35rem;
+      }
+
+      .decision__t {
+        font-size: var(--step-2);
+        margin-bottom: 0.4rem;
+      }
+
+      .decision__b {
+        color: var(--ink-soft);
+        max-width: var(--measure);
+      }
+
+      .decision__b strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      @media (max-width: 34rem) {
+        .decision {
+          grid-template-columns: 1fr;
+          gap: 0.35rem;
+        }
+        .decision__ref {
+          padding-top: 0;
+        }
+      }
+
+      /* --- Estado ------------------------------------------------------ */
+
+      .status {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.94rem;
+      }
+
+      .status caption {
+        text-align: left;
+        color: var(--muted);
+        font-size: 0.86rem;
+        padding-bottom: 0.8rem;
+      }
+
+      .status th,
+      .status td {
+        text-align: left;
+        padding: 0.62rem 0.9rem 0.62rem 0;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: top;
+      }
+
+      .status th {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 500;
+        border-bottom-color: var(--rule-strong);
+      }
+
+      .status td:first-child {
+        font-weight: 600;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+
+      .pill {
+        display: inline-block;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.16rem 0.5rem;
+        border: 1px solid currentColor;
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+
+      .pill--ok {
+        color: var(--ok);
+      }
+      .pill--wait {
+        color: var(--wait);
+      }
+      .pill--stop {
+        color: var(--stop);
+      }
+
+      /* --- Pila -------------------------------------------------------- */
+
+      .stack-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+        gap: 1px;
+        background: var(--rule);
+        border: 1px solid var(--rule);
+      }
+
+      .stack-list li {
+        background: var(--surface);
+        padding: 1rem 1.1rem;
+      }
+
+      .stack-list dt {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.3rem;
+      }
+
+      .stack-list dd {
+        margin: 0;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .stack-list span {
+        display: block;
+        font-weight: 400;
+        font-size: 0.86rem;
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+
+      /* --- Nota y pie -------------------------------------------------- */
+
+      .note {
+        background: var(--accent-soft);
+        border-left: 3px solid var(--accent);
+        padding: 1.1rem 1.3rem;
+        max-width: var(--measure);
+        color: var(--ink-soft);
+      }
+
+      .note strong {
+        color: var(--ink);
+      }
+
+      footer {
+        background: var(--steel);
+        color: var(--steel-muted);
+        padding-block: 2.5rem;
+        border-top: 3px solid var(--accent);
+        font-size: 0.9rem;
+      }
+
+      footer a {
+        color: var(--accent);
+      }
+
+      .foot-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 2rem;
+        align-items: baseline;
+      }
+
+      .foot-row p {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="plate">
+      <div class="wrap">
+        <p class="eyebrow">Marketplace B2B · España</p>
+        <h1 class="plate__title">Maquinaria</h1>
+        <p class="plate__lede">
+          Subcontratación de maquinaria industrial entre empresas de obra.
+          <strong>Quien tiene una excavadora parada</strong> y quien la necesita dos semanas en
+          Valencia, con la documentación comprobada antes de contratar.
+        </p>
+
+        <dl class="specs">
+          <div class="spec">
+            <dt class="spec__k">Tests en verde</dt>
+            <dd class="spec__n">1.091</dd>
+          </div>
+          <div class="spec">
+            <dt class="spec__k">Endpoints</dt>
+            <dd class="spec__n">89</dd>
+          </div>
+          <div class="spec">
+            <dt class="spec__k">Migraciones</dt>
+            <dd class="spec__n">26</dd>
+          </div>
+          <div class="spec">
+            <dt class="spec__k">Módulos</dt>
+            <dd class="spec__n">24</dd>
+          </div>
+          <div class="spec">
+            <dt class="spec__k">Líneas TypeScript</dt>
+            <dd class="spec__n">40.314</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <main>
+      <section class="wrap">
+        <div class="section-head">
+          <h2>El problema</h2>
+          <p class="eyebrow">Contexto</p>
+        </div>
+
+        <div class="two-col">
+          <div class="prose">
+            <p>
+              Una constructora tiene una retroexcavadora parada tres semanas entre obras. Otra, a
+              cuarenta kilómetros, la necesita justo esas tres semanas y acaba alquilándola a un
+              distribuidor por el triple.
+            </p>
+            <p>
+              Se conocen por teléfono, por un grupo de WhatsApp del sector, o no se conocen. No hay
+              forma de saber si la máquina tiene la ITV al día, si el seguro cubre a un tercero, ni
+              qué pasa si algo se rompe a mitad de obra.
+            </p>
+          </div>
+          <div class="prose">
+            <p>
+              La plataforma cruza <strong>oferta y demanda por categoría, fechas y radio</strong>,
+              comprueba la documentación de cada máquina antes de permitir contratar, y congela las
+              condiciones en un contrato en el momento en que las dos partes aceptan.
+            </p>
+            <p>
+              La ubicación pública se ajusta a una rejilla de aproximadamente un kilómetro: se ve
+              dónde hay máquinas sin publicar dónde está cada una.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="wrap">
+        <div class="section-head">
+          <h2>Arquitectura</h2>
+          <p class="eyebrow">ADR-001 · Monolito modular</p>
+        </div>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 720 300" role="img" aria-labelledby="diag-t diag-d">
+            <title id="diag-t">Diagrama de la arquitectura</title>
+            <desc id="diag-d">
+              Dos aplicaciones Next.js hablan con una API NestJS dividida en contextos acotados, que
+              usa PostgreSQL con PostGIS como único almacén autoritativo, más Redis y
+              almacenamiento de objetos.
+            </desc>
+
+            <g
+              font-family="IBM Plex Mono, monospace"
+              font-size="10"
+              fill="var(--muted)"
+              letter-spacing="1"
+            >
+              <text x="0" y="12">CLIENTE</text>
+              <text x="0" y="112">API · NestJS</text>
+              <text x="0" y="252">PERSISTENCIA</text>
+            </g>
+
+            <!-- Clientes -->
+            <g>
+              <rect
+                x="0"
+                y="22"
+                width="170"
+                height="42"
+                fill="var(--surface-sunk)"
+                stroke="var(--rule-strong)"
+              />
+              <text
+                x="14"
+                y="42"
+                font-family="IBM Plex Sans, sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="var(--ink)"
+              >
+                Mercado público
+              </text>
+              <text
+                x="14"
+                y="56"
+                font-family="IBM Plex Mono, monospace"
+                font-size="9.5"
+                fill="var(--muted)"
+              >
+                Next.js · sin sesión
+              </text>
+
+              <rect
+                x="186"
+                y="22"
+                width="170"
+                height="42"
+                fill="var(--surface-sunk)"
+                stroke="var(--rule-strong)"
+              />
+              <text
+                x="200"
+                y="42"
+                font-family="IBM Plex Sans, sans-serif"
+                font-size="13"
+                font-weight="600"
+                fill="var(--ink)"
+              >
+                Backoffice
+              </text>
+              <text
+                x="200"
+                y="56"
+                font-family="IBM Plex Mono, monospace"
+                font-size="9.5"
+                fill="var(--muted)"
+              >
+                Next.js · plataforma
+              </text>
+            </g>
+
+            <!-- Flechas cliente -> API -->
+            <g stroke="var(--rule-strong)" stroke-width="1.5" fill="none">
+              <path d="M85 64 L85 118" />
+              <path d="M271 64 L271 118" />
+            </g>
+            <g fill="var(--rule-strong)">
+              <path d="M85 124 l-4 -8 h8 z" />
+              <path d="M271 124 l-4 -8 h8 z" />
+            </g>
+
+            <!-- API -->
+            <rect
+              x="0"
+              y="124"
+              width="720"
+              height="76"
+              fill="var(--surface)"
+              stroke="var(--accent)"
+              stroke-width="1.5"
+            />
+            <g
+              font-family="IBM Plex Sans, sans-serif"
+              font-size="11"
+              font-weight="600"
+              fill="var(--ink)"
+            >
+              <text x="16" y="152">Identidad</text>
+              <text x="98" y="152">Catálogo</text>
+              <text x="180" y="152">Máquinas</text>
+              <text x="268" y="152">Documentos</text>
+              <text x="370" y="152">Anuncios</text>
+              <text x="452" y="152">Matching</text>
+              <text x="536" y="152">Contratación</text>
+              <text x="640" y="152">Contratos</text>
+
+              <text x="16" y="180">Mensajería</text>
+              <text x="112" y="180">Valoraciones</text>
+              <text x="216" y="180">Suscripciones</text>
+              <text x="330" y="180">Notificaciones</text>
+              <text x="446" y="180">Observabilidad</text>
+              <text x="566" y="180" fill="var(--muted)">Pagos · pendiente</text>
+            </g>
+
+            <!-- Flechas API -> almacenes -->
+            <g stroke="var(--rule-strong)" stroke-width="1.5" fill="none">
+              <path d="M120 200 L120 254" />
+              <path d="M360 200 L360 254" />
+              <path d="M600 200 L600 254" />
+            </g>
+            <g fill="var(--rule-strong)">
+              <path d="M120 260 l-4 -8 h8 z" />
+              <path d="M360 260 l-4 -8 h8 z" />
+              <path d="M600 260 l-4 -8 h8 z" />
+            </g>
+
+            <!-- Almacenes -->
+            <g>
+              <rect
+                x="30"
+                y="260"
+                width="180"
+                height="36"
+                fill="var(--surface-sunk)"
+                stroke="var(--rule-strong)"
+              />
+              <text
+                x="44"
+                y="283"
+                font-family="IBM Plex Sans, sans-serif"
+                font-size="12"
+                font-weight="600"
+                fill="var(--ink)"
+              >
+                PostgreSQL 18 + PostGIS
+              </text>
+
+              <rect
+                x="270"
+                y="260"
+                width="180"
+                height="36"
+                fill="var(--surface-sunk)"
+                stroke="var(--rule-strong)"
+              />
+              <text
+                x="284"
+                y="283"
+                font-family="IBM Plex Sans, sans-serif"
+                font-size="12"
+                font-weight="600"
+                fill="var(--ink)"
+              >
+                Redis · límites y caché
+              </text>
+
+              <rect
+                x="510"
+                y="260"
+                width="180"
+                height="36"
+                fill="var(--surface-sunk)"
+                stroke="var(--rule-strong)"
+              />
+              <text
+                x="524"
+                y="283"
+                font-family="IBM Plex Sans, sans-serif"
+                font-size="12"
+                font-weight="600"
+                fill="var(--ink)"
+              >
+                S3 · URL firmadas
+              </text>
+            </g>
+          </svg>
+
+          <figcaption>
+            Un solo despliegue, con los contextos separados por frontera de módulo: ninguno accede a
+            la persistencia de otro. PostgreSQL es el único almacén autoritativo; los binarios
+            —documentos, fotos, contratos firmados— nunca entran en la base de datos.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="wrap">
+        <div class="section-head">
+          <h2>Seis decisiones</h2>
+          <p class="eyebrow">De 56 registradas</p>
+        </div>
+
+        <div class="decisions">
+          <article class="decision">
+            <p class="decision__ref mono">ADR-006</p>
+            <div>
+              <h3 class="decision__t">El solapamiento lo impide el motor, no un <code>if</code></h3>
+              <p class="decision__b">
+                Dos alquileres de la misma máquina en fechas que se pisan es el error que no se
+                puede permitir. Un <code>SELECT</code> previo más un <code>INSERT</code> funciona
+                hasta que dos peticiones entran a la vez: las dos ven la máquina libre. Lo resuelve
+                una restricción <code>EXCLUDE USING gist</code> sobre un rango temporal —
+                <strong>la base de datos rechaza la segunda</strong>, no el código. Con ocho
+                escrituras simultáneas gana exactamente una.
+              </p>
+            </div>
+          </article>
+
+          <article class="decision">
+            <p class="decision__ref mono">§7.42</p>
+            <div>
+              <h3 class="decision__t">Las valoraciones se escriben a ciegas</h3>
+              <p class="decision__b">
+                Ninguna parte ve la del otro hasta que las dos están puestas o pasan catorce días.
+                Sin eso, la primera valoración fija la segunda: quien recibe tres estrellas responde
+                con tres, y en dos meses todo el mundo ha aprendido a poner cinco.
+                <strong>Una reputación donde nadie sale mal no informa de nada.</strong> Vive en el
+                modelo de datos, no en la interfaz, porque en cuanto una valoración se ha visto ya
+                se ha visto.
+              </p>
+            </div>
+          </article>
+
+          <article class="decision">
+            <p class="decision__ref mono">§7.34</p>
+            <div>
+              <h3 class="decision__t">Sin vínculo previo no hay conversación</h3>
+              <p class="decision__b">
+                Escribir a otra empresa exige un cruce, un anuncio o una contratación que ya las
+                relacione, y el servidor lo comprueba contra la fila real. Además, estar bloqueado y
+                no tener vínculo <strong>responden exactamente lo mismo</strong>: quien fue bloqueado
+                no debe poder averiguarlo probando anclas hasta dar con una válida.
+              </p>
+            </div>
+          </article>
+
+          <article class="decision">
+            <p class="decision__ref mono">§7.45</p>
+            <div>
+              <h3 class="decision__t">Rendimiento medido por forma del plan, no por milisegundos</h3>
+              <p class="decision__b">
+                Un test que exija «menos de 40 ms» falla en un portátil ocupado y pasa en una máquina
+                rápida aunque la consulta esté recorriendo la tabla entera. Se afirma sobre el plan
+                de ejecución, que no depende de la máquina ni del día. Con una salvedad que costó
+                tres intentos entender:
+                <strong>«sin recorrido secuencial» solo significa algo si la consulta es
+                selectiva</strong> — una que pide el 40 % de la tabla se recorre entera, y hace bien.
+              </p>
+            </div>
+          </article>
+
+          <article class="decision">
+            <p class="decision__ref mono">§7.38</p>
+            <div>
+              <h3 class="decision__t">La autorización se comprueba sola</h3>
+              <p class="decision__b">
+                La guarda deja pasar cuando no encuentra permiso declarado — tiene que hacerlo, hay
+                rutas que solo piden sesión. La consecuencia es que a un endpoint de empresa al que
+                se le olvide el decorador <strong>no le pasa nada</strong>: responde, y le responde a
+                cualquiera con token. Un test recorre la tabla de rutas real y falla si aparece uno.
+                Ya ha parado dos cambios.
+              </p>
+            </div>
+          </article>
+
+          <article class="decision">
+            <p class="decision__ref mono">E-44</p>
+            <div>
+              <h3 class="decision__t">Una protección no conectada parece una que funciona</h3>
+              <p class="decision__b">
+                El registro estructurado redactaba contraseñas y tokens desde el primer día, con sus
+                tests en verde. Y no estaba enchufado: los servicios usaban el logger del framework,
+                que escribe sin redactar. No había fuga porque nadie registraba objetos — pero eso
+                era disciplina, no una garantía.
+                <strong>Una medida de seguridad se verifica por quien la llama</strong>, no por sus
+                tests.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="wrap">
+        <div class="section-head">
+          <h2>Pila</h2>
+          <p class="eyebrow">Versiones fijadas</p>
+        </div>
+
+        <ul class="stack-list">
+          <li>
+            <dl>
+              <dt>API</dt>
+              <dd>NestJS 12 <span>TypeScript 6, Zod en la frontera</span></dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dt>Frontend</dt>
+              <dd>Next.js 16 <span>React 19, Tailwind 4</span></dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dt>Datos</dt>
+              <dd>PostgreSQL 18.6 <span>PostGIS 3.6, Drizzle, uuidv7 nativo</span></dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dt>Monorepo</dt>
+              <dd>pnpm + Turborepo <span>10 packages, 2 aplicaciones</span></dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dt>Observabilidad</dt>
+              <dd>Prometheus + Sentry <span>correlación por petición</span></dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dt>Infraestructura</dt>
+              <dd>Terraform <span>AWS · tres entornos aislados</span></dd>
+            </dl>
+          </li>
+        </ul>
+      </section>
+
+      <section class="wrap">
+        <div class="section-head">
+          <h2>Estado</h2>
+          <p class="eyebrow">20 de 24 fases</p>
+        </div>
+
+        <table class="status">
+          <caption>
+            Lo que falta no es código: son decisiones legales y accesos que no se resuelven
+            escribiendo.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Área</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dominio y catálogo</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>16 categorías, atributos variables validados contra el catálogo</td>
+            </tr>
+            <tr>
+              <td>Matching</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Elegibilidad, radio PostGIS, puntuación explicable</td>
+            </tr>
+            <tr>
+              <td>Contratación</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Negociación por rondas, contrato con copia congelada y huella</td>
+            </tr>
+            <tr>
+              <td>Seguridad</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Aislamiento entre empresas con test negativo por capacidad</td>
+            </tr>
+            <tr>
+              <td>Observabilidad</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Métricas, alertas definidas, reporte de errores saneado</td>
+            </tr>
+            <tr>
+              <td>Infraestructura</td>
+              <td><span class="pill pill--wait">Sin aplicar</span></td>
+              <td>Terraform validado; falta una cuenta de AWS</td>
+            </tr>
+            <tr>
+              <td>Pagos</td>
+              <td><span class="pill pill--stop">Bloqueado</span></td>
+              <td>Merchant of record, custodia de fondos, IVA y KYC sin cerrar</td>
+            </tr>
+            <tr>
+              <td>Sesión y backoffice</td>
+              <td><span class="pill pill--stop">Bloqueado</span></td>
+              <td>Requiere un proveedor OIDC configurado</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="note" style="margin-top: 2rem">
+          <strong>Los pagos van los últimos a propósito.</strong> Empezar a mover dinero antes de
+          decidir quién emite la factura y quién custodia los fondos significa elegir esas cosas por
+          omisión, que es como un marketplace acaba siendo una entidad de pago sin saberlo.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap foot-row">
+        <p><strong style="color: var(--steel-ink)">Maquinaria</strong> · proyecto personal</p>
+        <p>
+          Código en
+          <a href="https://github.com/Xkmarasa/Maquinaria">github.com/Xkmarasa/Maquinaria</a>
+        </p>
+        <p style="margin-left: auto">
+          Aplicación completa: requiere API, PostgreSQL con PostGIS y almacenamiento de objetos.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
