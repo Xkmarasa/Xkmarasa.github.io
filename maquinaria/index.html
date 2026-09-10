@@ -235,6 +235,37 @@
         color: var(--steel-muted);
       }
 
+      .demo-cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.4rem 1.1rem;
+        padding-block: 1.4rem 1.6rem;
+      }
+
+      .demo-cta a {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 0.1rem;
+      }
+
+      .demo-cta a:hover {
+        color: var(--steel-ink);
+        border-color: var(--steel-ink);
+      }
+
+      .demo-cta span {
+        font-size: 0.88rem;
+        color: var(--steel-muted);
+        max-width: 44ch;
+      }
+
       /* --- Secciones --------------------------------------------------- */
 
       section {
@@ -529,6 +560,14 @@
             <dd class="spec__n">40.314</dd>
           </div>
         </dl>
+
+        <p class="demo-cta">
+          <a href="./demo/">Abrir la demostración del mercado &rarr;</a>
+          <span
+            >Datos reales de la aplicación, congelados en el navegador: se puede buscar, filtrar y
+            abrir fichas.</span
+          >
+        </p>
       </div>
     </header>
 
@@ -994,6 +1033,7 @@
           Código en
           <a href="https://github.com/Xkmarasa/Maquinaria">github.com/Xkmarasa/Maquinaria</a>
         </p>
+        <p><a href="./demo/">Demostración del mercado</a></p>
         <p style="margin-left: auto">
           Aplicación completa: requiere API, PostgreSQL con PostGIS y almacenamiento de objetos.
         </p>

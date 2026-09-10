@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maquinaria · Demo del mercado</title>
+    <meta
+      name="description"
+      content="Demostración navegable del marketplace de maquinaria: búsqueda, filtros y fichas con datos reales de la aplicación, congelados en el navegador."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --ground: #f5f7f8;
+        --surface: #ffffff;
+        --surface-sunk: #eef1f3;
+        --ink: #131a20;
+        --ink-soft: #3d4a56;
+        --muted: #64717e;
+        --rule: #d9e0e6;
+        --rule-strong: #b9c4cd;
+        --accent: #c47f06;
+        --accent-ink: #8a5a04;
+        --accent-soft: #fdf4e3;
+        --steel: #1b242d;
+        --steel-ink: #e6ecf1;
+        --steel-muted: #93a3b1;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --ground: #0e1317;
+          --surface: #151c22;
+          --surface-sunk: #111820;
+          --ink: #e9eff4;
+          --ink-soft: #bcc8d2;
+          --muted: #8b9aa8;
+          --rule: #222d36;
+          --rule-strong: #35434f;
+          --accent: #eda92e;
+          --accent-ink: #f3c168;
+          --accent-soft: #2a2012;
+          --steel: #0a0e12;
+          --steel-ink: #e9eff4;
+          --steel-muted: #8b9aa8;
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+        font-weight: 600;
+        line-height: 1.08;
+        margin: 0;
+        text-wrap: balance;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        color: var(--accent-ink);
+        text-underline-offset: 0.18em;
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      select:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .mono,
+      .price {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .wrap {
+        width: min(100% - 2rem, 64rem);
+        margin-inline: auto;
+      }
+
+      /* --- Barra superior --------------------------------------------- */
+
+      .top {
+        background: var(--steel);
+        color: var(--steel-ink);
+        border-bottom: 3px solid var(--accent);
+      }
+
+      .top__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1.25rem;
+        padding-block: 0.9rem;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--steel-ink);
+        text-decoration: none;
+      }
+
+      .brand__mark {
+        display: grid;
+        place-items: center;
+        width: 1.7rem;
+        height: 1.7rem;
+        background: var(--accent);
+        color: #16202a;
+        font-size: 1.05rem;
+        border-radius: 2px;
+      }
+
+      .top__links {
+        margin-left: auto;
+        display: flex;
+        gap: 1.1rem;
+        font-size: 0.88rem;
+      }
+
+      .top__links a {
+        color: var(--steel-muted);
+        text-decoration: none;
+      }
+
+      .top__links a:hover {
+        color: var(--steel-ink);
+        text-decoration: underline;
+      }
+
+      /* --- Aviso de demo ----------------------------------------------- */
+
+      .warn {
+        background: var(--accent-soft);
+        border-bottom: 1px solid var(--rule);
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+      }
+
+      .warn__row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+        align-items: baseline;
+        padding-block: 0.7rem;
+      }
+
+      .warn strong {
+        color: var(--ink);
+      }
+
+      /* --- Cabecera de búsqueda ---------------------------------------- */
+
+      .lede {
+        padding-block: 2rem 1.25rem;
+      }
+
+      .lede h1 {
+        font-size: clamp(2rem, 5vw, 2.9rem);
+        text-transform: uppercase;
+      }
+
+      .lede p {
+        color: var(--muted);
+        margin-top: 0.35rem;
+      }
+
+      .sides {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        gap: 0.75rem;
+        margin-block: 1.25rem;
+      }
+
+      .side {
+        text-align: left;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--rule-strong);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 3px;
+        cursor: pointer;
+        font: inherit;
+        transition:
+          background 0.12s,
+          border-color 0.12s;
+      }
+
+      .side strong {
+        display: block;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 1.15rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+
+      .side span {
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      .side[aria-pressed='true'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #16202a;
+      }
+
+      .side[aria-pressed='true'] span {
+        color: #3d2f10;
+      }
+
+      /* --- Filtros ------------------------------------------------------ */
+
+      .filters {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        gap: 0.9rem;
+        align-items: end;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        min-width: 0;
+      }
+
+      .field label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .field select,
+      .field input {
+        font: inherit;
+        font-size: 0.92rem;
+        padding: 0.45rem 0.55rem;
+        border: 1px solid var(--rule-strong);
+        border-radius: 3px;
+        background: var(--surface);
+        color: var(--ink);
+        min-width: 0;
+      }
+
+      .checks {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-bottom: 0.45rem;
+      }
+
+      .checks label {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        text-transform: none;
+        letter-spacing: 0;
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      .reset {
+        font: inherit;
+        font-size: 0.88rem;
+        background: none;
+        border: 0;
+        color: var(--accent-ink);
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 0.18em;
+        padding: 0.45rem 0;
+        justify-self: start;
+      }
+
+      /* --- Resultados --------------------------------------------------- */
+
+      .count {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        padding-block: 1.5rem 0.75rem;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-bottom: 3rem;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.35rem 1rem;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 3px;
+        padding: 1rem 1.1rem;
+        cursor: pointer;
+        transition: border-color 0.12s;
+      }
+
+      .card:hover {
+        border-color: var(--accent);
+      }
+
+      .card__t {
+        font-family: inherit;
+        font-size: 1.02rem;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .price {
+        font-weight: 600;
+        white-space: nowrap;
+        text-align: right;
+      }
+
+      .price--none {
+        font-family: inherit;
+        font-weight: 400;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      .card__meta {
+        grid-column: 1 / -1;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      .card__badges {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.35rem;
+      }
+
+      .badge {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.05em;
+        padding: 0.14rem 0.45rem;
+        border: 1px solid var(--rule-strong);
+        border-radius: 2px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .badge--demand {
+        border-color: var(--accent);
+        color: var(--accent-ink);
+      }
+
+      .empty {
+        background: var(--surface);
+        border: 1px dashed var(--rule-strong);
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        color: var(--muted);
+        border-radius: 3px;
+      }
+
+      /* --- Ficha (diálogo) --------------------------------------------- */
+
+      dialog {
+        border: 1px solid var(--rule-strong);
+        border-radius: 4px;
+        padding: 0;
+        background: var(--surface);
+        color: var(--ink);
+        width: min(100% - 2rem, 40rem);
+        max-height: 86vh;
+      }
+
+      dialog::backdrop {
+        background: rgb(10 14 18 / 0.55);
+      }
+
+      .sheet {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+      }
+
+      .sheet__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 1rem;
+      }
+
+      .sheet h2 {
+        font-size: 1.7rem;
+      }
+
+      .sheet__co {
+        color: var(--muted);
+        font-size: 0.92rem;
+        margin-top: 0.2rem;
+      }
+
+      .sheet__close {
+        font: inherit;
+        line-height: 1;
+        font-size: 1.4rem;
+        background: none;
+        border: 0;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 0.2rem 0.4rem;
+      }
+
+      .sheet dl {
+        margin: 0;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.4rem 1.25rem;
+        font-size: 0.92rem;
+        border-top: 1px solid var(--rule);
+        padding-top: 0.9rem;
+      }
+
+      .sheet dt {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding-top: 0.2rem;
+      }
+
+      .sheet dd {
+        margin: 0;
+      }
+
+      .sheet__note {
+        font-size: 0.86rem;
+        color: var(--muted);
+        background: var(--surface-sunk);
+        border-left: 3px solid var(--rule-strong);
+        padding: 0.7rem 0.9rem;
+      }
+
+      .sheet__off {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .sheet__off button {
+        font: inherit;
+        font-size: 0.88rem;
+        padding: 0.45rem 0.9rem;
+        border: 1px solid var(--rule-strong);
+        border-radius: 3px;
+        background: var(--surface-sunk);
+        color: var(--muted);
+        cursor: not-allowed;
+      }
+
+      footer {
+        background: var(--steel);
+        color: var(--steel-muted);
+        border-top: 3px solid var(--accent);
+        padding-block: 1.75rem;
+        font-size: 0.88rem;
+      }
+
+      footer a {
+        color: var(--accent);
+      }
+
+      .foot-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.75rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="top">
+      <div class="wrap top__row">
+        <a class="brand" href="../"><span class="brand__mark">M</span> Maquinaria</a>
+        <nav class="top__links">
+          <a href="../">Sobre el proyecto</a>
+          <a href="https://github.com/Xkmarasa/Maquinaria">Código</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="warn">
+      <div class="wrap warn__row">
+        <p>
+          <strong>Demostración.</strong> Los datos son reales —salidos de la aplicación en
+          ejecución— pero están <strong>congelados en el navegador</strong>. Se puede buscar,
+          filtrar y abrir fichas; no se puede publicar, contratar ni iniciar sesión.
+        </p>
+        <p class="mono" style="margin-left: auto; white-space: nowrap">
+          Datos de <span id="fecha"></span>
+        </p>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <div class="lede">
+        <h1>Maquinaria para obra</h1>
+        <p>Oferta y demanda de maquinaria industrial entre empresas.</p>
+      </div>
+
+      <div class="sides">
+        <button type="button" class="side" data-side="SUPPLY" aria-pressed="true">
+          <strong>Quiero maquinaria</strong>
+          <span>Busco máquinas disponibles para mi obra</span>
+        </button>
+        <button type="button" class="side" data-side="DEMAND" aria-pressed="false">
+          <strong>Tengo maquinaria</strong>
+          <span>Busco obras que necesiten mi maquinaria</span>
+        </button>
+      </div>
+
+      <form class="filters" id="filtros" aria-label="Filtros de búsqueda">
+        <div class="field">
+          <label for="f-cat">Categoría</label>
+          <select id="f-cat"><option value="">Todas</option></select>
+        </div>
+        <div class="field">
+          <label for="f-prov">Provincia</label>
+          <select id="f-prov"><option value="">Todas</option></select>
+        </div>
+        <div class="field">
+          <label for="f-max">Precio máximo €/día</label>
+          <input id="f-max" type="number" min="0" step="50" inputmode="numeric" placeholder="Sin límite" />
+        </div>
+        <div class="field">
+          <label for="f-sort">Orden</label>
+          <select id="f-sort">
+            <option value="recent">Más recientes</option>
+            <option value="price-asc">Precio: de menor a mayor</option>
+            <option value="price-desc">Precio: de mayor a menor</option>
+          </select>
+        </div>
+        <div class="checks">
+          <label><input type="checkbox" id="f-op" /> Con operario</label>
+          <label><input type="checkbox" id="f-tr" /> Con transporte</label>
+        </div>
+        <button type="button" class="reset" id="limpiar">Limpiar filtros</button>
+      </form>
+
+      <p class="count" id="contador"></p>
+      <div class="results" id="resultados"></div>
+    </main>
+
+    <dialog id="ficha">
+      <div class="sheet" id="ficha-cuerpo"></div>
+    </dialog>
+
+    <footer>
+      <div class="wrap foot-row">
+        <p><strong style="color: var(--steel-ink)">Maquinaria</strong> · demostración estática</p>
+        <p><a href="../">Volver a la presentación</a></p>
+        <p style="margin-left: auto">
+          La aplicación completa necesita API, PostgreSQL con PostGIS y almacenamiento de objetos.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const DATOS = {"generado":"2026-09-10","listings":[{"id":"01a08c26-d3d3-7e1e-ab5a-17f984072313","type":"SUPPLY","title":"Retroexcavadora mixta JCB 3CX","description":"La maquina de siempre para obra menor: cazo, martillo y horquillas.","categorySlug":"retroexcavadoras","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"24000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Aridos del Ebro S.L.","machine":{"brand":"JCB","model":"3CX","year":2021,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.974Z","availableUntil":"2028-03-10T16:29:09.974Z","publishedAt":"2026-09-10T16:29:09.970Z"},{"id":"01a08c26-d3bc-7f2d-841f-fbebb28573be","type":"SUPPLY","title":"Dumper articulado 25 t","description":"Para movimiento de tierras en cantera y grandes explanaciones.","categorySlug":"dumpers","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"78000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Aridos del Ebro S.L.","machine":{"brand":"Volvo","model":"A25G","year":2019,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.953Z","availableUntil":"2028-03-10T16:29:09.953Z","publishedAt":"2026-09-10T16:29:09.946Z"},{"id":"01a08c26-d3a1-7a5c-9e01-a00e6cac4cbd","type":"SUPPLY","title":"Telescopico 18 m, 4 t","description":"Con horquillas y cesta homologada. Ideal para montaje de estructura.","categorySlug":"manipuladores-telescopicos","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"28000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Elevacion Castellana S.L.","machine":{"brand":"Manitou","model":"MT 1840","year":2020,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.925Z","availableUntil":"2028-03-10T16:29:09.925Z","publishedAt":"2026-09-10T16:29:09.919Z"},{"id":"01a08c26-d385-7e50-98d8-59fa0f8e7391","type":"SUPPLY","title":"Tijera electrica 12 m para interior","description":"Electrica y sin emisiones: apta para trabajo en interior y naves ocupadas.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"13000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Elevacion Castellana S.L.","machine":{"brand":"JLG","model":"3246ES","year":2023,"attributes":{"carga_maxima":320,"altura_trabajo":11.7,"tipo_plataforma":"TIJERA"},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.897Z","availableUntil":"2028-03-10T16:29:09.897Z","publishedAt":"2026-09-10T16:29:09.891Z"},{"id":"01a08c26-d36c-75c5-889a-ac064ff25e59","type":"SUPPLY","title":"Plataforma articulada 16 m, diesel 4x4","description":"Brazo articulado con alcance horizontal de 7,6 m. Traccion 4x4 para terreno irregular.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"22000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Elevacion Castellana S.L.","machine":{"brand":"Genie","model":"Z-45 XC","year":2022,"attributes":{"carga_maxima":300,"altura_trabajo":15.9,"tipo_plataforma":"ARTICULADA"},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.872Z","availableUntil":"2028-03-10T16:29:09.872Z","publishedAt":"2026-09-10T16:29:09.866Z"},{"id":"01a08c26-d356-7c9e-8cad-91947dbad517","type":"SUPPLY","title":"Compactadora tandem 9 t","description":"Para asfaltado de viales. Riego de agua con autonomia de jornada completa.","categorySlug":"compactadoras","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"41000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Hamm","model":"HD+ 90i","year":2021,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.849Z","availableUntil":"2028-03-10T16:29:09.849Z","publishedAt":"2026-09-10T16:29:09.845Z"},{"id":"01a08c26-d33f-73b4-8265-90b6b4325ab0","type":"SUPPLY","title":"Bulldozer CAT D6 para explanaciones","description":"Hoja semiuniversal y riper trasero. Transporte incluido hasta 80 km.","categorySlug":"bulldozers","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"92000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Caterpillar","model":"D6","year":2018,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.827Z","availableUntil":"2028-03-10T16:29:09.827Z","publishedAt":"2026-09-10T16:29:09.821Z"},{"id":"01a08c26-d322-79d8-8318-94509234c1a4","type":"SUPPLY","title":"Grua movil 50 t con operador certificado","description":"Grua autopropulsada de 50 toneladas. Incluye operador con carne en vigor y estudio previo de montaje.","categorySlug":"gruas","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"145000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Liebherr","model":"LTM 1050-3.1","year":2020,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.799Z","availableUntil":"2028-03-10T16:29:09.799Z","publishedAt":"2026-09-10T16:29:09.791Z"},{"id":"01a08c26-d305-7c0e-a40b-b3e3f86142a1","type":"SUPPLY","title":"Minicargadora Bobcat S770","description":"Con cazo estandar y horquillas. Entrega en 24 h.","categorySlug":"minicargadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"19000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Excavaciones Turia S.L.","machine":{"brand":"Bobcat","model":"S770","year":2022,"attributes":{},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.770Z","availableUntil":"2028-03-10T16:29:09.770Z","publishedAt":"2026-09-10T16:29:09.763Z"},{"id":"01a08c26-d2e5-7c86-be26-a2286517b1c7","type":"SUPPLY","title":"Excavadora 14 t con orugas de goma","description":"Orugas de goma: apta para trabajar sobre pavimento sin danarlo. Ideal para urbanizaciones y zanjas en casco urbano.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"36000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Excavaciones Turia S.L.","machine":{"brand":"Volvo","model":"EC140EL","year":2019,"attributes":{"anchura":2.5,"potencia":90,"tipo_orugas":"GOMA","peso_operativo":14200,"profundidad_excavacion":5.5},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.738Z","availableUntil":"2028-03-10T16:29:09.738Z","publishedAt":"2026-09-10T16:29:09.731Z"},{"id":"01a08c26-d2c6-70e6-a4e4-3f5125fe702d","type":"SUPPLY","title":"Excavadora de cadenas 21 t con operador","description":"Komatsu PC210 de 2021, revisada y con mantenimiento al dia. Disponible con operador y transporte en la provincia de Valencia.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"48000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Excavaciones Turia S.L.","machine":{"brand":"Komatsu","model":"PC210LC-11","year":2021,"attributes":{"anchura":2.8,"potencia":123,"tipo_orugas":"ACERO","peso_operativo":21500,"profundidad_excavacion":6.6},"primaryPhotoUrl":null},"availableFrom":"2026-09-10T16:29:09.706Z","availableUntil":"2028-03-10T16:29:09.706Z","publishedAt":"2026-09-10T16:29:09.698Z"},{"id":"01a08c27-3c55-71a1-9797-1104ba3e61f0","type":"DEMAND","title":"Tijera electrica para montaje en nave","description":"Instalacion de conductos a 10 m en nave ocupada. Se requiere maquina electrica.","categorySlug":"plataformas-elevadoras","city":"Bilbao","province":"Bizkaia","country":"ES","approximateLatitude":43.265,"approximateLongitude":-2.935,"distanceKm":null,"priceAmount":"15000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Nervion Construcciones S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-10T16:29:36.722Z"},{"id":"01a08c27-021b-7b57-ae5c-2467d70c2f89","type":"DEMAND","title":"Excavadora de 20 t para movimiento de tierras","description":"Explanacion de parcela industrial. Un mes de trabajo, posible ampliacion.","categorySlug":"excavadoras","city":"Sevilla","province":"Sevilla","country":"ES","approximateLatitude":37.385,"approximateLongitude":-5.985,"distanceKm":null,"priceAmount":"50000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Obras y Servicios Guadalquivir S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-10T16:29:21.817Z"},{"id":"01a08c26-d3e5-70f5-883b-107c9b900d4d","type":"DEMAND","title":"Se necesita compactadora para campana de asfaltado","description":"Dos semanas de asfaltado en viales urbanos. Se valora que incluya operador y transporte.","categorySlug":"compactadoras","city":"Sevilla","province":"Sevilla","country":"ES","approximateLatitude":37.385,"approximateLongitude":-5.985,"distanceKm":null,"priceAmount":"45000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyName":"Obras y Servicios Guadalquivir S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-10T16:29:09.987Z"}],"categorias":[{"slug":"excavadoras","name":"Excavadoras"},{"slug":"retroexcavadoras","name":"Retroexcavadoras"},{"slug":"minicargadoras","name":"Minicargadoras"},{"slug":"dumpers","name":"Dumpers"},{"slug":"bulldozers","name":"Bulldozers"},{"slug":"motoniveladoras","name":"Motoniveladoras"},{"slug":"compactadoras","name":"Compactadoras"},{"slug":"gruas","name":"Gruas"},{"slug":"manipuladores-telescopicos","name":"Manipuladores telescopicos"},{"slug":"plataformas-elevadoras","name":"Plataformas elevadoras"},{"slug":"carretillas","name":"Carretillas"},{"slug":"generadores","name":"Generadores"},{"slug":"compresores","name":"Compresores"},{"slug":"bombas","name":"Bombas"},{"slug":"equipos-hormigon","name":"Equipos de hormigon"},{"slug":"otra-maquinaria","name":"Otra maquinaria industrial"}],"mapa":[{"latitude":39.45,"longitude":-0.35,"count":3,"listingId":null},{"latitude":40.45,"longitude":-3.75,"count":3,"listingId":null},{"latitude":41.35,"longitude":2.15,"count":3,"listingId":null},{"latitude":41.65,"longitude":-0.85,"count":2,"listingId":null}]};
+    </script>
+
+    <script>
+      (function () {
+        'use strict';
+
+        const $ = (s) => document.querySelector(s);
+
+        const CATEGORIAS = new Map(DATOS.categorias.map((c) => [c.slug, c.name]));
+
+        /**
+         * El dinero llega como cadena de unidades mínimas, igual que de la API.
+         * Se divide aquí y no antes por la misma razón que en la aplicación: en
+         * coma flotante, 24000 / 100 es exacto pero 1 / 3 no, y una vez que un
+         * importe pasa por `number` ya no se sabe cuál de los dos era.
+         */
+        function euros(cadena) {
+          if (cadena === null || cadena === undefined) return null;
+          const minimas = BigInt(cadena);
+          const entero = minimas / 100n;
+          const resto = (minimas % 100n).toString().padStart(2, '0');
+          return entero.toLocaleString('es-ES') + ',' + resto + ' €';
+        }
+
+        const UNIDADES = { DAY: 'día', WEEK: 'semana', MONTH: 'mes', HOUR: 'hora' };
+
+        function precio(l) {
+          const base = euros(l.priceAmount);
+          if (!base) return null;
+          const unidad = UNIDADES[l.priceUnit] || l.priceUnit;
+          return base + '/' + unidad;
+        }
+
+        function fecha(iso) {
+          if (!iso) return null;
+          return new Date(iso).toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          });
+        }
+
+        function periodo(l) {
+          const a = fecha(l.availableFrom);
+          const b = fecha(l.availableUntil);
+          if (!a && !b) return null;
+          if (a && b) return a + ' — ' + b;
+          return a ? 'Desde ' + a : 'Hasta ' + b;
+        }
+
+        // --- Estado ---------------------------------------------------------
+
+        const estado = {
+          side: 'SUPPLY',
+          categoria: '',
+          provincia: '',
+          maximo: null,
+          operario: false,
+          transporte: false,
+          orden: 'recent',
+        };
+
+        /**
+         * Qué se enseña en cada lado.
+         *
+         * «Quiero maquinaria» enseña ofertas; «tengo maquinaria», demandas. No es
+         * un filtro más: es la pregunta que hace quien entra, y por eso está
+         * arriba del todo y no dentro del panel.
+         */
+        function filtrar() {
+          let items = DATOS.listings.filter((l) => l.type === estado.side);
+
+          if (estado.categoria) items = items.filter((l) => l.categorySlug === estado.categoria);
+          if (estado.provincia) items = items.filter((l) => l.province === estado.provincia);
+          if (estado.operario) items = items.filter((l) => l.operator);
+          if (estado.transporte) items = items.filter((l) => l.transport);
+
+          if (estado.maximo !== null) {
+            items = items.filter((l) => {
+              if (!l.priceAmount) return false;
+              return Number(l.priceAmount) <= estado.maximo * 100;
+            });
+          }
+
+          const porPrecio = (a, b) => Number(a.priceAmount || 0) - Number(b.priceAmount || 0);
+
+          if (estado.orden === 'price-asc') items = items.slice().sort(porPrecio);
+          else if (estado.orden === 'price-desc') items = items.slice().sort((a, b) => porPrecio(b, a));
+          else
+            items = items
+              .slice()
+              .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+          return items;
+        }
+
+        // --- Pintado --------------------------------------------------------
+
+        function tarjeta(l) {
+          const boton = document.createElement('button');
+          boton.type = 'button';
+          boton.className = 'card';
+          boton.dataset.id = l.id;
+
+          const t = document.createElement('h3');
+          t.className = 'card__t';
+          t.textContent = l.title;
+
+          const p = document.createElement('p');
+          const valor = precio(l);
+          if (valor) {
+            p.className = 'price';
+            p.textContent = valor;
+          } else {
+            p.className = 'price price--none';
+            p.textContent = 'Precio a convenir';
+          }
+
+          const meta = document.createElement('p');
+          meta.className = 'card__meta';
+          const sitio = [l.city, l.province].filter(Boolean).join(', ');
+          meta.textContent =
+            l.companyName + (sitio ? ' · ' + sitio + ' · aproximada' : '');
+
+          const badges = document.createElement('div');
+          badges.className = 'card__badges';
+
+          const etiquetas = [];
+          if (l.type === 'DEMAND') etiquetas.push(['Demanda', true]);
+          etiquetas.push([CATEGORIAS.get(l.categorySlug) || l.categorySlug, false]);
+          if (l.operator) etiquetas.push(['Con operario', false]);
+          if (l.transport) etiquetas.push(['Con transporte', false]);
+          const rango = periodo(l);
+          if (rango) etiquetas.push([rango, false]);
+
+          for (const [texto, destacada] of etiquetas) {
+            const s = document.createElement('span');
+            s.className = destacada ? 'badge badge--demand' : 'badge';
+            s.textContent = texto;
+            badges.appendChild(s);
+          }
+
+          boton.append(t, p, meta, badges);
+          return boton;
+        }
+
+        function pintar() {
+          const items = filtrar();
+          const lista = $('#resultados');
+          const contador = $('#contador');
+
+          lista.textContent = '';
+
+          const que = estado.side === 'SUPPLY' ? 'ofertas de maquinaria' : 'demandas de obra';
+          contador.textContent =
+            items.length === 0
+              ? 'Sin resultados con estos filtros'
+              : items.length + ' ' + que;
+
+          if (items.length === 0) {
+            const vacio = document.createElement('p');
+            vacio.className = 'empty';
+            vacio.textContent =
+              'Ningún anuncio encaja con estos filtros. Prueba a quitar alguno.';
+            lista.appendChild(vacio);
+            return;
+          }
+
+          for (const l of items) lista.appendChild(tarjeta(l));
+        }
+
+        // --- Ficha ----------------------------------------------------------
+
+        function fila(dl, clave, valor) {
+          if (!valor) return;
+          const dt = document.createElement('dt');
+          dt.textContent = clave;
+          const dd = document.createElement('dd');
+          dd.textContent = valor;
+          dl.append(dt, dd);
+        }
+
+        function abrirFicha(id) {
+          const l = DATOS.listings.find((x) => x.id === id);
+          if (!l) return;
+
+          const cuerpo = $('#ficha-cuerpo');
+          cuerpo.textContent = '';
+
+          const head = document.createElement('div');
+          head.className = 'sheet__head';
+
+          const izq = document.createElement('div');
+          const h = document.createElement('h2');
+          h.textContent = l.title;
+          const co = document.createElement('p');
+          co.className = 'sheet__co';
+          co.textContent = l.companyName;
+          izq.append(h, co);
+
+          const cerrar = document.createElement('button');
+          cerrar.type = 'button';
+          cerrar.className = 'sheet__close';
+          cerrar.setAttribute('aria-label', 'Cerrar');
+          cerrar.textContent = '✕';
+          cerrar.addEventListener('click', () => $('#ficha').close());
+
+          head.append(izq, cerrar);
+          cuerpo.appendChild(head);
+
+          if (l.description) {
+            const d = document.createElement('p');
+            d.textContent = l.description;
+            cuerpo.appendChild(d);
+          }
+
+          const dl = document.createElement('dl');
+          fila(dl, 'Precio', precio(l) || 'A convenir');
+          fila(dl, 'Categoría', CATEGORIAS.get(l.categorySlug) || l.categorySlug);
+          if (l.machine && (l.machine.brand || l.machine.model)) {
+            fila(
+              dl,
+              'Máquina',
+              [l.machine.brand, l.machine.model, l.machine.year].filter(Boolean).join(' · '),
+            );
+          }
+          fila(dl, 'Ubicación', [l.city, l.province].filter(Boolean).join(', '));
+          fila(dl, 'Disponible', periodo(l));
+          fila(
+            dl,
+            'Incluye',
+            [l.operator ? 'operario' : null, l.transport ? 'transporte' : null]
+              .filter(Boolean)
+              .join(' y ') || 'ni operario ni transporte',
+          );
+
+          const atributos = (l.machine && l.machine.attributes) || {};
+          for (const [clave, valor] of Object.entries(atributos)) {
+            fila(dl, clave.replace(/_/g, ' '), String(valor));
+          }
+
+          cuerpo.appendChild(dl);
+
+          const nota = document.createElement('p');
+          nota.className = 'sheet__note';
+          nota.textContent =
+            'La ubicación mostrada es aproximada, con una precisión de alrededor de un kilómetro. ' +
+            'La dirección exacta se acuerda entre las partes al contratar.';
+          cuerpo.appendChild(nota);
+
+          const acciones = document.createElement('div');
+          acciones.className = 'sheet__off';
+          for (const texto of ['Solicitar contratación', 'Realizar propuesta', 'Contactar']) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.disabled = true;
+            b.textContent = texto;
+            acciones.appendChild(b);
+          }
+          cuerpo.appendChild(acciones);
+
+          const aviso = document.createElement('p');
+          aviso.className = 'sheet__co';
+          aviso.textContent =
+            'Estas acciones necesitan sesión y servidor: no funcionan en la demostración.';
+          cuerpo.appendChild(aviso);
+
+          $('#ficha').showModal();
+        }
+
+        // --- Conexiones ------------------------------------------------------
+
+        function poblarSelects() {
+          const cat = $('#f-cat');
+          const usadas = new Set(DATOS.listings.map((l) => l.categorySlug));
+          for (const c of DATOS.categorias) {
+            if (!usadas.has(c.slug)) continue;
+            const o = document.createElement('option');
+            o.value = c.slug;
+            o.textContent = c.name;
+            cat.appendChild(o);
+          }
+
+          const prov = $('#f-prov');
+          const provincias = [...new Set(DATOS.listings.map((l) => l.province).filter(Boolean))];
+          provincias.sort((a, b) => a.localeCompare(b, 'es'));
+          for (const p of provincias) {
+            const o = document.createElement('option');
+            o.value = p;
+            o.textContent = p;
+            prov.appendChild(o);
+          }
+        }
+
+        document.querySelectorAll('.side').forEach((boton) => {
+          boton.addEventListener('click', () => {
+            estado.side = boton.dataset.side;
+            document
+              .querySelectorAll('.side')
+              .forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
+            pintar();
+          });
+        });
+
+        $('#f-cat').addEventListener('change', (e) => {
+          estado.categoria = e.target.value;
+          pintar();
+        });
+        $('#f-prov').addEventListener('change', (e) => {
+          estado.provincia = e.target.value;
+          pintar();
+        });
+        $('#f-sort').addEventListener('change', (e) => {
+          estado.orden = e.target.value;
+          pintar();
+        });
+        $('#f-max').addEventListener('input', (e) => {
+          const v = e.target.value.trim();
+          estado.maximo = v === '' ? null : Number(v);
+          pintar();
+        });
+        $('#f-op').addEventListener('change', (e) => {
+          estado.operario = e.target.checked;
+          pintar();
+        });
+        $('#f-tr').addEventListener('change', (e) => {
+          estado.transporte = e.target.checked;
+          pintar();
+        });
+
+        $('#limpiar').addEventListener('click', () => {
+          Object.assign(estado, {
+            categoria: '',
+            provincia: '',
+            maximo: null,
+            operario: false,
+            transporte: false,
+            orden: 'recent',
+          });
+          $('#filtros').reset();
+          pintar();
+        });
+
+        $('#resultados').addEventListener('click', (e) => {
+          const tarjeta = e.target.closest('.card');
+          if (tarjeta) abrirFicha(tarjeta.dataset.id);
+        });
+
+        // Cerrar pinchando fuera del panel.
+        $('#ficha').addEventListener('click', (e) => {
+          if (e.target === e.currentTarget) e.currentTarget.close();
+        });
+
+        $('#fecha').textContent = new Date(DATOS.generado).toLocaleDateString('es-ES', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+
+        poblarSelects();
+        pintar();
+      })();
+    </script>
+  </body>
+</html>
