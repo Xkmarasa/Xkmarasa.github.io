@@ -108,7 +108,12 @@
         margin: 0;
         background: var(--ground);
         color: var(--ink);
-        font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-family:
+          'IBM Plex Sans',
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
         font-size: var(--step-0);
         line-height: 1.62;
         -webkit-font-smoothing: antialiased;
@@ -616,8 +621,8 @@
             <title id="diag-t">Diagrama de la arquitectura</title>
             <desc id="diag-d">
               Dos aplicaciones Next.js hablan con una API NestJS dividida en contextos acotados, que
-              usa PostgreSQL con PostGIS como único almacén autoritativo, más Redis y
-              almacenamiento de objetos.
+              usa PostgreSQL con PostGIS como único almacén autoritativo, más Redis y almacenamiento
+              de objetos.
             </desc>
 
             <g
@@ -858,8 +863,8 @@
               <p class="decision__b">
                 Escribir a otra empresa exige un cruce, un anuncio o una contratación que ya las
                 relacione, y el servidor lo comprueba contra la fila real. Además, estar bloqueado y
-                no tener vínculo <strong>responden exactamente lo mismo</strong>: quien fue bloqueado
-                no debe poder averiguarlo probando anclas hasta dar con una válida.
+                no tener vínculo <strong>responden exactamente lo mismo</strong>: quien fue
+                bloqueado no debe poder averiguarlo probando anclas hasta dar con una válida.
               </p>
             </div>
           </article>
@@ -867,14 +872,19 @@
           <article class="decision">
             <p class="decision__ref mono">§7.45</p>
             <div>
-              <h3 class="decision__t">Rendimiento medido por forma del plan, no por milisegundos</h3>
+              <h3 class="decision__t">
+                Rendimiento medido por forma del plan, no por milisegundos
+              </h3>
               <p class="decision__b">
-                Un test que exija «menos de 40 ms» falla en un portátil ocupado y pasa en una máquina
-                rápida aunque la consulta esté recorriendo la tabla entera. Se afirma sobre el plan
-                de ejecución, que no depende de la máquina ni del día. Con una salvedad que costó
-                tres intentos entender:
-                <strong>«sin recorrido secuencial» solo significa algo si la consulta es
-                selectiva</strong> — una que pide el 40 % de la tabla se recorre entera, y hace bien.
+                Un test que exija «menos de 40 ms» falla en un portátil ocupado y pasa en una
+                máquina rápida aunque la consulta esté recorriendo la tabla entera. Se afirma sobre
+                el plan de ejecución, que no depende de la máquina ni del día. Con una salvedad que
+                costó tres intentos entender:
+                <strong
+                  >«sin recorrido secuencial» solo significa algo si la consulta es
+                  selectiva</strong
+                >
+                — una que pide el 40 % de la tabla se recorre entera, y hace bien.
               </p>
             </div>
           </article>
@@ -886,9 +896,9 @@
               <p class="decision__b">
                 La guarda deja pasar cuando no encuentra permiso declarado — tiene que hacerlo, hay
                 rutas que solo piden sesión. La consecuencia es que a un endpoint de empresa al que
-                se le olvide el decorador <strong>no le pasa nada</strong>: responde, y le responde a
-                cualquiera con token. Un test recorre la tabla de rutas real y falla si aparece uno.
-                Ya ha parado dos cambios.
+                se le olvide el decorador <strong>no le pasa nada</strong>: responde, y le responde
+                a cualquiera con token. Un test recorre la tabla de rutas real y falla si aparece
+                uno. Ya ha parado dos cambios.
               </p>
             </div>
           </article>
