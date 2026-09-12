@@ -271,6 +271,19 @@
         max-width: 44ch;
       }
 
+      /* La copia estatica ya no es la demostracion: es la red de seguridad para
+         cuando el servicio gratuito esta dormido. Se dice, y se enseña debajo. */
+      .demo-alt {
+        font-size: 0.85rem;
+        color: var(--steel-muted);
+        max-width: 62ch;
+        padding-bottom: 1.4rem;
+      }
+
+      .demo-alt a {
+        color: var(--steel-ink);
+      }
+
       /* --- Secciones --------------------------------------------------- */
 
       section {
@@ -546,32 +559,38 @@
         <dl class="specs">
           <div class="spec">
             <dt class="spec__k">Tests en verde</dt>
-            <dd class="spec__n">1.091</dd>
+            <dd class="spec__n">1.297</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Endpoints</dt>
-            <dd class="spec__n">89</dd>
+            <dd class="spec__n">104</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Migraciones</dt>
-            <dd class="spec__n">26</dd>
+            <dd class="spec__n">29</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Módulos</dt>
-            <dd class="spec__n">24</dd>
+            <dd class="spec__n">21</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Líneas TypeScript</dt>
-            <dd class="spec__n">40.314</dd>
+            <dd class="spec__n">40.991</dd>
           </div>
         </dl>
 
         <p class="demo-cta">
-          <a href="./demo/">Abrir la demostración del mercado &rarr;</a>
+          <a href="https://maquinaria-web-xkmarasa.onrender.com">Ver la demostración interactiva &rarr;</a>
           <span
-            >Datos reales de la aplicación, congelados en el navegador: se puede buscar, filtrar y
-            abrir fichas.</span
+            >La aplicación entera, con su API y su base de datos. Se entra como una de ocho personas
+            inventadas y se publica, se negocia y se contrata de verdad.</span
           >
+        </p>
+
+        <p class="demo-alt">
+          El servicio gratuito se duerme a los quince minutos y tarda cerca de uno en despertar. Si
+          no responde, <a href="./demo/">esta copia del mercado</a> funciona sin servidor: lleva los
+          datos dentro y filtra en el navegador.
         </p>
       </div>
     </header>
@@ -969,7 +988,7 @@
       <section class="wrap">
         <div class="section-head">
           <h2>Estado</h2>
-          <p class="eyebrow">20 de 24 fases</p>
+          <p class="eyebrow">21 de 24 fases</p>
         </div>
 
         <table class="status">
@@ -1021,9 +1040,16 @@
               <td>Merchant of record, custodia de fondos, IVA y KYC sin cerrar</td>
             </tr>
             <tr>
-              <td>Sesión y backoffice</td>
-              <td><span class="pill pill--stop">Bloqueado</span></td>
-              <td>Requiere un proveedor OIDC configurado</td>
+              <td>Sesión y perfil</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Cookie httpOnly; el proveedor de identidad real sigue pendiente de decidir</td>
+            </tr>
+            <tr>
+              <td>Backoffice</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>
+                Verificación de empresas, revisión de documentos y moderación, por su propio eje
+              </td>
             </tr>
           </tbody>
         </table>
@@ -1043,7 +1069,10 @@
           Código en
           <a href="https://github.com/Xkmarasa/Maquinaria">github.com/Xkmarasa/Maquinaria</a>
         </p>
-        <p><a href="./demo/">Demostración del mercado</a></p>
+        <p>
+          <a href="https://maquinaria-web-xkmarasa.onrender.com">Demostración interactiva</a> ·
+          <a href="./demo/">copia del mercado</a>
+        </p>
         <p style="margin-left: auto">
           Aplicación completa: requiere API, PostgreSQL con PostGIS y almacenamiento de objetos.
         </p>
