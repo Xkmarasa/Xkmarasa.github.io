@@ -290,10 +290,13 @@
         padding-block: clamp(3rem, 7vw, 5rem);
       }
 
+      /* Se parte en dos líneas cuando no cabe: en un móvil, el título y la
+         etiqueta de la derecha juntos miden más que la pantalla. */
       .section-head {
         display: flex;
+        flex-wrap: wrap;
         align-items: baseline;
-        gap: 1rem;
+        gap: 0.25rem 1rem;
         border-bottom: 1px solid var(--rule-strong);
         padding-bottom: 0.7rem;
         margin-bottom: 2rem;
@@ -323,9 +326,11 @@
         font-weight: 600;
       }
 
+      /* `min(19rem, 100%)`: sin él, en una pantalla más estrecha que 19 rem la
+         única columna seguiría midiendo 19 rem y la página se desplazaría. */
       .two-col {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
         gap: clamp(1.5rem, 4vw, 3rem);
         align-items: start;
       }
@@ -441,6 +446,36 @@
         font-weight: 600;
         color: var(--ink);
         white-space: nowrap;
+      }
+
+      /* En un móvil la tabla de estado no cabe con sus tres columnas: cada fila
+         pasa a ser un bloque —el área como título, el estado y el detalle
+         debajo— en lugar de desplazarse de lado. */
+      @media (max-width: 34rem) {
+        .status,
+        .status tbody,
+        .status tr,
+        .status td {
+          display: block;
+        }
+
+        .status thead {
+          display: none;
+        }
+
+        .status tr {
+          padding-block: 0.75rem;
+          border-bottom: 1px solid var(--rule);
+        }
+
+        .status td {
+          padding: 0.15rem 0;
+          border-bottom: 0;
+        }
+
+        .status td:first-child {
+          white-space: normal;
+        }
       }
 
       .pill {
@@ -988,7 +1023,7 @@
       <section class="wrap">
         <div class="section-head">
           <h2>Estado</h2>
-          <p class="eyebrow">21 de 24 fases</p>
+          <p class="eyebrow">22 de 24 fases</p>
         </div>
 
         <table class="status">
@@ -1050,6 +1085,11 @@
               <td>
                 Verificación de empresas, revisión de documentos y moderación, por su propio eje
               </td>
+            </tr>
+            <tr>
+              <td>Dispositivos</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>Móvil, tablet con guantes, monitor y papel, medido ruta a ruta</td>
             </tr>
           </tbody>
         </table>
