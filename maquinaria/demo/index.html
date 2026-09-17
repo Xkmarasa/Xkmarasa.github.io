@@ -203,50 +203,6 @@
         margin-top: 0.35rem;
       }
 
-      .sides {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-        gap: 0.75rem;
-        margin-block: 1.25rem;
-      }
-
-      .side {
-        text-align: left;
-        padding: 0.85rem 1rem;
-        border: 1px solid var(--rule-strong);
-        background: var(--surface);
-        color: var(--ink);
-        border-radius: 3px;
-        cursor: pointer;
-        font: inherit;
-        transition:
-          background 0.12s,
-          border-color 0.12s;
-      }
-
-      .side strong {
-        display: block;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 1.15rem;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-      }
-
-      .side span {
-        font-size: 0.84rem;
-        color: var(--muted);
-      }
-
-      .side[aria-pressed='true'] {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #16202a;
-      }
-
-      .side[aria-pressed='true'] span {
-        color: #3d2f10;
-      }
-
       /* Con el dedo, los controles del filtro crecen hasta 44 px y la letra a
          16: por debajo de eso Safari amplia la pagina entera al enfocar el campo. */
       @media (pointer: coarse) {
@@ -415,11 +371,6 @@
         border-radius: 2px;
         color: var(--muted);
         white-space: nowrap;
-      }
-
-      .badge--demand {
-        border-color: var(--accent);
-        color: var(--accent-ink);
       }
 
       .empty {
@@ -625,18 +576,7 @@
     <main class="wrap">
       <div class="lede">
         <h1>Maquinaria para obra</h1>
-        <p>Oferta y demanda de maquinaria industrial entre empresas.</p>
-      </div>
-
-      <div class="sides">
-        <button type="button" class="side" data-side="SUPPLY" aria-pressed="true">
-          <strong>Quiero maquinaria</strong>
-          <span>Busco máquinas disponibles para mi obra</span>
-        </button>
-        <button type="button" class="side" data-side="DEMAND" aria-pressed="false">
-          <strong>Tengo maquinaria</strong>
-          <span>Busco obras que necesiten mi maquinaria</span>
-        </button>
+        <p>Maquinaria industrial que otras empresas alquilan, lista para contratar.</p>
       </div>
 
       <form class="filters" id="filtros" aria-label="Filtros de búsqueda">
@@ -697,7 +637,7 @@
     </footer>
 
     <script>
-      const DATOS = {"generado":"2026-09-16","listings":[{"id":"01a0a991-237e-7f80-aa8d-5c3506eb3364","type":"SUPPLY","title":"Excavadora Hitachi 21 t, disponible en unas semanas","description":"Termina obra en Teruel. Disponible con operador para trabajos en Aragón y la Comunidad Valenciana.","categorySlug":"excavadoras","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"56000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1d68-7b35-84c2-afb1e51513b8","companyName":"Áridos del Ebro S.L.","machine":{"brand":"Hitachi","model":"ZX210LC-6","year":2020,"attributes":{"anchura":2.9,"potencia":125,"tipo_orugas":"ACERO","peso_operativo":20900,"profundidad_excavacion":6.7},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d68-7b35-84c2-afb1e51513b8%2Fmachines%2F01a0a991-234f-73fd-b0b4-6eedf2fe1ef3%2Fphotos%2F01a0a991-3c2e-71c9-87a0-997af1465cf0.png&e=1789553040&s=fRnplhIbraV9X1zn5hLGashgob6OR23lHgcpdttxcCY"},"availableFrom":"2026-10-21T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.445Z"},{"id":"01a0a991-2347-7535-9fe7-ddb02c30b91a","type":"SUPPLY","title":"Retroexcavadora mixta JCB 3CX","description":"La máquina de siempre para obra menor: cazo, martillo y horquillas.","categorySlug":"retroexcavadoras","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"24000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1d68-7b35-84c2-afb1e51513b8","companyName":"Áridos del Ebro S.L.","machine":{"brand":"JCB","model":"3CX","year":2021,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d68-7b35-84c2-afb1e51513b8%2Fmachines%2F01a0a991-2342-76ae-b57b-41b552438166%2Fphotos%2F01a0a991-3c21-777b-bb69-ca714775407d.png&e=1789553040&s=Kc5bHSNopjTdaPaZrPWw-98DRMSbGmbAPDEhjJvGMgg"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.390Z"},{"id":"01a0a991-233b-7110-9418-a5c89d18477e","type":"SUPPLY","title":"Dúmper articulado 25 t","description":"Para movimiento de tierras en cantera y grandes explanaciones.","categorySlug":"dumpers","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"78000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":false,"companyId":"01a0a991-1d68-7b35-84c2-afb1e51513b8","companyName":"Áridos del Ebro S.L.","machine":{"brand":"Volvo","model":"A25G","year":2019,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d68-7b35-84c2-afb1e51513b8%2Fmachines%2F01a0a991-2336-730e-9259-5ef75e1ae12c%2Fphotos%2F01a0a991-395e-7af3-a7fb-b044ad3cf815.png&e=1789553040&s=X5ZwLE9tsKDWo4YFL4z_gr2awAukIW9hIyFwz58ukqo"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.377Z"},{"id":"01a0a991-2321-7df8-9a6a-de96e163cd5a","type":"SUPPLY","title":"Tijera eléctrica 12 m para interior","description":"Eléctrica y sin emisiones: apta para trabajar en interior y en naves ocupadas.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"13000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0a991-1d45-7ab9-b67b-a01e064e8687","companyName":"Elevación Castellana S.L.","machine":{"brand":"JLG","model":"3246ES","year":2023,"attributes":{"carga_maxima":320,"altura_trabajo":11.7,"tipo_plataforma":"TIJERA"},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d45-7ab9-b67b-a01e064e8687%2Fmachines%2F01a0a991-231c-7e3c-9306-0fff2b3e14e8%2Fphotos%2F01a0a991-3574-782d-a5a0-ca09e2ba4861.png&e=1789553040&s=4TnHXf1NY3wpteThVu5FYGa_dmwenDMCMeu4UF-Xd-g"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.352Z"},{"id":"01a0a991-22d0-77c3-a5d7-2a8d16e807d4","type":"SUPPLY","title":"Plataforma articulada 16 m, diésel 4x4","description":"Brazo articulado con alcance horizontal de 7,6 m. Tracción 4x4 para terreno irregular.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"22000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0a991-1d45-7ab9-b67b-a01e064e8687","companyName":"Elevación Castellana S.L.","machine":{"brand":"Genie","model":"Z-45 XC","year":2022,"attributes":{"carga_maxima":300,"altura_trabajo":15.9,"tipo_plataforma":"ARTICULADA"},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d45-7ab9-b67b-a01e064e8687%2Fmachines%2F01a0a991-22ca-7c42-8722-861957ece6cb%2Fphotos%2F01a0a991-33e1-7161-afa7-cd2fc48ba241.png&e=1789553040&s=IEfM4drWMTd8MFYvmlS1v_TaPVlzhRl2MSAfjH6AIsg"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.270Z"},{"id":"01a0a991-22c2-7d9d-a4d1-d862c4db62ae","type":"SUPPLY","title":"Compactadora tándem 9 t","description":"Para asfaltado de viales. Riego de agua con autonomía de jornada completa.","categorySlug":"compactadoras","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"41000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":false,"companyId":"01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Hamm","model":"HD+ 90i","year":2021,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40%2Fmachines%2F01a0a991-22be-7235-9ff6-1aa4ca90fe7c%2Fphotos%2F01a0a991-2ffd-71ad-9203-72dd5d023199.png&e=1789553040&s=FtgIWkqZtoqTLa7A3-l9TIj6WS7w66uiyyrp3l4CBpc"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.257Z"},{"id":"01a0a991-22b5-7dcf-92be-1fa56a60a668","type":"SUPPLY","title":"Bulldozer CAT D6 para explanaciones","description":"Hoja semiuniversal y ripper trasero. Transporte incluido hasta 80 km.","categorySlug":"bulldozers","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"92000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Caterpillar","model":"D6","year":2018,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40%2Fmachines%2F01a0a991-2263-789d-9504-de1175516968%2Fphotos%2F01a0a991-2e6f-73d3-a219-5271e138e041.png&e=1789553040&s=HRV-IzsYkOqW5tO2LkSkFPMquGKk9i02U0yhMdkaJ7Q"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.244Z"},{"id":"01a0a991-225a-7b42-8daa-557d2d81751a","type":"SUPPLY","title":"Grúa móvil 50 t con operador certificado","description":"Grúa autopropulsada de 50 toneladas. Incluye operador con carné en vigor y estudio previo de montaje.","categorySlug":"gruas","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"145000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Liebherr","model":"LTM 1050-3.1","year":2020,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1d39-7eb9-bc11-ee0d9b4a3b40%2Fmachines%2F01a0a991-2255-759d-bc82-5d5e16a0ec92%2Fphotos%2F01a0a991-2a85-7add-b62f-3c6e6e7e2b5f.png&e=1789553040&s=AvvqtxdsRNRH7KHTRXMZsmy6Pqj92uYz_DKpiPNjxAk"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:16.153Z"},{"id":"01a0a991-20bf-77fe-9ff5-4a45c60694c5","type":"SUPPLY","title":"Minicargadora Bobcat S770","description":"Con cazo estándar y horquillas. Entrega en 24 horas en el área de Valencia.","categorySlug":"minicargadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"19000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0a991-1ce9-7a52-8071-178aec916aef","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Bobcat","model":"S770","year":2022,"attributes":{},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1ce9-7a52-8071-178aec916aef%2Fmachines%2F01a0a991-1fa9-7afa-91a6-046cd41d435b%2Fphotos%2F01a0a991-2836-711d-ab5d-dabe1c6b3edf.png&e=1789553040&s=HfkhV8Tr4hjmNEmx6zeSsOJO6xnXq3oPknnywr_KvDI"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:15.644Z"},{"id":"01a0a991-1fa0-7515-b07e-06013b2d49e5","type":"SUPPLY","title":"Excavadora 14 t con orugas de goma","description":"Ideal para urbanizaciones y zanjas en casco urbano: no marca el pavimento y cabe por calles estrechas.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"36000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1ce9-7a52-8071-178aec916aef","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Volvo","model":"EC140EL","year":2019,"attributes":{"anchura":2.5,"potencia":90,"tipo_orugas":"GOMA","peso_operativo":14200,"profundidad_excavacion":5.5},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1ce9-7a52-8071-178aec916aef%2Fmachines%2F01a0a991-1f9b-7410-ae4d-154db73589b7%2Fphotos%2F01a0a991-2654-7d3a-8a17-db7b6ff99b8f.png&e=1789553040&s=zyryGSIJVxTRF5T_Ly1cJZSfr6RHyWI_-90ewwsp_8w"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:15.455Z"},{"id":"01a0a991-1f91-7c0d-adeb-1244dfa24db9","type":"SUPPLY","title":"Excavadora de cadenas 21 t con operador","description":"Komatsu PC210 de 2021, con mantenimiento al día. Con operador y transporte en la provincia de Valencia.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"48000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1ce9-7a52-8071-178aec916aef","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Komatsu","model":"PC210LC-11","year":2021,"attributes":{"anchura":2.8,"potencia":123,"tipo_orugas":"ACERO","peso_operativo":21500,"profundidad_excavacion":6.6},"primaryPhotoUrl":"https://maquinaria-api-xkmarasa.onrender.com/api/v1/storage/local?k=companies%2F01a0a991-1ce9-7a52-8071-178aec916aef%2Fmachines%2F01a0a991-1f32-71e7-b688-34b54db51f61%2Fphotos%2F01a0a991-263f-7157-8f04-fda694d39e7f.png&e=1789553040&s=ccCdM-Uxn46iL3XBm7eCtnuIULK1Ugdcijv44z_-4WM"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T09:34:15.439Z"},{"id":"01a0a991-23e5-7e7e-98d8-456e5d757081","type":"DEMAND","title":"Tijera eléctrica para montaje en nave","description":"Instalación de conductos a 10 m en una nave con actividad. Máquina eléctrica.","categorySlug":"plataformas-elevadoras","city":"Bilbao","province":"Bizkaia","country":"ES","approximateLatitude":43.265,"approximateLongitude":-2.935,"distanceKm":null,"priceAmount":"15000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":false,"companyId":"01a0a991-1d5b-7629-a35a-212e5a268ab8","companyName":"Nervión Construcciones S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-13T09:34:16.548Z"},{"id":"01a0a991-2397-73d9-8cd4-8e3c96c4ca18","type":"DEMAND","title":"Compactadora para campaña de asfaltado","description":"Dos semanas de asfaltado en viales urbanos. Se valora que incluya operador y transporte.","categorySlug":"compactadoras","city":"Sevilla","province":"Sevilla","country":"ES","approximateLatitude":37.385,"approximateLongitude":-5.985,"distanceKm":null,"priceAmount":"45000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":false,"companyId":"01a0a991-1d4f-7d83-8af6-ab5b1d40e51e","companyName":"Obras y Servicios Guadalquivir S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-13T09:34:16.470Z"},{"id":"01a0a991-238e-71ed-b076-a058b4a32159","type":"DEMAND","title":"Excavadora de 20 t para urbanización en Paterna","description":"Cuatro semanas de movimiento de tierras en una urbanización. Con operador y transporte.","categorySlug":"excavadoras","city":"Paterna","province":"Valencia","country":"ES","approximateLatitude":39.505,"approximateLongitude":-0.445,"distanceKm":null,"priceAmount":"50000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0a991-1d4f-7d83-8af6-ab5b1d40e51e","companyName":"Obras y Servicios Guadalquivir S.L.","machine":null,"availableFrom":null,"availableUntil":null,"publishedAt":"2026-09-13T09:34:16.460Z"}],"categorias":[{"slug":"excavadoras","name":"Excavadoras"},{"slug":"retroexcavadoras","name":"Retroexcavadoras"},{"slug":"minicargadoras","name":"Minicargadoras"},{"slug":"dumpers","name":"Dumpers"},{"slug":"bulldozers","name":"Bulldozers"},{"slug":"motoniveladoras","name":"Motoniveladoras"},{"slug":"compactadoras","name":"Compactadoras"},{"slug":"gruas","name":"Gruas"},{"slug":"manipuladores-telescopicos","name":"Manipuladores telescopicos"},{"slug":"plataformas-elevadoras","name":"Plataformas elevadoras"},{"slug":"carretillas","name":"Carretillas"},{"slug":"generadores","name":"Generadores"},{"slug":"compresores","name":"Compresores"},{"slug":"bombas","name":"Bombas"},{"slug":"equipos-hormigon","name":"Equipos de hormigon"},{"slug":"otra-maquinaria","name":"Otra maquinaria industrial"}],"mapa":[{"latitude":39.45,"longitude":-0.35,"count":3,"listingId":null},{"latitude":41.35,"longitude":2.15,"count":3,"listingId":null},{"latitude":41.65,"longitude":-0.85,"count":3,"listingId":null},{"latitude":40.45,"longitude":-3.75,"count":2,"listingId":null}]};
+      const DATOS = {"generado":"2026-09-16","listings":[{"id":"01a0ac03-13ba-70c0-8589-5c1d98824bc6","title":"Excavadora Hitachi 21 t, disponible en unas semanas","description":"Termina obra en Teruel. Disponible con operador para trabajos en Aragón y la Comunidad Valenciana.","categorySlug":"excavadoras","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"56000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-10d2-7fde-b675-fed3aebb69be","companyName":"Áridos del Ebro S.L.","machine":{"brand":"Hitachi","model":"ZX210LC-6","year":2020,"attributes":{"anchura":2.9,"potencia":125,"tipo_orugas":"ACERO","peso_operativo":20900,"profundidad_excavacion":6.7},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-10d2-7fde-b675-fed3aebb69be%2Fmachines%2F01a0ac03-13af-7c50-9cc7-b2674c3f41df%2Fphotos%2F01a0ac03-1a08-7157-8c62-a3045f45bf23.png&e=1789595580&s=3IsXoxaTFlCILXg2_6aFRZ2aXBPtHpIo3qdrSvRxfrA"},"availableFrom":"2026-10-21T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.943Z"},{"id":"01a0ac03-13a1-7c0e-88c7-b574a4880e58","title":"Retroexcavadora mixta JCB 3CX","description":"La máquina de siempre para obra menor: cazo, martillo y horquillas.","categorySlug":"retroexcavadoras","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"24000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-10d2-7fde-b675-fed3aebb69be","companyName":"Áridos del Ebro S.L.","machine":{"brand":"JCB","model":"3CX","year":2021,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-10d2-7fde-b675-fed3aebb69be%2Fmachines%2F01a0ac03-1398-7348-b879-13fb0ade03b0%2Fphotos%2F01a0ac03-19c9-7f75-bc36-ea9107b01bce.png&e=1789595580&s=pTLSXULHwx2_JDLUKc5B9d7n2Nqh2RJWM00KZCDP2lM"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.919Z"},{"id":"01a0ac03-1383-79a3-b76b-4f703495fc54","title":"Dúmper articulado 25 t","description":"Para movimiento de tierras en cantera y grandes explanaciones.","categorySlug":"dumpers","city":"Zaragoza","province":"Zaragoza","country":"ES","approximateLatitude":41.645,"approximateLongitude":-0.885,"distanceKm":null,"priceAmount":"78000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":false,"companyId":"01a0ac03-10d2-7fde-b675-fed3aebb69be","companyName":"Áridos del Ebro S.L.","machine":{"brand":"Volvo","model":"A25G","year":2019,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-10d2-7fde-b675-fed3aebb69be%2Fmachines%2F01a0ac03-1378-7b9b-919c-df898f587e16%2Fphotos%2F01a0ac03-1942-77eb-bef1-0e9f650311bc.png&e=1789595580&s=_ELC2zLis8UixdrsvvYHNgqeINjEKLG_dKB12vhIs3E"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.890Z"},{"id":"01a0ac03-134f-74f9-b49e-a9f1b95f0386","title":"Tijera eléctrica 12 m para interior","description":"Eléctrica y sin emisiones: apta para trabajar en interior y en naves ocupadas.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"13000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0ac03-1074-7dc4-ab9c-9a467142cac1","companyName":"Elevación Castellana S.L.","machine":{"brand":"JLG","model":"3246ES","year":2023,"attributes":{"carga_maxima":320,"altura_trabajo":11.7,"tipo_plataforma":"TIJERA"},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1074-7dc4-ab9c-9a467142cac1%2Fmachines%2F01a0ac03-1342-7896-b173-3e9a6dd43f23%2Fphotos%2F01a0ac03-1839-7da3-951f-8c24d8415a91.png&e=1789595580&s=KYHdAxkzlK855Hnf7cwM_FP70icmJX6VOf1Vlslg-EI"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.836Z"},{"id":"01a0ac03-1331-7df0-b153-e6c64270623f","title":"Plataforma articulada 16 m, diésel 4x4","description":"Brazo articulado con alcance horizontal de 7,6 m. Tracción 4x4 para terreno irregular.","categorySlug":"plataformas-elevadoras","city":"Madrid","province":"Madrid","country":"ES","approximateLatitude":40.415,"approximateLongitude":-3.705,"distanceKm":null,"priceAmount":"22000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0ac03-1074-7dc4-ab9c-9a467142cac1","companyName":"Elevación Castellana S.L.","machine":{"brand":"Genie","model":"Z-45 XC","year":2022,"attributes":{"carga_maxima":300,"altura_trabajo":15.9,"tipo_plataforma":"ARTICULADA"},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1074-7dc4-ab9c-9a467142cac1%2Fmachines%2F01a0ac03-1327-7889-9d3d-163c4f777a25%2Fphotos%2F01a0ac03-17b9-7e18-960d-51357dda1da1.png&e=1789595580&s=QF0zMGZ55BP9np9Vc7V36QgPKKvUidxHQDS-dbqGKIM"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.807Z"},{"id":"01a0ac03-1316-7e30-98fc-45c4424dfcab","title":"Compactadora tándem 9 t","description":"Para asfaltado de viales. Riego de agua con autonomía de jornada completa.","categorySlug":"compactadoras","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"41000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":false,"companyId":"01a0ac03-1052-7e95-ae84-d8e80b540b86","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Hamm","model":"HD+ 90i","year":2021,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1052-7e95-ae84-d8e80b540b86%2Fmachines%2F01a0ac03-130c-778d-a41e-19900c0e01cd%2Fphotos%2F01a0ac03-174f-7531-9039-202f0d37ea5e.png&e=1789595580&s=nSXfykXkJE0Bb9G6xfG_bCk2Vb07FSElBI60CWtj7Hw"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.780Z"},{"id":"01a0ac03-12fa-7088-8872-e91094171c2f","title":"Bulldozer CAT D6 para explanaciones","description":"Hoja semiuniversal y ripper trasero. Transporte incluido hasta 80 km.","categorySlug":"bulldozers","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"92000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-1052-7e95-ae84-d8e80b540b86","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Caterpillar","model":"D6","year":2018,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1052-7e95-ae84-d8e80b540b86%2Fmachines%2F01a0ac03-12ee-799b-bc85-a620a10f7211%2Fphotos%2F01a0ac03-16d1-7b36-82e0-de3598c61478.png&e=1789595580&s=EO9xAd0zIsXT4kNMJTW8hNi5_EwnayW3vHPJVBL3qRc"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.751Z"},{"id":"01a0ac03-12db-7ece-a13b-34c0fcec13b8","title":"Grúa móvil 50 t con operador certificado","description":"Grúa autopropulsada de 50 toneladas. Incluye operador con carné en vigor y estudio previo de montaje.","categorySlug":"gruas","city":"Barcelona","province":"Barcelona","country":"ES","approximateLatitude":41.385,"approximateLongitude":2.165,"distanceKm":null,"priceAmount":"145000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-1052-7e95-ae84-d8e80b540b86","companyName":"Maquinaria Llobregat S.A.","machine":{"brand":"Liebherr","model":"LTM 1050-3.1","year":2020,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1052-7e95-ae84-d8e80b540b86%2Fmachines%2F01a0ac03-12d0-7aa1-89dd-80f529d1be51%2Fphotos%2F01a0ac03-1663-7b51-989a-730b2d1e54b4.png&e=1789595580&s=9PwU2BxLjsimYo3uwrdWnqJvl9iRjybzB0TS4qiU-Os"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.721Z"},{"id":"01a0ac03-12a4-77d9-ae34-d4a40c642370","title":"Minicargadora Bobcat S770","description":"Con cazo estándar y horquillas. Entrega en 24 horas en el área de Valencia.","categorySlug":"minicargadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"19000","priceCurrency":"EUR","priceUnit":"DAY","operator":false,"transport":true,"companyId":"01a0ac03-1023-7e6d-a22b-dc61c1366ba1","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Bobcat","model":"S770","year":2022,"attributes":{},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1023-7e6d-a22b-dc61c1366ba1%2Fmachines%2F01a0ac03-1298-7ddc-b061-296a8d19c48b%2Fphotos%2F01a0ac03-15b8-7b93-afc2-7608e52a60a6.png&e=1789595580&s=ChpBmMimChx-kf6QVfJ3sP73KAwPlFY7p9tisk7aC0c"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.665Z"},{"id":"01a0ac03-1283-7c15-9a2f-1b2e7c057c9c","title":"Excavadora 14 t con orugas de goma","description":"Ideal para urbanizaciones y zanjas en casco urbano: no marca el pavimento y cabe por calles estrechas.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"36000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-1023-7e6d-a22b-dc61c1366ba1","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Volvo","model":"EC140EL","year":2019,"attributes":{"anchura":2.5,"potencia":90,"tipo_orugas":"GOMA","peso_operativo":14200,"profundidad_excavacion":5.5},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1023-7e6d-a22b-dc61c1366ba1%2Fmachines%2F01a0ac03-1277-7bbf-a8d8-1e80344eec66%2Fphotos%2F01a0ac03-151f-7a97-82db-2182c9d57211.png&e=1789595580&s=VI051NiDhMB7DB10IhIHXYi9qx8HzI9b1-bUxsOqELw"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.632Z"},{"id":"01a0ac03-1263-7f99-96e7-5e7d75f9d0b7","title":"Excavadora de cadenas 21 t con operador","description":"Komatsu PC210 de 2021, con mantenimiento al día. Con operador y transporte en la provincia de Valencia.","categorySlug":"excavadoras","city":"Valencia","province":"Valencia","country":"ES","approximateLatitude":39.465,"approximateLongitude":-0.375,"distanceKm":null,"priceAmount":"48000","priceCurrency":"EUR","priceUnit":"DAY","operator":true,"transport":true,"companyId":"01a0ac03-1023-7e6d-a22b-dc61c1366ba1","companyName":"Excavaciones Turia S.L.","machine":{"brand":"Komatsu","model":"PC210LC-11","year":2021,"attributes":{"anchura":2.8,"potencia":123,"tipo_orugas":"ACERO","peso_operativo":21500,"profundidad_excavacion":6.6},"primaryPhotoUrl":"http://localhost:3001/api/v1/storage/local?k=companies%2F01a0ac03-1023-7e6d-a22b-dc61c1366ba1%2Fmachines%2F01a0ac03-1258-7859-b3e9-90d9a7f4fe19%2Fphotos%2F01a0ac03-14b5-7690-84a6-df9e84d60b60.png&e=1789595580&s=tfIw5hwmEZk5_7tZZTtystAH0e5JzsBpbNmkGdcxugg"},"availableFrom":"2026-09-16T00:00:00.000Z","availableUntil":"2028-03-09T00:00:00.000Z","publishedAt":"2026-09-06T20:57:57.601Z"}],"categorias":[{"slug":"excavadoras","name":"Excavadoras"},{"slug":"retroexcavadoras","name":"Retroexcavadoras"},{"slug":"minicargadoras","name":"Minicargadoras"},{"slug":"dumpers","name":"Dumpers"},{"slug":"bulldozers","name":"Bulldozers"},{"slug":"motoniveladoras","name":"Motoniveladoras"},{"slug":"compactadoras","name":"Compactadoras"},{"slug":"gruas","name":"Gruas"},{"slug":"manipuladores-telescopicos","name":"Manipuladores telescopicos"},{"slug":"plataformas-elevadoras","name":"Plataformas elevadoras"},{"slug":"carretillas","name":"Carretillas"},{"slug":"generadores","name":"Generadores"},{"slug":"compresores","name":"Compresores"},{"slug":"bombas","name":"Bombas"},{"slug":"equipos-hormigon","name":"Equipos de hormigon"},{"slug":"otra-maquinaria","name":"Otra maquinaria industrial"}],"mapa":[{"latitude":39.45,"longitude":-0.35,"count":3,"listingId":null},{"latitude":41.35,"longitude":2.15,"count":3,"listingId":null},{"latitude":41.65,"longitude":-0.85,"count":3,"listingId":null},{"latitude":40.45,"longitude":-3.75,"count":2,"listingId":null}]};
       const API_EN_VIVO = "https://maquinaria-api-xkmarasa.onrender.com/api/v1";
     </script>
 
@@ -762,7 +702,6 @@
         // --- Estado ---------------------------------------------------------
 
         const estado = {
-          side: 'SUPPLY',
           categoria: '',
           provincia: '',
           maximo: null,
@@ -772,14 +711,13 @@
         };
 
         /**
-         * Qué se enseña en cada lado.
+         * Qué se enseña con los filtros puestos.
          *
-         * «Quiero maquinaria» enseña ofertas; «tengo maquinaria», demandas. No es
-         * un filtro más: es la pregunta que hace quien entra, y por eso está
-         * arriba del todo y no dentro del panel.
+         * Todos los anuncios son ofertas de maquinaria (ADR-007): no hay un lado
+         * que elegir antes de empezar a buscar.
          */
         function filtrar() {
-          let items = DATOS.listings.filter((l) => l.type === estado.side);
+          let items = DATOS.listings.slice();
 
           if (estado.categoria) items = items.filter((l) => l.categorySlug === estado.categoria);
           if (estado.provincia) items = items.filter((l) => l.province === estado.provincia);
@@ -834,17 +772,15 @@
           const badges = document.createElement('div');
           badges.className = 'card__badges';
 
-          const etiquetas = [];
-          if (l.type === 'DEMAND') etiquetas.push(['Demanda', true]);
-          etiquetas.push([CATEGORIAS.get(l.categorySlug) || l.categorySlug, false]);
-          if (l.operator) etiquetas.push(['Con operario', false]);
-          if (l.transport) etiquetas.push(['Con transporte', false]);
+          const etiquetas = [CATEGORIAS.get(l.categorySlug) || l.categorySlug];
+          if (l.operator) etiquetas.push('Con operario');
+          if (l.transport) etiquetas.push('Con transporte');
           const rango = periodo(l);
-          if (rango) etiquetas.push([rango, false]);
+          if (rango) etiquetas.push(rango);
 
-          for (const [texto, destacada] of etiquetas) {
+          for (const texto of etiquetas) {
             const s = document.createElement('span');
-            s.className = destacada ? 'badge badge--demand' : 'badge';
+            s.className = 'badge';
             s.textContent = texto;
             badges.appendChild(s);
           }
@@ -860,9 +796,10 @@
 
           lista.textContent = '';
 
-          const que = estado.side === 'SUPPLY' ? 'ofertas de maquinaria' : 'demandas de obra';
           contador.textContent =
-            items.length === 0 ? 'Sin resultados con estos filtros' : items.length + ' ' + que;
+            items.length === 0
+              ? 'Sin resultados con estos filtros'
+              : items.length + ' ofertas de maquinaria';
 
           if (items.length === 0) {
             const vacio = document.createElement('p');
@@ -1065,12 +1002,7 @@
 
         /** Lo minimo para pintar una tarjeta sin que reviente. */
         function valido(l) {
-          return (
-            l &&
-            typeof l.id === 'string' &&
-            (l.type === 'SUPPLY' || l.type === 'DEMAND') &&
-            typeof l.title === 'string'
-          );
+          return l && typeof l.id === 'string' && typeof l.title === 'string';
         }
 
         async function cargarEnVivo() {
@@ -1088,13 +1020,12 @@
           const aviso = setTimeout(() => mostrarOrigen('despertando'), 4000);
 
           try {
-            const [ofertas, demandas, categorias] = await Promise.all([
-              traer('/marketplace/listings?type=SUPPLY&limit=50', control.signal),
-              traer('/marketplace/listings?type=DEMAND&limit=50', control.signal),
+            const [ofertas, categorias] = await Promise.all([
+              traer('/marketplace/listings?limit=50', control.signal),
               traer('/catalog/categories', control.signal),
             ]);
 
-            const listings = comoLista(ofertas).concat(comoLista(demandas)).filter(valido);
+            const listings = comoLista(ofertas).filter(valido);
 
             // Una API viva sin anuncios —recien desplegada, sin sembrar— es peor
             // demostracion que la copia. Se dice, y se queda la copia.
@@ -1117,16 +1048,6 @@
             clearTimeout(aviso);
           }
         }
-
-        document.querySelectorAll('.side').forEach((boton) => {
-          boton.addEventListener('click', () => {
-            estado.side = boton.dataset.side;
-            document
-              .querySelectorAll('.side')
-              .forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
-            pintar();
-          });
-        });
 
         $('#f-cat').addEventListener('change', (e) => {
           estado.categoria = e.target.value;

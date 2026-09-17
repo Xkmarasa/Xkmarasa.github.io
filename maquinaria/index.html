@@ -452,7 +452,11 @@
          pasa a ser un bloque —el área como título, el estado y el detalle
          debajo— en lugar de desplazarse de lado. */
       @media (max-width: 34rem) {
+        /* El pie va también en bloque: si se queda como `table-caption` dentro
+           de una tabla que ya no lo es, el navegador lo envuelve en una tabla
+           anónima que encoge al mínimo, y sale una columna de una palabra. */
         .status,
+        .status caption,
         .status tbody,
         .status tr,
         .status td {
@@ -594,15 +598,15 @@
         <dl class="specs">
           <div class="spec">
             <dt class="spec__k">Tests en verde</dt>
-            <dd class="spec__n">1.297</dd>
+            <dd class="spec__n">1.264</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Endpoints</dt>
-            <dd class="spec__n">104</dd>
+            <dd class="spec__n">113</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Migraciones</dt>
-            <dd class="spec__n">29</dd>
+            <dd class="spec__n">33</dd>
           </div>
           <div class="spec">
             <dt class="spec__k">Módulos</dt>
@@ -610,7 +614,7 @@
           </div>
           <div class="spec">
             <dt class="spec__k">Líneas TypeScript</dt>
-            <dd class="spec__n">40.991</dd>
+            <dd class="spec__n">41.647</dd>
           </div>
         </dl>
 
@@ -652,9 +656,11 @@
           </div>
           <div class="prose">
             <p>
-              La plataforma cruza <strong>oferta y demanda por categoría, fechas y radio</strong>,
-              comprueba la documentación de cada máquina antes de permitir contratar, y congela las
-              condiciones en un contrato en el momento en que las dos partes aceptan.
+              Quien tiene la máquina la publica, y quien la necesita
+              <strong>la encuentra por categoría, fechas y radio</strong>. La plataforma comprueba
+              la documentación de cada máquina antes de permitir contratar, dice qué operarios van
+              con ella, y congela las condiciones en un contrato en el momento en que las dos partes
+              aceptan.
             </p>
             <p>
               La ubicación pública se ajusta a una rejilla de aproximadamente un kilómetro: se ve
@@ -780,7 +786,7 @@
               <text x="180" y="152">Máquinas</text>
               <text x="268" y="152">Documentos</text>
               <text x="370" y="152">Anuncios</text>
-              <text x="452" y="152">Matching</text>
+              <text x="452" y="152">Operarios</text>
               <text x="536" y="152">Contratación</text>
               <text x="640" y="152">Contratos</text>
 
@@ -915,10 +921,10 @@
             <div>
               <h3 class="decision__t">Sin vínculo previo no hay conversación</h3>
               <p class="decision__b">
-                Escribir a otra empresa exige un cruce, un anuncio o una contratación que ya las
-                relacione, y el servidor lo comprueba contra la fila real. Además, estar bloqueado y
-                no tener vínculo <strong>responden exactamente lo mismo</strong>: quien fue
-                bloqueado no debe poder averiguarlo probando anclas hasta dar con una válida.
+                Escribir a otra empresa exige un anuncio o una contratación que ya las relacione, y
+                el servidor lo comprueba contra la fila real. Además, estar bloqueado y no tener
+                vínculo <strong>responden exactamente lo mismo</strong>: quien fue bloqueado no debe
+                poder averiguarlo probando anclas hasta dar con una válida.
               </p>
             </div>
           </article>
@@ -1045,9 +1051,9 @@
               <td>16 categorías, atributos variables validados contra el catálogo</td>
             </tr>
             <tr>
-              <td>Matching</td>
+              <td>Mercado</td>
               <td><span class="pill pill--ok">Completo</span></td>
-              <td>Elegibilidad, radio PostGIS, puntuación explicable</td>
+              <td>Solo ofertas: se busca por categoría, fechas, atributos y radio PostGIS</td>
             </tr>
             <tr>
               <td>Contratación</td>
@@ -1055,9 +1061,16 @@
               <td>Negociación por rondas, contrato con copia congelada y huella</td>
             </tr>
             <tr>
+              <td>Operarios</td>
+              <td><span class="pill pill--ok">Completo</span></td>
+              <td>
+                Alta con su documentación, asignados al contratar; nadie en dos obras a la vez
+              </td>
+            </tr>
+            <tr>
               <td>Seguridad</td>
               <td><span class="pill pill--ok">Completo</span></td>
-              <td>Aislamiento entre empresas con test negativo por capacidad</td>
+              <td>Dos roles por empresa y aislamiento con test negativo por capacidad</td>
             </tr>
             <tr>
               <td>Observabilidad</td>
