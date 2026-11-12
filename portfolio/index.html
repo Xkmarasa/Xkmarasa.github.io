@@ -8,184 +8,558 @@
 <meta property="og:title" content="Xavier Camarasa — Portfolio">
 <meta property="og:description" content="Software developer building tools that real businesses use every day.">
 <meta property="og:image" content="slides/s01.jpg">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%232B4EEA'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'>XC</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%232B4EEA'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'>XC</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --blue: #2B4EEA; --ink: #111318; --muted: #5C6270; --line: #D9DCE2; --bg: #F1F2F5; }
+  :root { --blue: #2B4EEA; --blue-soft: #C9D3FF; --ink: #111318; --muted: #5C6270; --line: #D9DCE2; --light: #F1F2F5; --e: cubic-bezier(.2,.8,.2,1); }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 15px/1.4 "Segoe UI", Calibri, Arial, sans-serif; overflow: hidden; }
+  html, body { margin: 0; height: 100%; background: #0c0e13; color: var(--ink); font-family: Inter, "Segoe UI", Arial, sans-serif; overflow: hidden; -webkit-font-smoothing: antialiased; }
   button { font: inherit; cursor: pointer; }
   :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
-  header { position: fixed; inset: 0 0 auto 0; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 5; background: rgba(241,242,245,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-family: Arial, sans-serif; letter-spacing: -.01em; }
-  .brand b { width: 30px; height: 30px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 12px; }
-  .brand span { color: var(--muted); font-weight: 400; }
-  .tools { display: flex; gap: 8px; align-items: center; }
-  .tbtn { height: 36px; padding: 0 14px; border: 1px solid var(--line); background: #fff; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: border-color .2s, background .2s; }
-  .tbtn:hover { border-color: var(--blue); }
-  .tbtn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .tbtn svg { width: 16px; height: 16px; }
+  #viewport { position: fixed; inset: 0 0 64px 0; overflow: hidden; }
+  #canvas { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 0 0; background: #fff; box-shadow: 0 40px 120px -20px rgba(0,0,0,.6); overflow: hidden; }
+  .slide { position: absolute; inset: 0; background: #fff; visibility: hidden; opacity: 0; transition: opacity .6s var(--e), transform .7s var(--e), visibility 0s .7s; transform: scale(1.015); }
+  .slide.on { visibility: visible; opacity: 1; transform: none; transition: opacity .6s var(--e), transform .9s var(--e), visibility 0s; z-index: 2; }
+  .slide.blue { background: var(--blue); color: #fff; }
+  .abs { position: absolute; }
+  .foot { position: absolute; left: 66px; bottom: 24px; font-size: 12px; color: #9097A3; }
+  .num { position: absolute; right: 66px; bottom: 24px; font-size: 12px; font-weight: 800; }
+  .blue .foot { color: var(--blue-soft); } .blue .num { color: #fff; }
 
-  main { position: fixed; inset: 56px 0 64px 0; display: grid; place-items: center; padding: 18px; }
-  .stage { position: relative; width: min(100%, calc((100vh - 56px - 64px - 36px) * 16 / 9)); aspect-ratio: 16 / 9; background: #fff; box-shadow: 0 30px 70px -30px rgba(17,19,24,.45); overflow: hidden; }
-  .slide { position: absolute; inset: 0; opacity: 0; transform: translateX(3%); transition: opacity .45s ease, transform .45s ease; pointer-events: none; }
-  .slide.on { opacity: 1; transform: none; pointer-events: auto; }
-  .slide.left { transform: translateX(-3%); }
-  .slide img { width: 100%; height: 100%; display: block; }
-  .hot { position: absolute; display: block; }
-  .hot:hover { background: rgba(43,78,234,.06); outline: 2px solid rgba(43,78,234,.35); }
-  .nav-zone { position: absolute; top: 0; bottom: 0; width: 22%; z-index: 2; border: 0; background: transparent; }
-  .nav-zone.prev { left: 0; cursor: w-resize; } .nav-zone.next { right: 0; cursor: e-resize; }
+  .lbl { font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--blue); white-space: nowrap; }
+  .sep { color: var(--ink); margin: 0 .55em; }
+  .blue .sep { color: #fff; }
+  .lbl.ink { color: var(--ink); } .lbl.soft { color: var(--blue-soft); } .lbl.soft .sep { color: #fff; }
+  .h1 { font-weight: 800; letter-spacing: -.035em; line-height: .95; margin: 0; }
+  .h2 { font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin: 0; }
+  .body { font-size: 18px; line-height: 1.55; color: var(--muted); }
+  .line { position: absolute; height: 1px; background: var(--line); transform-origin: left; }
+  .chips span { display: inline-block; background: var(--light); padding: 8px 13px; font-size: 13px; font-weight: 700; margin: 0 8px 8px 0; }
+  .chips.w span { background: #fff; }
 
-  footer { position: fixed; inset: auto 0 0 0; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 20px; background: rgba(241,242,245,.92); border-top: 1px solid var(--line); z-index: 5; }
-  .arrow { width: 40px; height: 40px; border: 1px solid var(--line); background: #fff; display: grid; place-items: center; }
+  .card { position: absolute; background: #fff; border: 1px solid var(--line); padding: 5px; box-shadow: 0 34px 70px -30px rgba(17,19,24,.45); cursor: zoom-in; }
+  .card .ph { overflow: hidden; aspect-ratio: 1.44; }
+  .card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transform: scale(1.08); transition: transform 7s ease-out; }
+  .on .card img { transform: scale(1); }
+  .card:hover img { transform: scale(1.03); transition: transform .6s var(--e); }
+  .tag { position: absolute; left: 20px; top: 20px; background: var(--blue); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; padding: 8px 12px; z-index: 2; }
+  .phone { position: absolute; background: var(--ink); border-radius: 26px; padding: 8px; box-shadow: 0 34px 60px -26px rgba(17,19,24,.55); cursor: zoom-in; }
+  .phone img { display: block; width: 100%; border-radius: 19px; }
+  .photo { position: absolute; top: 0; right: 0; bottom: 0; background-size: cover; background-position: center top; }
+  .panel { position: absolute; background: var(--light); }
+  .sq { position: absolute; background: var(--blue); display: grid; place-items: center; color: #fff; }
+  .sq svg { width: 45%; height: 45%; }
+  .ic { color: var(--blue); }
+
+  /* entrance animations — run each time a slide becomes active */
+  .a { opacity: 0; }
+  .on .a { animation: up .9s var(--e) both; animation-delay: calc(var(--d, 0) * 90ms + 200ms); }
+  .on .a.l { animation-name: fromL; } .on .a.r { animation-name: fromR; }
+  .on .a.pop { animation-name: pop; animation-timing-function: cubic-bezier(.34,1.56,.64,1); }
+  .on .a.fade { animation-name: fade; }
+  .on .a.wipe { animation-name: wipe; animation-duration: 1.1s; }
+  .on .a.wipeL { animation-name: wipeL; animation-duration: 1.1s; }
+  .on .a.draw { animation-name: draw; animation-duration: 1s; }
+  .on .a.grow { animation-name: grow; animation-duration: 1s; }
+  .mask { overflow: hidden; display: block; }
+  .on .mask > .a { animation-name: rise; animation-duration: 1s; }
+  @keyframes up { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
+  @keyframes rise { from { opacity: 1; transform: translateY(105%); } to { opacity: 1; transform: none; } }
+  @keyframes fromL { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: none; } }
+  @keyframes fromR { from { opacity: 0; transform: translateX(80px); } to { opacity: 1; transform: none; } }
+  @keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes wipe { from { opacity: 1; clip-path: inset(0 0 0 100%); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+  @keyframes wipeL { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+  @keyframes draw { from { opacity: 1; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+  @keyframes grow { from { opacity: 1; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+
+  /* UI */
+  .ui { position: fixed; z-index: 10; transition: opacity .4s; }
+  body.idle .ui { opacity: 0; pointer-events: none; }
+  body.idle { cursor: none; }
+  #top { top: 14px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+  #top > * { pointer-events: auto; }
+  .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 14px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+  .brand b { width: 30px; height: 30px; background: var(--blue); display: grid; place-items: center; font-size: 12px; }
+  .brand span { color: #b5bbc7; font-weight: 500; }
+  .tools { display: flex; gap: 8px; }
+  .tb { height: 36px; padding: 0 13px; border: 1px solid #2b303b; background: rgba(20,23,30,.88); color: #fff; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; text-decoration: none; backdrop-filter: blur(8px); }
+  .tb:hover { border-color: var(--blue); }
+  .tb.primary { background: var(--blue); border-color: var(--blue); }
+  .tb svg { width: 16px; height: 16px; }
+  .tb[aria-pressed="true"] { border-color: var(--blue); color: var(--blue-soft); }
+  #bottom { left: 0; right: 0; bottom: 0; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: #0c0e13; border-top: 1px solid #1d212a; color: #fff; }
+  .arrow { width: 40px; height: 40px; border: 1px solid #2b303b; background: #151821; color: #fff; display: grid; place-items: center; flex: none; }
   .arrow:hover { border-color: var(--blue); }
-  .arrow:disabled { opacity: .35; cursor: default; }
+  .arrow:disabled { opacity: .3; cursor: default; }
   .arrow svg { width: 18px; height: 18px; }
-  .meta { flex: 1; min-width: 0; }
-  .meta .ttl { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .meta .chap { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); font-weight: 700; }
-  .bar { position: absolute; left: 0; top: -1px; height: 3px; background: var(--blue); transition: width .4s ease; }
-  .count { font-family: Arial, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .count span { color: var(--muted); font-weight: 400; }
+  .meta { min-width: 0; width: 280px; flex: none; }
+  .meta .c { font-size: 10.5px; letter-spacing: .2em; font-weight: 700; color: var(--blue-soft); text-transform: uppercase; }
+  .meta .t { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #segs { flex: 1; display: flex; gap: 4px; align-items: center; height: 40px; }
+  #segs button { flex: 1; height: 100%; border: 0; background: transparent; padding: 0; position: relative; }
+  #segs button::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 4px; margin-top: -2px; background: #2a2f3a; transition: background .3s; }
+  #segs button.done::before { background: #4b5cb0; }
+  #segs button.cur::after { content: ""; position: absolute; left: 0; top: 50%; height: 4px; margin-top: -2px; background: var(--blue); width: var(--p, 100%); }
+  #segs button:hover::before { background: #59607a; }
+  #segs button span { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #fff; color: var(--ink); font-size: 12px; font-weight: 600; padding: 5px 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  #segs button:hover span { opacity: 1; }
+  .count { font-weight: 800; font-variant-numeric: tabular-nums; font-size: 14px; flex: none; }
+  .count span { color: #8e95a3; font-weight: 500; }
 
-  .grid { position: fixed; inset: 56px 0 0 0; background: var(--bg); z-index: 4; overflow: auto; padding: 28px 20px 40px; display: none; }
-  .grid.open { display: block; }
-  .grid h2 { font-family: Arial, sans-serif; margin: 0 auto 18px; max-width: 1200px; font-size: 22px; }
-  .thumbs { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
-  .thumb { border: 1px solid var(--line); background: #fff; padding: 0; text-align: left; transition: transform .2s, border-color .2s; }
-  .thumb:hover { transform: translateY(-3px); border-color: var(--blue); }
+  #grid { position: fixed; inset: 0; z-index: 20; background: rgba(12,14,19,.97); overflow: auto; padding: 70px 24px 40px; display: none; }
+  #grid.open { display: block; animation: fade .3s; }
+  #grid h2 { color: #fff; max-width: 1240px; margin: 0 auto 20px; font-size: 22px; }
+  .thumbs { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+  .thumb { background: #151821; border: 1px solid #2b303b; padding: 0; text-align: left; color: #fff; transition: transform .25s var(--e), border-color .2s; }
+  .thumb:hover { transform: translateY(-4px); border-color: var(--blue); }
   .thumb.cur { border: 2px solid var(--blue); }
   .thumb img { width: 100%; aspect-ratio: 16/9; display: block; }
-  .thumb div { padding: 8px 10px; font-size: 13px; font-weight: 600; }
-  .thumb small { color: var(--muted); font-weight: 400; margin-right: 6px; }
+  .thumb div { padding: 9px 11px; font-size: 13px; font-weight: 600; }
+  .thumb small { color: var(--blue-soft); margin-right: 6px; }
+  #closeGrid { position: fixed; top: 16px; right: 16px; }
 
-  .hint { position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 14px; font-size: 13px; z-index: 6; transition: opacity .6s; }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #lb { position: fixed; inset: 0; z-index: 30; background: rgba(8,9,12,.94); display: none; align-items: center; justify-content: center; padding: 40px; cursor: zoom-out; }
+  #lb.open { display: flex; animation: fade .25s; }
+  #lb img { max-width: 100%; max-height: 100%; box-shadow: 0 30px 80px rgba(0,0,0,.6); animation: pop .4s var(--e); }
 
-  @media (max-width: 700px) {
-    .brand span, .tbtn .lbl { display: none; }
-    main { padding: 10px; }
-    .stage { width: min(100%, calc((100vh - 56px - 64px - 20px) * 16 / 9)); }
-    .nav-zone { width: 30%; }
+  #hint { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: #fff; color: var(--ink); padding: 9px 14px; font-size: 13px; font-weight: 600; z-index: 15; transition: opacity .6s; box-shadow: 0 10px 30px rgba(0,0,0,.4); white-space: nowrap; }
+  @media (max-width: 760px) {
+    .brand span, .tb .lb, .meta, #hint { display: none; }
+    #segs { gap: 2px; }
   }
-  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
-  @media print {
-    html, body { overflow: visible; height: auto; background: #fff; }
-    header, footer, .grid, .hint, .nav-zone { display: none !important; }
-    main { position: static; display: block; padding: 0; }
-    .stage { width: 100%; box-shadow: none; aspect-ratio: auto; overflow: visible; }
-    .slide { position: static; opacity: 1; transform: none; page-break-after: always; }
+  @media (prefers-reduced-motion: reduce) {
+    .a, .on .a { animation: none !important; opacity: 1 !important; }
+    .slide { transition: opacity .2s; transform: none !important; }
+    .card img { transform: none !important; transition: none; }
   }
 </style>
 </head>
 <body>
-<header>
+
+<div id="viewport"><div id="canvas" aria-roledescription="carousel" aria-label="Portfolio of Xavier Camarasa">
+
+<!-- 1 COVER -->
+<section class="slide" data-c="Introduction" data-t="Xavier Camarasa — Software developer">
+  <div class="photo a wipe" style="left:984px;background-image:url(img/me-pro.jpg);--d:0"></div>
+  <div class="abs a pop" style="left:894px;top:642px;width:312px;height:186px;background:var(--blue);color:#fff;padding:22px 30px;--d:6">
+    <div style="font-size:52px;font-weight:800;line-height:1" data-count="9">9</div>
+    <div style="font-size:15px;margin-top:8px">projects in 6 industries</div>
+  </div>
+  <div class="abs lbl a" style="left:90px;top:96px;--d:1">Portfolio 2026</div>
+  <h1 class="abs h1" style="left:84px;top:140px;font-size:104px">
+    <span class="mask"><span class="a" style="display:block;--d:2">Xavier</span></span>
+    <span class="mask"><span class="a" style="display:block;--d:3">Camarasa.</span></span>
+  </h1>
+  <p class="abs body a" style="left:90px;top:440px;width:744px;font-size:24px;margin:0;--d:5">Software developer building tools that real businesses use every day.</p>
+  <div class="line a draw" style="left:90px;top:630px;width:768px;--d:6"></div>
+  <div class="abs lbl a" style="left:90px;top:650px;--d:7">Studying</div>
+  <div class="abs a" style="left:300px;top:645px;font-size:17px;--d:7">Software Design with AI &amp; Cloud Computing — TUS, Ireland</div>
+  <div class="line a draw" style="left:90px;top:720px;width:768px;--d:8"></div>
+  <div class="abs lbl a" style="left:90px;top:740px;--d:9">Looking for</div>
+  <div class="abs a" style="left:300px;top:735px;font-size:17px;--d:9">Internships &amp; graduate roles</div>
+</section>
+
+<!-- 2 PROFILE -->
+<section class="slide" data-c="Introduction" data-t="Profile — A developer who listens first">
+  <div class="panel a wipe" style="left:1050px;top:0;width:550px;height:900px;--d:0"></div>
+  <div class="abs lbl a" style="left:90px;top:84px;--d:1">Profile</div>
+  <h2 class="abs h2" style="left:84px;top:126px;font-size:58px">
+    <span class="mask"><span class="a" style="display:block;--d:2">A developer who</span></span>
+    <span class="mask"><span class="a" style="display:block;--d:3">listens first.</span></span>
+  </h2>
+  <div class="abs body" style="left:90px;top:350px;width:860px">
+    <p class="a" style="margin:0 0 16px;--d:5">I study Software Design with AI and Cloud Computing at TUS in Ireland. Alongside my degree I've built software for real clients in Spain — a real-estate agency, a sauce factory, a physiotherapist and a local bar — and a marketplace of my own.</p>
+    <p class="a" style="margin:0 0 16px;--d:6">What I enjoy most is the moment a client stops calling me because they can do it themselves. That's why almost everything I build comes with an admin panel, an export button or a clear handover.</p>
+    <p class="a" style="margin:0;color:var(--ink);font-weight:700;--d:7">I'm looking for a team where I can keep turning real business problems into working software.</p>
+  </div>
+  <div class="abs" style="left:1116px;top:96px;width:430px">
+    <div class="a r" style="--d:4;margin-bottom:46px"><div class="lbl">Education</div><div style="font-size:17px;margin-top:10px">BSc Software Design with AI &amp; Cloud Computing — TUS</div></div>
+    <div class="a r" style="--d:5;margin-bottom:46px"><div class="lbl">Final-year project</div><div style="font-size:17px;margin-top:10px">AI-assisted manufacturing drawings in Autodesk Inventor</div></div>
+    <div class="a r" style="--d:6;margin-bottom:46px"><div class="lbl">Experience</div><div style="font-size:17px;margin-top:10px">Freelance client projects in Spain + own B2B product</div></div>
+    <div class="a r" style="--d:7;margin-bottom:46px"><div class="lbl">Languages</div><div style="font-size:17px;margin-top:10px">Spanish <b class="sep" style="color:var(--blue)">/</b> English</div></div>
+    <div class="a r" style="--d:8"><div class="lbl">Available for</div><div style="font-size:17px;margin-top:10px">Internships, graduate roles, freelance</div></div>
+  </div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">02</div>
+</section>
+
+<!-- 3 DIVIDER 01 -->
+<section class="slide blue" data-c="01 Featured product" data-t="Chapter 01 — Featured product">
+  <div class="abs mask" style="left:66px;top:20px"><div class="a" style="font-size:250px;font-weight:800;color:var(--blue-soft);line-height:1;letter-spacing:-.04em;--d:0">01</div></div>
+  <h2 class="abs h2 a" style="left:90px;top:360px;font-size:60px;--d:2">Featured product</h2>
+  <p class="abs a" style="left:90px;top:460px;width:700px;font-size:20px;color:var(--blue-soft);margin:0;--d:3">The project I'm proudest of — designed, built and tested end to end.</p>
+  <div class="line a draw" style="left:90px;top:600px;width:672px;background:#5A76F0;--d:4"></div>
+  <div class="abs a" style="left:90px;top:612px;font-size:17px;font-weight:700;--d:5">Maquinaria <span class="sep">/</span> the product</div>
+  <div class="line a draw" style="left:90px;top:654px;width:672px;background:#5A76F0;--d:5"></div>
+  <div class="abs a" style="left:90px;top:666px;font-size:17px;font-weight:700;--d:6">Under the hood <span class="sep">/</span> engineering decisions</div>
+  <div class="card a r" style="left:888px;top:150px;width:792px;--d:3" data-zoom="img/maq-listing.jpg"><div class="ph"><img src="img/maq-listing.jpg" alt="Maquinaria machine listing page"></div></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">03</div>
+</section>
+
+<!-- 4 MAQUINARIA -->
+<section class="slide" data-c="01 Featured product" data-t="Maquinaria — B2B marketplace">
+  <div class="panel a fade" style="left:0;top:0;width:1600px;height:570px;--d:0"></div>
+  <div class="abs lbl a" style="left:90px;top:72px;--d:1">B2B marketplace <span class="sep">/</span> construction</div>
+  <h2 class="abs h2 mask" style="left:84px;top:108px;font-size:56px"><span class="a" style="display:block;--d:2">Maquinaria</span></h2>
+  <p class="abs body a" style="left:90px;top:228px;width:500px;margin:0;--d:3">Construction companies rent idle machinery to each other — with documents verified before anyone can hire.</p>
+  <div class="abs chips w a" style="left:90px;top:402px;width:520px;--d:4"><span>TypeScript</span><span>Next.js</span><span>REST API</span><span>PostgreSQL</span><span>OpenStreetMap</span><span>Testing</span></div>
+  <div class="card a r" style="left:642px;top:72px;width:528px;--d:3" data-zoom="img/maq-home.jpg"><div class="ph"><img src="img/maq-home.jpg" alt="Marketplace search"></div></div>
+  <div class="card a r" style="left:1008px;top:174px;width:528px;--d:5" data-zoom="img/maq-map.jpg"><div class="ph"><img src="img/maq-map.jpg" alt="Map of machinery listings in Spain"></div></div>
+  <div class="abs a" style="left:90px;top:612px;width:441px;--d:6"><div class="lbl">01 <span style="margin-left:.6em">Problem</span></div><p class="body" style="font-size:16px;margin:14px 0 0;color:var(--ink)">One company has an excavator standing still for three weeks; another, 40 km away, needs exactly that — and rents from a distributor at three times the price.</p></div>
+  <div class="abs a" style="left:579px;top:612px;width:441px;--d:7"><div class="lbl">02 <span style="margin-left:.6em">Solution</span></div><p class="body" style="font-size:16px;margin:14px 0 0;color:var(--ink)">Search by category, dates and radius or on a map. The platform checks each machine's paperwork and freezes the terms into a contract once both sides agree.</p></div>
+  <div class="abs a" style="left:1068px;top:612px;width:441px;--d:8"><div class="lbl">03 <span style="margin-left:.6em">Result</span></div><p class="body" style="font-size:16px;margin:14px 0 0;color:var(--ink)">A complete product with an interactive demo: eight test personas can publish, negotiate and hire for real, end to end.</p></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">04</div>
+</section>
+
+<!-- 5 UNDER THE HOOD -->
+<section class="slide" data-c="01 Featured product" data-t="Maquinaria — Under the hood">
+  <div class="abs a grow" style="left:0;top:0;width:528px;height:900px;background:var(--ink);transform-origin:top;--d:0"></div>
+  <div class="abs lbl soft a" style="left:78px;top:84px;--d:2">By the numbers</div>
+  <div class="abs a" style="left:78px;top:150px;--d:3"><div style="font-size:72px;font-weight:800;color:#fff;letter-spacing:-.03em" data-count="1406">1,406</div><div style="font-size:17px;color:#B7BDC8">passing automated tests</div></div>
+  <div class="abs a" style="left:78px;top:360px;--d:4"><div style="font-size:72px;font-weight:800;color:#fff;letter-spacing:-.03em" data-count="120">120</div><div style="font-size:17px;color:#B7BDC8">API endpoints</div></div>
+  <div class="abs a" style="left:78px;top:570px;--d:5"><div style="font-size:72px;font-weight:800;color:#fff;letter-spacing:-.03em" data-count="40">40</div><div style="font-size:17px;color:#B7BDC8">database migrations</div></div>
+  <div class="abs lbl a" style="left:600px;top:84px;--d:2">Maquinaria <span class="sep">/</span> under the hood</div>
+  <h2 class="abs h2 a" style="left:596px;top:126px;font-size:42px;width:940px;--d:3">Built to be trusted, not just used.</h2>
+  <div class="line a draw" style="left:600px;top:276px;width:936px;--d:4"></div>
+  <div class="sq a pop" style="left:600px;top:306px;width:74px;height:74px;--d:5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></div>
+  <div class="abs a l" style="left:708px;top:300px;width:828px;--d:5"><div style="font-size:21px;font-weight:700">The database refuses double bookings, not an if.</div><p class="body" style="font-size:16px;margin:8px 0 0">A “check, then insert” breaks when two requests arrive at once. A date-range constraint in PostgreSQL means that of eight simultaneous bookings, exactly one wins.</p></div>
+  <div class="line a draw" style="left:600px;top:456px;width:936px;--d:6"></div>
+  <div class="sq a pop" style="left:600px;top:486px;width:74px;height:74px;--d:7"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div>
+  <div class="abs a l" style="left:708px;top:480px;width:828px;--d:7"><div style="font-size:21px;font-weight:700">Reviews are written blind.</div><p class="body" style="font-size:16px;margin:8px 0 0">Neither side sees the other's review until both are in (or 14 days pass), so the first rating can't anchor the second.</p></div>
+  <div class="line a draw" style="left:600px;top:636px;width:936px;--d:8"></div>
+  <div class="sq a pop" style="left:600px;top:666px;width:74px;height:74px;--d:9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <div class="abs a l" style="left:708px;top:660px;width:828px;--d:9"><div style="font-size:21px;font-weight:700">No shared deal, no conversation.</div><p class="body" style="font-size:16px;margin:8px 0 0">Messaging another company requires a listing or booking that links you, checked on the server. Locations are always rounded to a ~1 km grid.</p></div>
+  <div class="foot" style="color:#7d8492">Xavier Camarasa — Portfolio 2026</div><div class="num">05</div>
+</section>
+
+<!-- 6 DIVIDER 02 -->
+<section class="slide blue" data-c="02 Client work" data-t="Chapter 02 — Client work">
+  <div class="abs mask" style="left:66px;top:20px"><div class="a" style="font-size:250px;font-weight:800;color:var(--blue-soft);line-height:1;letter-spacing:-.04em;--d:0">02</div></div>
+  <h2 class="abs h2 a" style="left:90px;top:360px;font-size:60px;--d:2">Client work</h2>
+  <p class="abs a" style="left:90px;top:460px;width:700px;font-size:20px;color:var(--blue-soft);margin:0;--d:3">Four businesses, four different problems — each one solved with the client, not just for them.</p>
+  <div class="line a draw" style="left:90px;top:572px;width:672px;background:#5A76F0;--d:4"></div>
+  <div class="abs a" style="left:90px;top:584px;font-size:17px;font-weight:700;--d:5">Mediterranean Blue <span class="sep">/</span> real estate</div>
+  <div class="line a draw" style="left:90px;top:626px;width:672px;background:#5A76F0;--d:5"></div>
+  <div class="abs a" style="left:90px;top:638px;font-size:17px;font-weight:700;--d:6">DK Tegoria Salsas <span class="sep">/</span> food manufacturing</div>
+  <div class="line a draw" style="left:90px;top:680px;width:672px;background:#5A76F0;--d:6"></div>
+  <div class="abs a" style="left:90px;top:692px;font-size:17px;font-weight:700;--d:7">Bar Castelló <span class="sep">/</span> hospitality</div>
+  <div class="line a draw" style="left:90px;top:734px;width:672px;background:#5A76F0;--d:7"></div>
+  <div class="abs a" style="left:90px;top:746px;font-size:17px;font-weight:700;--d:8">Physiotherapist <span class="sep">/</span> health</div>
+  <div class="card a r" style="left:888px;top:150px;width:792px;--d:3" data-zoom="img/mbir-home.jpg"><div class="ph"><img src="img/mbir-home.jpg" alt="Mediterranean Blue home page"></div></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">06</div>
+</section>
+
+<!-- 7-10 CLIENT SLIDES (filled from the template below) -->
+<template id="client">
+  <div class="panel a wipeL" style="left:0;top:0;width:882px;height:900px;--d:0"></div>
+  <div class="card a l" style="left:72px;top:90px;width:732px;--d:2" data-zoom="{main}">{mainTag}<div class="ph"><img src="{main}" alt="{title} — main screen"></div></div>
+  <div class="card a" style="left:450px;top:486px;width:378px;--d:5" data-zoom="{second}">{secondTag}<div class="ph"><img src="{second}" alt="{title} — detail"></div></div>
+  <div class="abs lbl a" style="left:954px;top:90px;--d:2">{sector}</div>
+  <h2 class="abs h2 a" style="left:950px;top:128px;font-size:{size}px;width:600px;--d:3">{title}</h2>
+  <p class="abs body a" style="left:954px;top:{descTop}px;width:586px;margin:0;--d:4">{desc}</p>
+  {meta}
+  <div class="abs a" style="left:954px;top:{outTop}px;width:586px;--d:9"><div class="lbl">Outcome</div><div style="font-size:23px;font-weight:800;color:var(--blue);margin-top:10px;letter-spacing:-.01em;line-height:1.25">{outcome}</div></div>
+</template>
+<section class="slide client" data-c="02 Client work" data-t="Mediterranean Blue Realty" data-n="07"
+  data-sector="Real estate <span class='sep'>/</span> Costa Blanca" data-title="Mediterranean Blue Realty" data-size="40"
+  data-desc="A bilingual website for an international agency selling luxury villas to buyers abroad."
+  data-main="img/mbir-detail.jpg" data-second="img/mbir-admin.jpg" data-secondtag="Admin"
+  data-meta="Need|Reach foreign buyers; update listings without a developer;;Built|Listings, galleries, news &amp; blog in ES/EN + admin panel;;Features|Bilingual <b class='sep' style='color:var(--blue)'>/</b> responsive <b class='sep' style='color:var(--blue)'>/</b> GDPR cookies"
+  data-outcome="The agency runs its own content day to day."></section>
+<section class="slide client" data-c="02 Client work" data-t="DK Tegoria Salsas" data-n="08"
+  data-sector="Food manufacturing <span class='sep'>/</span> internal tool" data-title="DK Tegoria Salsas" data-size="46"
+  data-desc="An internal platform that replaced paper for working hours and quality control."
+  data-main="img/dk-menu.jpg" data-second="img/dk-clock.jpg" data-secondtag="Clock-in"
+  data-meta="Need|Hours and quality checks lived on paper;;Built|Clock-in/out, 16 report types, one-click Excel export;;Features|Role-based login <b class='sep' style='color:var(--blue)'>/</b> pH, cleaning, waste, water reports"
+  data-outcome="Less paper, fewer errors, data ready for any inspection."></section>
+<section class="slide client" data-c="02 Client work" data-t="Bar Castelló" data-n="09"
+  data-sector="Hospitality <span class='sep'>/</span> L'Alcúdia, Valencia" data-title="Bar Castelló" data-size="46"
+  data-desc="From a quick prototype to a live digital menu the owner updates without touching code."
+  data-main="img/bar-live.jpg" data-maintag="Final" data-second="img/bar-proto.jpg" data-secondtag="Prototype"
+  data-meta="Need|A menu that changes every week, kept up to date online;;Process|Prototype → owner feedback → final product;;Built|Website + real-time digital menu + admin panel"
+  data-outcome="New dishes and prices go live in seconds."></section>
+<section class="slide client" data-c="02 Client work" data-t="Physiotherapist website" data-n="10"
+  data-sector="Health <span class='sep'>/</span> personal brand" data-title="Physiotherapist website" data-size="44"
+  data-desc="A personal-brand landing page for Ximo Marqués, a registered physiotherapist."
+  data-main="img/physio-hero.jpg" data-second="img/physio-cookies.jpg" data-secondtag="GDPR"
+  data-meta="Need|A professional online presence that builds trust fast;;Built|Mobile-first landing page with clear sections;;Features|GDPR cookie banner: accept, reject or configure"
+  data-outcome="A credible first impression, legally sound from day one."></section>
+
+<!-- 11 DIVIDER 03 -->
+<section class="slide blue" data-c="03 Mobile & academic" data-t="Chapter 03 — Mobile & academic">
+  <div class="abs mask" style="left:66px;top:20px"><div class="a" style="font-size:250px;font-weight:800;color:var(--blue-soft);line-height:1;letter-spacing:-.04em;--d:0">03</div></div>
+  <h2 class="abs h2 a" style="left:90px;top:360px;font-size:60px;--d:2">Mobile &amp; academic</h2>
+  <p class="abs a" style="left:90px;top:460px;width:700px;font-size:20px;color:var(--blue-soft);margin:0;--d:3">Apps for phones, data for decisions and a final-year project at the edge of engineering and AI.</p>
+  <div class="line a draw" style="left:90px;top:572px;width:672px;background:#5A76F0;--d:4"></div>
+  <div class="abs a" style="left:90px;top:584px;font-size:17px;font-weight:700;--d:5">SolidarityHub <span class="sep">/</span> Android</div>
+  <div class="line a draw" style="left:90px;top:626px;width:672px;background:#5A76F0;--d:5"></div>
+  <div class="abs a" style="left:90px;top:638px;font-size:17px;font-weight:700;--d:6">Live-music review app <span class="sep">/</span> mobile</div>
+  <div class="line a draw" style="left:90px;top:680px;width:672px;background:#5A76F0;--d:6"></div>
+  <div class="abs a" style="left:90px;top:692px;font-size:17px;font-weight:700;--d:7">Cost of Living Visualizer <span class="sep">/</span> data viz</div>
+  <div class="line a draw" style="left:90px;top:734px;width:672px;background:#5A76F0;--d:7"></div>
+  <div class="abs a" style="left:90px;top:746px;font-size:17px;font-weight:700;--d:8">Final-year project <span class="sep">/</span> Autodesk Inventor + AI</div>
+  <div class="phone a" style="left:930px;top:120px;width:260px;--d:3" data-zoom="img/sol-role.jpg"><img src="img/sol-role.jpg" alt="SolidarityHub role selection"></div>
+  <div class="phone a" style="left:1230px;top:180px;width:234px;--d:4" data-zoom="img/music-review.jpg"><img src="img/music-review.jpg" alt="Music app review screen"></div>
+  <div class="phone a" style="left:1505px;top:120px;width:260px;--d:5" data-zoom="img/sol-map.jpg"><img src="img/sol-map.jpg" alt="SolidarityHub location picker"></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">11</div>
+</section>
+
+<!-- 12 MOBILE -->
+<section class="slide" data-c="03 Mobile & academic" data-t="Mobile apps — SolidarityHub & live-music app">
+  <div class="panel a fade" style="left:72px;top:66px;width:708px;height:450px;--d:0"></div>
+  <div class="panel a fade" style="left:820px;top:66px;width:708px;height:450px;--d:1"></div>
+  <div class="phone a" style="left:144px;top:110px;width:172px;--d:2" data-zoom="img/sol-role.jpg"><img src="img/sol-role.jpg" alt="SolidarityHub role selection"></div>
+  <div class="phone a" style="left:340px;top:110px;width:172px;--d:3" data-zoom="img/sol-map.jpg"><img src="img/sol-map.jpg" alt="SolidarityHub location and radius"></div>
+  <div class="phone a" style="left:536px;top:110px;width:172px;--d:4" data-zoom="img/sol-skills.jpg"><img src="img/sol-skills.jpg" alt="SolidarityHub capabilities and shifts"></div>
+  <div class="phone a" style="left:1000px;top:110px;width:150px;--d:4" data-zoom="img/music-review.jpg"><img src="img/music-review.jpg" alt="Concert review"></div>
+  <div class="phone a" style="left:1190px;top:110px;width:150px;--d:5" data-zoom="img/music-collections.jpg"><img src="img/music-collections.jpg" alt="Music collections"></div>
+  <div class="abs a" style="left:72px;top:546px;width:708px;--d:6"><div class="lbl">Android <span class="sep">/</span> emergency response</div><div class="h2" style="font-size:32px;margin-top:12px">SolidarityHub</div><p class="body" style="font-size:16px;margin:12px 0 16px">Inspired by the DANA floods in Valencia: connects volunteers with affected people — role, location and radius, what you can offer and when, and requests on a map.</p><div class="chips"><span>Android</span><span>Geolocation</span><span>Matching</span></div></div>
+  <div class="abs a" style="left:820px;top:546px;width:708px;--d:7"><div class="lbl">Mobile <span class="sep">/</span> music &amp; social</div><div class="h2" style="font-size:32px;margin-top:12px">Live-music review app</div><p class="body" style="font-size:16px;margin:12px 0 16px">Review concerts and albums with star ratings and photos, build collections like “Favourites” and follow friends — in a dark UI designed for one-handed use.</p><div class="chips"><span>Mobile UI</span><span>Social</span><span>Ratings</span></div></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">12</div>
+</section>
+
+<!-- 13 ACADEMIC -->
+<section class="slide" data-c="03 Mobile & academic" data-t="Academic work">
+  <div class="abs lbl a" style="left:90px;top:84px;--d:1">Academic work <span class="sep">/</span> TUS</div>
+  <h2 class="abs h2 a" style="left:84px;top:126px;font-size:44px;--d:2">Data, AI and project management.</h2>
+  <div class="line a draw" style="left:90px;top:276px;width:1420px;--d:3"></div>
+  <div class="sq a pop" style="left:90px;top:318px;width:156px;height:156px;--d:4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+  <div class="abs a l" style="left:294px;top:318px;width:560px;--d:5"><div class="lbl">Data visualisation <span class="sep">/</span> team of 4</div><div style="font-size:25px;font-weight:800;margin:12px 0 18px">Cost of Living Visualizer</div><div class="chips"><span>Python</span><span>pandas</span><span>Streamlit</span><span>Plotly</span><span>Teamwork</span></div></div>
+  <p class="abs body a" style="left:888px;top:312px;width:624px;margin:0;font-size:17px;--d:6">An interactive dashboard comparing wages with rent, groceries, energy and transport across European countries — so people thinking of moving abroad can see what they would actually have left each month.</p>
+  <div class="line a draw" style="left:90px;top:546px;width:1420px;--d:6"></div>
+  <div class="sq a pop" style="left:90px;top:588px;width:156px;height:156px;--d:7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7L6 21M12 7l6 14M8 15h8"/></svg></div>
+  <div class="abs a l" style="left:294px;top:588px;width:560px;--d:8"><div class="lbl">Final-year project <span class="sep">/</span> engineering + AI</div><div style="font-size:25px;font-weight:800;margin:12px 0 18px;line-height:1.2">AI-assisted drawing generation for Autodesk Inventor</div><div class="chips"><span>Inventor API</span><span>SRS</span><span>Feasibility</span><span>Risk register</span></div></div>
+  <p class="abs body a" style="left:888px;top:582px;width:624px;margin:0;font-size:17px;--d:9">Automatically generating and evaluating manufacturing drawings from 3D parts. Delivered so far: proposal, SRS and a feasibility study with PERT estimates, a risk register and MoSCoW scoping.</p>
+  <div class="line a draw" style="left:90px;top:816px;width:1420px;--d:9"></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">13</div>
+</section>
+
+<!-- 14 PROCESS -->
+<section class="slide" data-c="04 How I work & skills" data-t="How I work — Listen first, then build">
+  <div class="abs lbl a" style="left:90px;top:84px;--d:1">04 <span class="sep">/</span> How I work</div>
+  <h2 class="abs h2 a" style="left:84px;top:126px;font-size:56px;--d:2">Listen first, then build.</h2>
+  <div class="abs a draw" style="left:138px;top:353px;width:1065px;height:3px;background:var(--ink);transform-origin:left;--d:3;animation-duration:1.8s"></div>
+  <div class="sq a pop" style="left:90px;top:306px;width:96px;height:96px;background:var(--ink);border:4px solid #fff;font-size:20px;font-weight:800;--d:4">01</div>
+  <div class="sq a pop" style="left:445px;top:306px;width:96px;height:96px;background:var(--ink);border:4px solid #fff;font-size:20px;font-weight:800;--d:6">02</div>
+  <div class="sq a pop" style="left:800px;top:306px;width:96px;height:96px;background:var(--ink);border:4px solid #fff;font-size:20px;font-weight:800;--d:8">03</div>
+  <div class="sq a pop" style="left:1155px;top:306px;width:96px;height:96px;border:4px solid #fff;font-size:20px;font-weight:800;--d:10">04</div>
+  <div class="abs a" style="left:90px;top:438px;width:300px;--d:5"><div style="font-size:27px;font-weight:800">Listen</div><p class="body" style="font-size:16px;margin:14px 0 0">Start from the business problem — the paperwork, the idle machine, the weekly menu — not from a tech stack.</p><div class="lbl" style="margin-top:34px;white-space:normal;line-height:1.5">DK Tegoria <span class="sep">/</span> Maquinaria</div></div>
+  <div class="abs a" style="left:445px;top:438px;width:300px;--d:7"><div style="font-size:27px;font-weight:800">Prototype</div><p class="body" style="font-size:16px;margin:14px 0 0">Show something clickable early and let the client react. Cheap changes now beat expensive ones later.</p><div class="lbl" style="margin-top:34px;white-space:normal;line-height:1.5">Bar Castelló</div></div>
+  <div class="abs a" style="left:800px;top:438px;width:300px;--d:9"><div style="font-size:27px;font-weight:800">Build &amp; test</div><p class="body" style="font-size:16px;margin:14px 0 0">Front end, back end, database and tests in one pair of hands, with key rules enforced where they can't be bypassed.</p><div class="lbl" style="margin-top:34px;white-space:normal;line-height:1.5">1,406 tests <span class="sep">/</span> Maquinaria</div></div>
+  <div class="abs a" style="left:1155px;top:438px;width:300px;--d:11"><div style="font-size:27px;font-weight:800">Hand over</div><p class="body" style="font-size:16px;margin:14px 0 0">Admin panels and exports so clients run their own tools — no developer needed for day-to-day changes.</p><div class="lbl" style="margin-top:34px;white-space:normal;line-height:1.5">Mediterranean Blue <span class="sep">/</span> Bar Castelló</div></div>
+  <div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">14</div>
+</section>
+
+<!-- 15 SKILLS (rows added by script) -->
+<section class="slide" data-c="04 How I work & skills" data-t="Skills — What I bring to a team" id="skills">
+  <div class="abs lbl a" style="left:90px;top:72px;--d:1">Skills</div>
+  <h2 class="abs h2 a" style="left:84px;top:110px;font-size:48px;--d:2">What I bring to a team.</h2>
+</section>
+
+<!-- 16 CLOSING -->
+<section class="slide blue" data-c="Thank you" data-t="Let's build something useful">
+  <div class="photo a wipe" style="left:984px;background-image:url(img/me-pro.jpg);--d:0"></div>
+  <div class="abs lbl soft a" style="left:90px;top:168px;--d:1">Thank you</div>
+  <h1 class="abs h1" style="left:84px;top:212px;font-size:84px;color:#fff;line-height:1">
+    <span class="mask"><span class="a" style="display:block;--d:2">Let's build</span></span>
+    <span class="mask"><span class="a" style="display:block;--d:3">something</span></span>
+    <span class="mask"><span class="a" style="display:block;--d:4">useful.</span></span>
+  </h1>
+  <p class="abs a" style="left:90px;top:600px;font-size:21px;color:var(--blue-soft);margin:0;--d:6">Open to internships, graduate roles and freelance projects.</p>
+  <div class="line a draw" style="left:90px;top:690px;width:816px;background:#5A76F0;--d:7"></div>
+  <div class="abs a" style="left:90px;top:712px;font-size:17px;color:var(--blue-soft);--d:8"><b style="color:#fff">Xavier Camarasa</b><span class="sep">/</span>Software Developer<span class="sep">/</span>Contact details on my CV</div>
+</section>
+
+</div></div>
+
+<div class="ui" id="top">
   <div class="brand"><b>XC</b>Xavier Camarasa <span>— Portfolio 2026</span></div>
   <div class="tools">
-    <button class="tbtn" id="gridBtn" aria-label="Show all slides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span class="lbl">All slides</span></button>
-    <button class="tbtn" id="fsBtn" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M21 8V3h-5M16 21h5v-5M3 16v5h5"/></svg><span class="lbl">Present</span></button>
-    <a class="tbtn primary" href="Xavier-Camarasa-Portfolio.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="lbl">Download PDF</span></a>
+    <button class="tb" id="playBtn" aria-pressed="false" title="Autoplay (P)"><svg viewBox="0 0 24 24" fill="currentColor" id="playIco"><path d="M8 5v14l11-7z"/></svg><span class="lb">Autoplay</span></button>
+    <button class="tb" id="gridBtn" title="All slides (G)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span class="lb">All slides</span></button>
+    <button class="tb" id="fsBtn" title="Full screen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M21 8V3h-5M16 21h5v-5M3 16v5h5"/></svg><span class="lb">Present</span></button>
+    <a class="tb primary" href="Xavier-Camarasa-Portfolio.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="lb">PDF</span></a>
   </div>
-</header>
-
-<main>
-  <div class="stage" id="stage" aria-roledescription="carousel" aria-label="Portfolio slides">
-    <button class="nav-zone prev" id="zPrev" aria-label="Previous slide"></button>
-    <button class="nav-zone next" id="zNext" aria-label="Next slide"></button>
-  </div>
-</main>
-
-<footer>
-  <div class="bar" id="bar"></div>
+</div>
+<div class="ui" id="bottom">
   <button class="arrow" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
   <button class="arrow" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
-  <div class="meta"><div class="chap" id="chap"></div><div class="ttl" id="ttl" aria-live="polite"></div></div>
+  <div class="meta"><div class="c" id="chap"></div><div class="t" id="ttl" aria-live="polite"></div></div>
+  <div id="segs"></div>
   <div class="count" id="count"></div>
-</footer>
-
-<section class="grid" id="grid" aria-label="All slides"><h2>All slides</h2><div class="thumbs" id="thumbs"></div></section>
-<div class="hint" id="hint">Use ← → or swipe to move between slides</div>
+</div>
+<section id="grid" aria-label="All slides"><button class="tb" id="closeGrid">Close ✕</button><h2>All slides</h2><div class="thumbs" id="thumbs"></div></section>
+<div id="lb" role="dialog" aria-label="Screenshot"><img alt=""></div>
+<div id="hint">← → to navigate · P autoplay · F full screen · click a screenshot to zoom</div>
 
 <script>
-const SLIDES = [
-  ["Introduction", "Xavier Camarasa — Software developer", "Cover: Xavier Camarasa, software developer building tools that real businesses use every day. Studying Software Design with AI & Cloud Computing at TUS, Ireland. Looking for internships and graduate roles. Nine projects in six industries."],
-  ["Introduction", "Profile — A developer who listens first", "Profile: studies at TUS; built software for real clients in Spain (a real-estate agency, a sauce factory, a physiotherapist, a local bar) plus an own B2B product. Languages: Spanish and English. Available for internships, graduate roles and freelance."],
-  ["01 Featured product", "Chapter 01 — Featured product", "Chapter divider: Maquinaria, the product, and its engineering decisions."],
-  ["01 Featured product", "Maquinaria — B2B marketplace", "Maquinaria: construction companies rent idle machinery to each other, with documents verified before hiring. Problem, solution and result. TypeScript, Next.js, REST API, PostgreSQL, OpenStreetMap, testing."],
-  ["01 Featured product", "Maquinaria — Under the hood", "By the numbers: 1,406 passing automated tests, 120 API endpoints, 40 database migrations. Decisions: the database refuses double bookings; reviews are written blind; no shared deal, no conversation."],
-  ["02 Client work", "Chapter 02 — Client work", "Chapter divider: Mediterranean Blue (real estate), DK Tegoria Salsas (food manufacturing), Bar Castelló (hospitality), physiotherapist (health)."],
-  ["02 Client work", "Mediterranean Blue Realty", "Bilingual luxury real-estate website with listings, galleries, news, blog and an admin panel. Outcome: the agency runs its own content day to day."],
-  ["02 Client work", "DK Tegoria Salsas", "Internal platform replacing paper: clock-in/out, 16 quality-control report types, one-click Excel export. Outcome: less paper, fewer errors, data ready for any inspection."],
-  ["02 Client work", "Bar Castelló", "From prototype to a live digital menu the owner updates from an admin panel. Outcome: new dishes and prices go live in seconds."],
-  ["02 Client work", "Physiotherapist website", "Personal-brand landing page for a registered physiotherapist, mobile-first with a GDPR cookie banner. Outcome: a credible first impression, legally sound from day one."],
-  ["03 Mobile & academic", "Chapter 03 — Mobile & academic", "Chapter divider: SolidarityHub, live-music review app, Cost of Living Visualizer, final-year project."],
-  ["03 Mobile & academic", "Mobile apps — SolidarityHub & live-music app", "SolidarityHub: Android app inspired by the DANA floods connecting volunteers with affected people. Live-music review app: ratings, photos, collections and friends."],
-  ["03 Mobile & academic", "Academic work", "Cost of Living Visualizer: team data-visualisation dashboard (Python, pandas, Streamlit, Plotly). Final-year project: AI-assisted manufacturing drawing generation for Autodesk Inventor."],
-  ["04 How I work & skills", "How I work — Listen first, then build", "Process: listen, prototype, build & test, hand over — each step backed by a real project."],
-  ["04 How I work & skills", "Skills — What I bring to a team", "Front end, back end & data, mobile, data & AI, engineering practice and professional skills."],
-  ["Thank you", "Let's build something useful", "Closing: open to internships, graduate roles and freelance projects. Contact details on my CV."],
-];
-const HOTSPOTS = {};
+(() => {
+  const $ = s => document.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const pad = n => String(n).padStart(2, "0");
 
-const $ = s => document.querySelector(s);
-const stage = $("#stage"), N = SLIDES.length;
-const pad = n => String(n).padStart(2, "0");
-const els = SLIDES.map(([chap, title, alt], i) => {
-  const d = document.createElement("div");
-  d.className = "slide"; d.setAttribute("role", "group"); d.setAttribute("aria-roledescription", "slide"); d.setAttribute("aria-label", `${i + 1} of ${N}: ${title}`);
-  d.innerHTML = `<img src="slides/s${pad(i + 1)}.jpg" alt="${alt.replace(/"/g, "&quot;")}" ${i > 2 ? 'loading="lazy"' : ""}>`;
-  (HOTSPOTS[i + 1] || []).forEach(h => {
-    const a = document.createElement("a");
-    a.className = "hot"; a.href = "#" + h.to; a.style.cssText = `left:5.6%;width:88.8%;top:${h.top}%;height:${h.h}%`;
-    a.setAttribute("aria-label", "Go to " + SLIDES[h.to - 1][1]);
-    d.appendChild(a);
+  /* client slides from template */
+  const tpl = $("#client").innerHTML;
+  $$(".slide.client").forEach(s => {
+    const d = s.dataset;
+    const rows = d.meta.split(";;").map(r => r.split("|"));
+    const lines = d.title.length > 22 && +d.size > 40 ? 2 : 1;
+    const descTop = 128 + Math.round(+d.size * 1.1) * lines + 26;
+    let y = descTop + 104;
+    const meta = rows.map(([k, v], i) => {
+      const h = `<div class="line a draw" style="left:954px;top:${y}px;width:586px;--d:${5 + i}"></div>
+        <div class="abs lbl ink a" style="left:954px;top:${y + 22}px;--d:${5 + i}">${k}</div>
+        <div class="abs a" style="left:1128px;top:${y + 17}px;width:412px;font-size:16px;line-height:1.4;--d:${5 + i}">${v}</div>`;
+      y += 84; return h;
+    }).join("") + `<div class="line a draw" style="left:954px;top:${y}px;width:586px;--d:8"></div>`;
+    const tag = t => t ? `<div class="tag">${t}</div>` : "";
+    s.innerHTML = tpl.replaceAll("{main}", d.main).replaceAll("{second}", d.second).replaceAll("{title}", d.title)
+      .replace("{mainTag}", tag(d.maintag)).replace("{secondTag}", tag(d.secondtag)).replace("{sector}", d.sector)
+      .replace("{size}", d.size).replace("{descTop}", descTop).replace("{desc}", d.desc).replace("{meta}", meta)
+      .replace("{outTop}", y + 34).replace("{outcome}", d.outcome)
+      + `<div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">${d.n}</div>`;
   });
-  stage.appendChild(d); return d;
-});
-let cur = 0;
-function go(n, push = true) {
-  n = Math.max(0, Math.min(N - 1, n));
-  els.forEach((e, i) => { e.classList.toggle("on", i === n); e.classList.toggle("left", i < n); });
-  cur = n;
-  $("#ttl").textContent = SLIDES[n][1];
-  $("#chap").textContent = SLIDES[n][0];
-  $("#count").innerHTML = `${pad(n + 1)} <span>/ ${pad(N)}</span>`;
-  $("#bar").style.width = ((n + 1) / N * 100) + "%";
-  $("#prev").disabled = n === 0; $("#next").disabled = n === N - 1;
-  document.querySelectorAll(".thumb").forEach((t, i) => t.classList.toggle("cur", i === n));
-  if (push) history.replaceState(null, "", "#" + (n + 1));
-  [n + 1, n + 2].forEach(k => { if (els[k]) els[k].querySelector("img").loading = "eager"; });
-}
-$("#prev").onclick = $("#zPrev").onclick = () => go(cur - 1);
-$("#next").onclick = $("#zNext").onclick = () => go(cur + 1);
-addEventListener("keydown", e => {
-  if ($("#grid").classList.contains("open")) { if (e.key === "Escape" || e.key.toLowerCase() === "g") toggleGrid(false); return; }
-  if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); go(cur + 1); }
-  else if (["ArrowLeft", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); go(cur - 1); }
-  else if (e.key === "Home") go(0); else if (e.key === "End") go(N - 1);
-  else if (e.key.toLowerCase() === "g") toggleGrid(true);
-  else if (e.key.toLowerCase() === "f") fullscreen();
-});
-addEventListener("hashchange", () => { const n = parseInt(location.hash.slice(1), 10); if (n) go(n - 1, false); });
-// swipe
-let x0 = null;
-stage.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
-stage.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); x0 = null; });
-// grid
-const thumbs = $("#thumbs");
-SLIDES.forEach(([, title], i) => {
-  const b = document.createElement("button"); b.className = "thumb";
-  b.innerHTML = `<img src="slides/t${pad(i + 1)}.jpg" alt=""><div><small>${pad(i + 1)}</small>${title}</div>`;
-  b.onclick = () => { go(i); toggleGrid(false); };
-  thumbs.appendChild(b);
-});
-function toggleGrid(open) { $("#grid").classList.toggle("open", open); if (open) document.querySelector(".thumb.cur")?.scrollIntoView({ block: "center" }); }
-$("#gridBtn").onclick = () => toggleGrid(!$("#grid").classList.contains("open"));
-function fullscreen() { const el = document.documentElement; if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen)?.call(el); else document.exitFullscreen(); }
-$("#fsBtn").onclick = fullscreen;
-setTimeout(() => { $("#hint").style.opacity = 0; }, 3500);
-go((parseInt(location.hash.slice(1), 10) || 1) - 1, false);
+
+  /* skills rows */
+  const ICON = {
+    fe: '<rect x="2" y="3" width="20" height="14" rx="1"/><path d="M8 21h8M12 17v4"/>',
+    be: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/>',
+    mo: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+    ai: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+    en: '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    pr: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  };
+  const S = [["fe", "Front end", ["HTML & CSS", "JavaScript", "TypeScript", "React / Next.js", "Responsive design", "Accessibility"]],
+    ["be", "Back end & data", ["REST APIs", "SQL / PostgreSQL", "Migrations", "Authentication & roles", "Python", "pandas"]],
+    ["mo", "Mobile", ["Android", "Maps & geolocation", "Mobile UI design"]],
+    ["ai", "Data & AI", ["Streamlit", "Plotly", "Data cleaning", "Dashboards", "AI-assisted tooling"]],
+    ["en", "Engineering practice", ["Git", "Automated testing", "Architecture decisions", "GDPR & cookies", "Cloud deployment"]],
+    ["pr", "Professional", ["Client communication", "Requirements & SRS", "Feasibility & risk analysis", "Teamwork", "Spanish & English"]]];
+  const esc = t => t.replace(/&/g, "&amp;");
+  let html = "";
+  S.forEach(([ic, t, items], i) => {
+    const y = 240 + i * 96, d = 3 + i;
+    const list = items.map(esc).join(' <b class="sep" style="color:var(--blue)">/</b> ');
+    html += `<div class="line a draw" style="left:90px;top:${y}px;width:1420px;--d:${d}"></div>
+      <svg class="abs ic a pop" style="left:90px;top:${y + 29}px;width:38px;height:38px;--d:${d}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ICON[ic]}</svg>
+      <div class="abs a l" style="left:156px;top:${y + 32}px;font-size:21px;font-weight:700;--d:${d}">${esc(t)}</div>
+      <div class="abs a" style="left:552px;top:${y + 34}px;width:960px;font-size:17px;color:var(--muted);--d:${d + 1}">${list}</div>`;
+  });
+  html += `<div class="line a draw" style="left:90px;top:816px;width:1420px;--d:9"></div><div class="foot">Xavier Camarasa — Portfolio 2026</div><div class="num">15</div>`;
+  $("#skills").insertAdjacentHTML("beforeend", html);
+
+  /* scale the 1600x900 canvas to the window */
+  const canvas = $("#canvas"), vp = $("#viewport");
+  function fit() {
+    const full = !!document.fullscreenElement;
+    vp.style.bottom = full ? "0" : "64px";
+    const W = innerWidth, H = innerHeight - (full ? 0 : 64);
+    const p = full ? 0 : (W < 760 ? 6 : 26);
+    const s = Math.min((W - p * 2) / 1600, (H - p * 2 - (full || W < 760 ? 0 : 40)) / 900);
+    canvas.style.transform = `translate(${-800 * s}px, ${-450 * s + (full || W < 760 ? 0 : 12)}px) scale(${s})`;
+  }
+  addEventListener("resize", fit); document.addEventListener("fullscreenchange", fit); fit();
+
+  /* navigation */
+  const slides = $$(".slide"), N = slides.length, segs = $("#segs");
+  slides.forEach((s, i) => {
+    s.setAttribute("role", "group"); s.setAttribute("aria-roledescription", "slide"); s.setAttribute("aria-label", `${i + 1} of ${N}: ${s.dataset.t}`);
+    const b = document.createElement("button"); b.setAttribute("aria-label", `Go to slide ${i + 1}: ${s.dataset.t}`);
+    b.innerHTML = `<span>${pad(i + 1)} · ${s.dataset.t}</span>`; b.onclick = () => go(i); segs.appendChild(b);
+  });
+  const fmt = n => n.toLocaleString("en-GB");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function countUp(el, delay) {
+    const end = +el.dataset.count; if (reduce) { el.textContent = fmt(end); return; }
+    el.textContent = "0";
+    setTimeout(() => { const t0 = performance.now(), dur = 1500;
+      const tick = t => { const p = Math.min(1, (t - t0) / dur); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 4)))); if (p < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick); }, delay);
+  }
+  let cur = -1, playing = false, timer = null, raf = null; const DUR = 8000;
+  function go(n, push = true) {
+    n = Math.max(0, Math.min(N - 1, n)); if (n === cur) return;
+    const s = slides[n];
+    if (cur === -1) { s.style.transition = "none"; requestAnimationFrame(() => requestAnimationFrame(() => { s.style.transition = ""; })); }
+    slides.forEach((x, i) => x.classList.toggle("on", i === n));
+    s.querySelectorAll(".a").forEach(a => { a.style.animation = "none"; void a.offsetHeight; a.style.animation = ""; });
+    s.querySelectorAll("[data-count]").forEach(el => countUp(el, 650));
+    cur = n;
+    $("#chap").textContent = s.dataset.c; $("#ttl").textContent = s.dataset.t;
+    $("#count").innerHTML = `${pad(n + 1)} <span>/ ${pad(N)}</span>`;
+    [...segs.children].forEach((b, i) => { b.className = i < n ? "done" : i === n ? "cur" : ""; b.style.removeProperty("--p"); });
+    $("#prev").disabled = n === 0; $("#next").disabled = n === N - 1;
+    $$(".thumb").forEach((t, i) => t.classList.toggle("cur", i === n));
+    if (push) history.replaceState(null, "", "#" + (n + 1));
+    if (playing) startTimer();
+  }
+  $("#prev").onclick = () => go(cur - 1); $("#next").onclick = () => go(cur + 1);
+  canvas.addEventListener("click", e => {
+    if (e.target.closest("[data-zoom]")) return;
+    const r = canvas.getBoundingClientRect(); go(cur + (e.clientX - r.left < r.width * .3 ? -1 : 1));
+  });
+  addEventListener("keydown", e => {
+    if ($("#lb").classList.contains("open")) { if (e.key === "Escape") closeLb(); return; }
+    if ($("#grid").classList.contains("open")) { if (e.key === "Escape" || e.key.toLowerCase() === "g") grid(false); return; }
+    const k = e.key;
+    if (["ArrowRight", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); go(cur + 1); }
+    else if (["ArrowLeft", "PageUp", "Backspace"].includes(k)) { e.preventDefault(); go(cur - 1); }
+    else if (k === "Home") go(0); else if (k === "End") go(N - 1);
+    else if (k.toLowerCase() === "g") grid(true); else if (k.toLowerCase() === "f") fs(); else if (k.toLowerCase() === "p") togglePlay();
+  });
+  addEventListener("hashchange", () => { const n = parseInt(location.hash.slice(1), 10); if (n) go(n - 1, false); });
+  let x0 = null;
+  canvas.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+  canvas.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); x0 = null; });
+
+  /* autoplay */
+  function startTimer() {
+    clearTimeout(timer); cancelAnimationFrame(raf);
+    const seg = segs.children[cur], t0 = performance.now();
+    const tick = t => { seg.style.setProperty("--p", Math.min(100, (t - t0) / DUR * 100) + "%"); if (playing) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    timer = setTimeout(() => { if (cur < N - 1) go(cur + 1); else togglePlay(false); }, DUR);
+  }
+  function togglePlay(force) {
+    playing = typeof force === "boolean" ? force : !playing;
+    $("#playBtn").setAttribute("aria-pressed", playing);
+    $("#playIco").innerHTML = playing ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+    $("#playBtn .lb").textContent = playing ? "Pause" : "Autoplay";
+    if (playing) { if (cur === N - 1) go(0); startTimer(); }
+    else { clearTimeout(timer); cancelAnimationFrame(raf); [...segs.children].forEach(b => b.style.removeProperty("--p")); }
+  }
+  $("#playBtn").onclick = () => togglePlay();
+
+  /* grid of all slides */
+  const thumbs = $("#thumbs");
+  slides.forEach((s, i) => {
+    const b = document.createElement("button"); b.className = "thumb";
+    b.innerHTML = `<img src="slides/t${pad(i + 1)}.jpg" alt=""><div><small>${pad(i + 1)}</small>${s.dataset.t}</div>`;
+    b.onclick = () => { grid(false); go(i); }; thumbs.appendChild(b);
+  });
+  function grid(open) { $("#grid").classList.toggle("open", open); if (open) $(".thumb.cur")?.scrollIntoView({ block: "center" }); }
+  $("#gridBtn").onclick = () => grid(true); $("#closeGrid").onclick = () => grid(false);
+
+  /* screenshot zoom */
+  const lb = $("#lb");
+  $$("[data-zoom]").forEach(el => el.addEventListener("click", e => { e.stopPropagation(); const im = lb.querySelector("img"); im.src = el.dataset.zoom; im.alt = el.querySelector("img")?.alt || ""; lb.classList.add("open"); }));
+  function closeLb() { lb.classList.remove("open"); }
+  lb.onclick = closeLb;
+
+  /* full screen + hide controls when idle */
+  function fs() { const el = document.documentElement; if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen)?.call(el); else document.exitFullscreen(); }
+  $("#fsBtn").onclick = fs;
+  let idle;
+  const wake = () => { document.body.classList.remove("idle"); clearTimeout(idle); if (document.fullscreenElement) idle = setTimeout(() => document.body.classList.add("idle"), 2500); };
+  ["mousemove", "keydown", "touchstart"].forEach(ev => addEventListener(ev, wake, { passive: true }));
+  document.addEventListener("fullscreenchange", wake);
+
+  setTimeout(() => { $("#hint").style.opacity = 0; }, 4500);
+  go((parseInt(location.hash.slice(1), 10) || 1) - 1, false);
+})();
 </script>
 </body>
 </html>
