@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevator Pitch — Xavier Camarasa</title>
+<meta name="description" content="3-minute elevator pitch video by Xavier Camarasa, software developer — Management & Organisational Behaviour 4, TUS.">
+<meta property="og:title" content="Elevator Pitch — Xavier Camarasa">
+<meta property="og:image" content="poster.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%232B4EEA'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'>XC</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #2B4EEA; --soft: #C9D3FF; --ink: #111318; --muted: #9aa3b2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: #0c0e13; color: #fff; font-family: Inter, "Segoe UI", Arial, sans-serif; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; gap: 16px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .brand b { width: 32px; height: 32px; background: var(--blue); display: grid; place-items: center; font-size: 12px; }
+  .brand span { color: var(--muted); font-weight: 400; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border: 1px solid #2b303b; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; transition: border-color .2s; }
+  .btn:hover { border-color: var(--blue); }
+  .btn.primary { background: var(--blue); border-color: var(--blue); }
+  .btn svg { width: 16px; height: 16px; }
+  main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 8px 24px 40px; }
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); margin: 18px 0 10px; animation: up .7s ease both; }
+  h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin: 0 0 26px; animation: up .7s .1s ease both; }
+  .player { position: relative; background: #000; box-shadow: 0 40px 100px -30px rgba(0,0,0,.8); animation: up .8s .2s ease both; }
+  video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+  .meta { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 24px; color: var(--muted); font-size: 14px; animation: up .7s .3s ease both; }
+  .meta b { display: block; color: #fff; font-size: 15px; margin-top: 4px; }
+  .chapters { margin-top: 30px; border-top: 1px solid #1f2430; animation: up .7s .4s ease both; }
+  .chapters h2 { font-size: 13px; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); margin: 22px 0 8px; }
+  .chapters button { width: 100%; display: flex; gap: 18px; align-items: baseline; text-align: left; background: none; border: 0; border-bottom: 1px solid #1f2430; color: #fff; padding: 14px 0; font: inherit; cursor: pointer; }
+  .chapters button:hover { color: var(--soft); }
+  .chapters time { font-variant-numeric: tabular-nums; color: var(--blue); font-weight: 700; min-width: 48px; }
+  .chapters span { color: var(--muted); font-size: 14px; margin-left: auto; }
+  footer { padding: 20px 24px; color: #6b7280; font-size: 13px; text-align: center; }
+  @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  @media (max-width: 600px) { .chapters span { display: none; } .brand span { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>XC</b>Xavier Camarasa <span>— Elevator Pitch</span></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="btn" href="../portfolio/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Portfolio</a>
+    <a class="btn primary" href="elevator-pitch.mp4" download="Elevator Pitch - Xavier Camarasa.mp4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download video</a>
+  </div>
+</header>
+<main>
+  <p class="eyebrow">Management &amp; Organisational Behaviour 4 / TUS</p>
+  <h1>Elevator pitch</h1>
+  <div class="player">
+    <video id="v" controls playsinline preload="metadata" poster="poster.jpg">
+      <source src="elevator-pitch.mp4" type="video/mp4">
+      Your browser cannot play this video. <a href="elevator-pitch.mp4">Download it here</a>.
+    </video>
+  </div>
+  <div class="meta">
+    <div>Speaker<b>Xavier Camarasa</b></div>
+    <div>Programme<b>Software Design with AI &amp; Cloud Computing</b></div>
+    <div>Length<b>2:45</b></div>
+  </div>
+  <section class="chapters" aria-label="Chapters">
+    <h2>Chapters</h2>
+    <button data-t="0"><time>0:00</time>Introduction<span>Who I am</span></button>
+    <button data-t="31"><time>0:31</time>DK Tegoria Salsas<span>Family business — internal tool</span></button>
+    <button data-t="62"><time>1:02</time>Maquinaria<span>B2B machinery marketplace</span></button>
+    <button data-t="79"><time>1:19</time>Mediterranean Blue Realty<span>Real-estate website</span></button>
+    <button data-t="91"><time>1:31</time>Centro de Estudio de la Sábana Santa<span>Partner project — Valencia</span></button>
+    <button data-t="119"><time>1:59</time>Working with real clients<span>What I learned</span></button>
+    <button data-t="149"><time>2:29</time>Closing<span>Thank you</span></button>
+  </section>
+</main>
+<footer>© 2026 Xavier Camarasa</footer>
+<script>
+  const v = document.getElementById("v");
+  document.querySelectorAll(".chapters button").forEach(b => b.addEventListener("click", () => {
+    v.currentTime = +b.dataset.t; v.play(); v.scrollIntoView({ behavior: "smooth", block: "center" });
+  }));
+</script>
+</body>
+</html>
