@@ -114,7 +114,7 @@
 
   @page { size: A4; margin: 0; }
   @media print {
-    html { zoom: .82; }
+    html { zoom: .95; }
     body { background: #fff; }
     .bar { display: none; }
     .sheet { box-shadow: none; margin: 0; max-width: none; }
@@ -141,29 +141,28 @@
   <header class="hero">
     <img class="photo" src="photo.jpg" alt="Portrait of Xavier Camarasa" width="112" height="112">
     <div class="id">
-      <p class="kicker">Curriculum Vitae · 2026</p>
+      
       <h1>Xavier Camarasa</h1>
       <p class="role">Junior Software Engineer · Full-Stack Development · Industrial Automation · Applied AI</p>
       <ul class="contact">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:xavicamarasaa@gmail.com">xavicamarasaa@gmail.com</a></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><a href="https://xkmarasa.github.io/portfolio/">xkmarasa.github.io/portfolio</a></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><a href="https://github.com/Xkmarasa">github.com/Xkmarasa</a></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Ireland (Erasmus) · Valencia, Spain — open to relocation</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Ireland · Spain — open to relocation</li>
       </ul>
     </div>
   </header>
 
   <section class="stats" aria-label="Highlights">
-    <div class="stat"><b>5</b><span>client projects shipped</span></div>
-    <div class="stat"><b>2</b><span>own products in development</span></div>
-    <div class="stat"><b>B2</b><span>English · Cambridge FCE</span></div>
+    <div class="stat"><b>5</b><span>client projects</span></div>
+    <div class="stat"><b>2</b><span>own products</span></div>
+    <div class="stat"><b>B2</b><span>English (Cambridge)</span></div>
   </section>
 
   <div class="body">
     <p class="summary">
-      Final-year Software Engineering student who has shipped software for real businesses alongside the degree.
-      I build full-stack business applications (TypeScript, React, Node.js, PostgreSQL) and industrial automation in C#/.NET —
-      including an engineering-drawing system for Autodesk Inventor. Looking for graduate and junior software roles.
+      Final-year Computer Engineering student building full-stack business applications in TypeScript and
+      industrial automation in C#/.NET. Five client projects delivered alongside my degree.
     </p>
 
     <h2>Projects &amp; Experience</h2>
@@ -174,48 +173,47 @@
           <h3>Industrial Drawing Automation <span>— Final-year project</span><span class="badge">Featured</span></h3>
           <span class="when">Sep 2026 – present</span>
         </div>
-        <ul class="chips"><li>C#</li><li>.NET 8</li><li>Autodesk Inventor API</li><li>COM interop</li><li>Python</li><li>scikit-learn</li></ul>
+        <ul class="chips"><li>C#</li><li>.NET 8</li><li>Autodesk Inventor API</li><li>Python</li><li>scikit-learn</li></ul>
         <ul class="pts">
-          <li>Inventor add-in that generates dimensioned manufacturing drawings from 3D models of five part families, and reviews existing drawings for missing, redundant or unreadable dimensions.</li>
-          <li>Every dimension and warning is justified by one of 38 rules traced to UNE-EN ISO standards; learns a company's drafting style from a handful of its drawings. Runs fully on-premise.</li>
-          <li>~11k lines of C# and ~6.5k of Python with automated tests. In a synthetic benchmark the reviewer caught all 377 injected defects (8 types) with no false alarms; validation with industry professionals in progress.</li>
+          <li>Built an Autodesk Inventor add-in that generates and reviews manufacturing drawings from 3D models.</li>
+          <li>Justifies each dimension with UNE-EN ISO rules and adapts to each company's drafting style, fully on-premise.</li>
+          <li>Detected 377/377 injected defects with zero false alarms in a synthetic benchmark; industry validation in progress.</li>
         </ul>
       </div>
 
       <div class="item star">
         <div class="item-head">
-          <h3>SynerMachine <span>— B2B machinery-rental marketplace, built with a partner</span></h3>
+          <h3>SynerMachine <span>— B2B marketplace, co-built with a partner</span></h3>
           <span class="when">Sep 2026 – present</span>
         </div>
-        <ul class="chips"><li>TypeScript</li><li>NestJS</li><li>React</li><li>PostgreSQL</li><li>Docker</li><li>Terraform</li><li>GitHub Actions</li></ul>
+        <ul class="chips"><li>TypeScript</li><li>NestJS</li><li>React</li><li>PostgreSQL</li><li>Docker</li><li>Terraform</li></ul>
         <ul class="pts">
-          <li>Construction companies rent idle machinery to each other: company accounts and roles, operator documents, map search, bookings, messaging, invoicing and a back-office.</li>
-          <li>Modular monolith in a pnpm/Turborepo monorepo with 44 database migrations and 1,400+ automated tests; double bookings prevented at database level with PostgreSQL range constraints.</li>
-          <li>CI pipeline, infrastructure as code, error monitoring and a live interactive demo on Render.</li>
+          <li>Platform where construction companies rent idle machinery: bookings, documents, messaging and invoicing.</li>
+          <li>Modular monorepo with CI/CD, infrastructure as code and a live demo on Render.</li>
         </ul>
       </div>
 
       <div class="item">
         <div class="item-head">
-          <h3>Freelance Software Developer <span>— Client projects</span></h3>
+          <h3>Freelance Software Developer <span>— Client projects, Spain</span></h3>
           <span class="when">Jul 2025 – present</span>
         </div>
         <ul class="pts">
-          <li><b>Subscription e-commerce</b> for a journal publisher: Next.js, Supabase (PostgreSQL row-level security, MFA), Stripe checkout and subscriptions, order state machine, admin and delivery panels, ES/EN; unit, E2E and database tests in CI.</li>
-          <li><b>Mediterranean Blue Realty</b> — bilingual real-estate site: Express/PostgreSQL backend, scheduled XML property-feed sync, Cloudinary images, admin panel; deployed with Nginx and PM2.</li>
-          <li><b>UMA Manufaktur</b> — three-domain, five-language website (Python/Jinja2 generator) on Netlify, including DNS migration, HTTPS and security headers.</li>
-          <li><b>Bar Castelló</b> — website and live digital menu the owner edits without code (Express, PostgreSQL), iterated from prototype with owner feedback.</li>
+          <li><b>Subscription e-commerce</b> — Next.js, Supabase and Stripe, with admin panel and automated tests.</li>
+          <li><b>Mediterranean Blue Realty</b> — bilingual real-estate website with admin panel and automated listing sync.</li>
+          <li><b>UMA Manufaktur</b> — multilingual website across three domains.</li>
+          <li><b>Bar Castelló</b> — website and digital menu the owner updates without code.</li>
         </ul>
       </div>
 
       <div class="item">
         <div class="item-head">
-          <h3>Food-plant quality &amp; time-tracking app <span>— Internal tool in daily use</span></h3>
+          <h3>Food-Plant Operations App <span>— Internal tool in daily use</span></h3>
           <span class="when">Nov 2025 – present</span>
         </div>
-        <ul class="chips"><li>React</li><li>Firebase Functions</li><li>MongoDB Atlas</li><li>GitHub Actions</li></ul>
+        <ul class="chips"><li>React</li><li>Firebase</li><li>MongoDB</li></ul>
         <ul class="pts">
-          <li>Replaced paper records in a sauce factory: employee clock-in, 16 HACCP quality-report types with pH limits per product, batch traceability against material orders, role-based access and Excel export.</li>
+          <li>Replaced paper with digital clock-in, HACCP quality records and batch traceability.</li>
         </ul>
       </div>
 
@@ -228,8 +226,7 @@
           <div class="skill"><dt>Languages</dt><dd><span class="k">TypeScript</span><span class="k">C#</span><span class="k">Python</span><span>JavaScript</span><span>Java</span><span>SQL</span></dd></div>
           <div class="skill"><dt>Backend &amp; Frontend</dt><dd><span class="k">.NET 8</span><span class="k">NestJS</span><span class="k">React</span><span>Next.js</span><span>Node.js / Express</span><span>REST APIs</span><span>Auth &amp; RBAC</span></dd></div>
           <div class="skill"><dt>Data</dt><dd><span class="k">PostgreSQL</span><span>Supabase</span><span>MongoDB</span><span>MySQL / MariaDB</span></dd></div>
-          <div class="skill"><dt>Cloud &amp; DevOps</dt><dd><span class="k">Docker</span><span class="k">GitHub Actions</span><span>Terraform</span><span>Vercel</span><span>Render</span><span>Firebase</span><span>Netlify</span></dd></div>
-          <div class="skill"><dt>Quality</dt><dd><span>Vitest</span><span>Playwright</span><span>pytest</span><span>CI</span><span>ADRs &amp; docs</span></dd></div>
+          <div class="skill"><dt>Cloud, DevOps &amp; Testing</dt><dd><span class="k">Docker</span><span class="k">GitHub Actions</span><span>Terraform</span><span>Vercel</span><span>Render</span><span>Firebase</span><span>Netlify</span><span>Playwright</span><span>Vitest</span></dd></div>
         </dl>
       </div>
       <div>
@@ -240,7 +237,7 @@
         <p class="lang"><b>Spanish</b><span class="dots"><i></i><i></i><i></i><i></i><i></i></span> Native</p>
         <p class="lang"><b>English</b><span class="dots"><i></i><i></i><i></i><i></i><i class="o"></i></span> B2 · FCE 168</p>
         <h2>Also</h2>
-        <p class="plain">Weekend waiter 2021 – 2025: teamwork and customer service while studying.</p>
+        <p class="plain">Waiter (weekends), 2021 – 2025.</p>
       </div>
     </div>
   </div>
