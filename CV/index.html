@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xavier Camarasa — CV</title>
+<meta name="description" content="Xavier Camarasa — Junior Software Engineer. Full-stack development, industrial automation and applied AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2B4EEA; --blue-2: #1A36C4; --blue-soft: #E8ECFF; --blue-mid: #C9D3FF;
+    --ink: #111318; --ink-2: #1B1F2A; --muted: #5C6270; --text: #2C3039;
+    --line: #DFE2E8; --light: #F3F4F7; --page: #E6E8EE;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: Inter, "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.45; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  /* toolbar (screen only) */
+  .bar { max-width: 210mm; margin: 22px auto 12px; padding: 0 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+  .bar .back { color: var(--muted); font-weight: 600; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { border: 0; padding: 10px 14px; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; background: var(--blue); color: #fff; }
+  .btn.alt { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .btn:hover { filter: brightness(1.06); }
+  .hint { flex-basis: 100%; font-size: 12px; color: var(--muted); text-align: right; margin: 0; }
+
+  .sheet { max-width: 210mm; margin: 0 auto 40px; background: #fff; box-shadow: 0 30px 70px -35px rgba(17,19,24,.35); overflow: hidden; }
+
+  /* hero */
+  .hero { position: relative; background: var(--ink-2); color: #fff; padding: 11mm 14mm 9mm; display: grid; grid-template-columns: auto 1fr; gap: 0 22px; align-items: center; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; right: -60px; top: -80px; width: 300px; height: 300px; background: var(--blue); opacity: .9; transform: rotate(28deg); }
+  .hero::after { content: ""; position: absolute; right: 120px; bottom: -120px; width: 180px; height: 180px; border: 2px solid rgba(201,211,255,.25); transform: rotate(28deg); }
+  .photo { position: relative; z-index: 1; width: 112px; height: 112px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 10px 30px -8px rgba(0,0,0,.6); }
+  .id { position: relative; z-index: 1; min-width: 0; }
+  .kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--blue-mid); margin: 0 0 6px; }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: -.035em; line-height: 1; margin: 0; }
+  .role { margin: 8px 0 12px; font-size: 14px; font-weight: 600; color: #DDE3FF; }
+  .contact { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; font-size: 11.5px; }
+  .contact li { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); padding: 4px 9px; color: #fff; }
+  .contact svg { width: 12px; height: 12px; flex: none; color: var(--blue-mid); }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+  .stat { padding: 10px 14px 9px; border-right: 1px solid var(--line); }
+  .stat:first-child { padding-left: 14mm; }
+  .stat:last-child { border-right: 0; }
+  .stat b { display: block; font-size: 21px; font-weight: 800; letter-spacing: -.03em; color: var(--blue); line-height: 1.05; }
+  .stat span { font-size: 10.5px; color: var(--muted); font-weight: 600; }
+
+  .body { padding: 7mm 14mm 9mm; }
+  .summary { font-size: 12.8px; color: var(--text); margin: 0 0 4px; padding-left: 12px; border-left: 3px solid var(--blue); }
+
+  h2 { font-size: 10.5px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--blue); margin: 14px 0 8px; display: flex; align-items: center; gap: 10px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* timeline items */
+  .tl { position: relative; padding-left: 18px; }
+  .tl::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; background: var(--blue-soft); }
+  .item { position: relative; margin: 0 0 10px; break-inside: avoid; }
+  .item::before { content: ""; position: absolute; left: -18px; top: 4px; width: 10px; height: 10px; background: #fff; border: 2.5px solid var(--blue); border-radius: 50%; }
+  .item.star::before { background: var(--blue); }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .item h3 { font-size: 13.5px; font-weight: 800; margin: 0; letter-spacing: -.01em; }
+  .item h3 span { font-weight: 500; color: var(--muted); }
+  .item h3 .badge { color: #fff; }
+  .badge { display: inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; background: var(--blue); color: #fff; padding: 2px 6px; margin-left: 6px; vertical-align: 2px; }
+  .when { font-size: 11.5px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  .chips { margin: 4px 0 3px; display: flex; flex-wrap: wrap; gap: 4px; padding: 0; list-style: none; }
+  .chips li { font-size: 10.5px; font-weight: 700; background: var(--blue-soft); color: var(--blue-2); padding: 2px 7px; }
+  ul.pts { margin: 3px 0 0; padding-left: 15px; font-size: 12.2px; color: var(--text); }
+  ul.pts li { margin: 2px 0; }
+  ul.pts li::marker { color: var(--blue); }
+  ul.pts b { color: var(--ink); }
+
+  /* bottom grid */
+  .grid2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 0 26px; }
+  .skills { margin: 0; display: grid; gap: 7px; }
+  .skill dt { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .skill dd { margin: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+  .skill dd span { font-size: 11px; font-weight: 600; background: var(--light); border: 1px solid var(--line); padding: 2px 7px; }
+  .skill dd span.k { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .edu { margin: 0 0 8px; font-size: 12px; color: var(--text); }
+  .edu b { display: block; font-size: 12.8px; color: var(--ink); }
+  .edu i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--blue); }
+  .plain { font-size: 12px; color: var(--text); margin: 0 0 5px; }
+  .plain b { color: var(--ink); }
+  .lang { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 0 0 5px; }
+  .lang b { width: 56px; }
+  .dots { display: flex; gap: 3px; }
+  .dots i { width: 14px; height: 6px; background: var(--blue); }
+  .dots i.o { background: var(--blue-soft); }
+
+  /* responsive */
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; padding: 24px 16px 20px; gap: 14px; }
+    .photo { width: 96px; height: 96px; }
+    h1 { font-size: 30px; }
+    .stat, .stat:first-child { padding: 10px 12px; }
+    .stat b { font-size: 18px; }
+    .body { padding: 20px 16px 26px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .hint { text-align: left; }
+  }
+
+  /* no-photo mode (Ireland / UK applications) */
+  body.nophoto .photo { display: none; }
+  body.nophoto .hero { grid-template-columns: 1fr; }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    html { zoom: .82; }
+    body { background: #fff; }
+    .bar { display: none; }
+    .sheet { box-shadow: none; margin: 0; max-width: none; }
+    .item, .grid2, .skill, .edu { break-inside: auto; }
+    .body { padding-bottom: 3mm; }
+    .grid2 p:last-child { margin-bottom: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a:hover { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="back" href="../portfolio/">← Portfolio</a>
+  <div class="actions">
+    <button class="btn" type="button" data-print="photo">Download PDF</button>
+    <button class="btn alt" type="button" data-print="nophoto">PDF without photo</button>
+  </div>
+  <p class="hint">Without photo: recommended for applications in Ireland, the UK and the US.</p>
+</div>
+
+<main class="sheet">
+  <header class="hero">
+    <img class="photo" src="photo.jpg" alt="Portrait of Xavier Camarasa" width="112" height="112">
+    <div class="id">
+      <p class="kicker">Curriculum Vitae · 2026</p>
+      <h1>Xavier Camarasa</h1>
+      <p class="role">Junior Software Engineer · Full-Stack Development · Industrial Automation · Applied AI</p>
+      <ul class="contact">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:xavicamarasaa@gmail.com">xavicamarasaa@gmail.com</a></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><a href="https://xkmarasa.github.io/portfolio/">xkmarasa.github.io/portfolio</a></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg><a href="https://github.com/Xkmarasa">github.com/Xkmarasa</a></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Ireland (Erasmus) · Valencia, Spain — open to relocation</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="Highlights">
+    <div class="stat"><b>5</b><span>client projects shipped</span></div>
+    <div class="stat"><b>2</b><span>own products in development</span></div>
+    <div class="stat"><b>B2</b><span>English · Cambridge FCE</span></div>
+  </section>
+
+  <div class="body">
+    <p class="summary">
+      Final-year Software Engineering student who has shipped software for real businesses alongside the degree.
+      I build full-stack business applications (TypeScript, React, Node.js, PostgreSQL) and industrial automation in C#/.NET —
+      including an engineering-drawing system for Autodesk Inventor. Looking for graduate and junior software roles.
+    </p>
+
+    <h2>Projects &amp; Experience</h2>
+    <div class="tl">
+
+      <div class="item star">
+        <div class="item-head">
+          <h3>Industrial Drawing Automation <span>— Final-year project</span><span class="badge">Featured</span></h3>
+          <span class="when">Sep 2026 – present</span>
+        </div>
+        <ul class="chips"><li>C#</li><li>.NET 8</li><li>Autodesk Inventor API</li><li>COM interop</li><li>Python</li><li>scikit-learn</li></ul>
+        <ul class="pts">
+          <li>Inventor add-in that generates dimensioned manufacturing drawings from 3D models of five part families, and reviews existing drawings for missing, redundant or unreadable dimensions.</li>
+          <li>Every dimension and warning is justified by one of 38 rules traced to UNE-EN ISO standards; learns a company's drafting style from a handful of its drawings. Runs fully on-premise.</li>
+          <li>~11k lines of C# and ~6.5k of Python with automated tests. In a synthetic benchmark the reviewer caught all 377 injected defects (8 types) with no false alarms; validation with industry professionals in progress.</li>
+        </ul>
+      </div>
+
+      <div class="item star">
+        <div class="item-head">
+          <h3>SynerMachine <span>— B2B machinery-rental marketplace, built with a partner</span></h3>
+          <span class="when">Sep 2026 – present</span>
+        </div>
+        <ul class="chips"><li>TypeScript</li><li>NestJS</li><li>React</li><li>PostgreSQL</li><li>Docker</li><li>Terraform</li><li>GitHub Actions</li></ul>
+        <ul class="pts">
+          <li>Construction companies rent idle machinery to each other: company accounts and roles, operator documents, map search, bookings, messaging, invoicing and a back-office.</li>
+          <li>Modular monolith in a pnpm/Turborepo monorepo with 44 database migrations and 1,400+ automated tests; double bookings prevented at database level with PostgreSQL range constraints.</li>
+          <li>CI pipeline, infrastructure as code, error monitoring and a live interactive demo on Render.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <h3>Freelance Software Developer <span>— Client projects</span></h3>
+          <span class="when">Jul 2025 – present</span>
+        </div>
+        <ul class="pts">
+          <li><b>Subscription e-commerce</b> for a journal publisher: Next.js, Supabase (PostgreSQL row-level security, MFA), Stripe checkout and subscriptions, order state machine, admin and delivery panels, ES/EN; unit, E2E and database tests in CI.</li>
+          <li><b>Mediterranean Blue Realty</b> — bilingual real-estate site: Express/PostgreSQL backend, scheduled XML property-feed sync, Cloudinary images, admin panel; deployed with Nginx and PM2.</li>
+          <li><b>UMA Manufaktur</b> — three-domain, five-language website (Python/Jinja2 generator) on Netlify, including DNS migration, HTTPS and security headers.</li>
+          <li><b>Bar Castelló</b> — website and live digital menu the owner edits without code (Express, PostgreSQL), iterated from prototype with owner feedback.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <h3>Food-plant quality &amp; time-tracking app <span>— Internal tool in daily use</span></h3>
+          <span class="when">Nov 2025 – present</span>
+        </div>
+        <ul class="chips"><li>React</li><li>Firebase Functions</li><li>MongoDB Atlas</li><li>GitHub Actions</li></ul>
+        <ul class="pts">
+          <li>Replaced paper records in a sauce factory: employee clock-in, 16 HACCP quality-report types with pH limits per product, batch traceability against material orders, role-based access and Excel export.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h2>Skills</h2>
+        <dl class="skills">
+          <div class="skill"><dt>Languages</dt><dd><span class="k">TypeScript</span><span class="k">C#</span><span class="k">Python</span><span>JavaScript</span><span>Java</span><span>SQL</span></dd></div>
+          <div class="skill"><dt>Backend &amp; Frontend</dt><dd><span class="k">.NET 8</span><span class="k">NestJS</span><span class="k">React</span><span>Next.js</span><span>Node.js / Express</span><span>REST APIs</span><span>Auth &amp; RBAC</span></dd></div>
+          <div class="skill"><dt>Data</dt><dd><span class="k">PostgreSQL</span><span>Supabase</span><span>MongoDB</span><span>MySQL / MariaDB</span></dd></div>
+          <div class="skill"><dt>Cloud &amp; DevOps</dt><dd><span class="k">Docker</span><span class="k">GitHub Actions</span><span>Terraform</span><span>Vercel</span><span>Render</span><span>Firebase</span><span>Netlify</span></dd></div>
+          <div class="skill"><dt>Quality</dt><dd><span>Vitest</span><span>Playwright</span><span>pytest</span><span>CI</span><span>ADRs &amp; docs</span></dd></div>
+        </dl>
+      </div>
+      <div>
+        <h2>Education</h2>
+        <p class="edu"><b>BSc Computer Engineering</b>Universitat Politècnica de València (UPV)<br><i>2021 – 2027 (expected) · Software Design</i></p>
+        <p class="edu"><b>Erasmus exchange — final year</b>Technological University of the Shannon (TUS), Ireland<br><i>2026 – 2027 · Software Design with AI &amp; Cloud Computing</i></p>
+        <h2>Languages</h2>
+        <p class="lang"><b>Spanish</b><span class="dots"><i></i><i></i><i></i><i></i><i></i></span> Native</p>
+        <p class="lang"><b>English</b><span class="dots"><i></i><i></i><i></i><i></i><i class="o"></i></span> B2 · FCE 168</p>
+        <h2>Also</h2>
+        <p class="plain">Weekend waiter 2021 – 2025: teamwork and customer service while studying.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  document.querySelectorAll('[data-print]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var noPhoto = btn.getAttribute('data-print') === 'nophoto';
+      document.body.classList.toggle('nophoto', noPhoto);
+      window.print();
+    });
+  });
+  var fixedNoPhoto = /[?&]nophoto\b/.test(location.search);
+  if (fixedNoPhoto) document.body.classList.add('nophoto');
+  window.addEventListener('afterprint', function () { document.body.classList.toggle('nophoto', fixedNoPhoto); });
+</script>
+</body>
+</html>
