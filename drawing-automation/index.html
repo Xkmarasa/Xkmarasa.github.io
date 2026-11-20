@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industrial Drawing Automation — Case Study · Xavier Camarasa</title>
+<meta name="description" content="Case study: an Autodesk Inventor add-in (C#/.NET 8) that generates and reviews manufacturing drawings from 3D models and justifies every dimension with UNE-EN ISO rules.">
+<meta property="og:title" content="Industrial Drawing Automation — Case Study">
+<meta property="og:description" content="Autodesk Inventor add-in that generates and reviews manufacturing drawings, justifying every dimension with a rule and a standard.">
+<meta property="og:image" content="https://xkmarasa.github.io/drawing-automation/img/assembly.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2B4EEA; --blue-2: #1A36C4; --blue-soft: #E8ECFF; --blue-mid: #C9D3FF;
+    --ink: #111318; --ink-2: #1B1F2A; --muted: #5C6270; --text: #2C3039;
+    --line: #DFE2E8; --light: #F3F4F7; --page: #F6F7FA; --amber: #8A5A00; --amber-bg: #FFF6E0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: Inter, "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.55; }
+  a { color: var(--blue); }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(27,31,42,.96); backdrop-filter: blur(6px); }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 54px; font-size: 14px; }
+  nav a { color: #fff; text-decoration: none; font-weight: 600; }
+  nav .links { display: flex; gap: 18px; }
+  nav .links a { color: #C9D3FF; }
+  nav .links a:hover, nav a:hover { color: #fff; }
+
+  /* hero */
+  header { position: relative; overflow: hidden; background: var(--ink-2); color: #fff; padding: 64px 0 56px; }
+  header::before { content: ""; position: absolute; right: -120px; top: -160px; width: 520px; height: 520px; background: var(--blue); transform: rotate(28deg); opacity: .92; }
+  header::after { content: ""; position: absolute; right: 260px; bottom: -200px; width: 300px; height: 300px; border: 2px solid rgba(201,211,255,.22); transform: rotate(28deg); }
+  header .wrap { position: relative; z-index: 1; }
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--blue-mid); margin: 0 0 14px; }
+  h1 { font-size: clamp(34px, 5.6vw, 58px); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; margin: 0; max-width: 760px; }
+  .lead { font-size: clamp(17px, 2vw, 20px); color: #DDE3FF; max-width: 700px; margin: 18px 0 24px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+  .chips li { font-size: 12.5px; font-weight: 700; padding: 4px 10px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 26px; font-size: 13.5px; color: #C9D3FF; }
+  .facts b { color: #fff; font-weight: 700; }
+
+  section { padding: 56px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  h2 { font-size: 12px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--blue); margin: 0 0 10px; }
+  h3.title { font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; margin: 0 0 16px; max-width: 760px; }
+  p { color: var(--text); margin: 0 0 14px; max-width: 760px; }
+
+  /* video */
+  .video { margin-top: -28px; position: relative; z-index: 2; }
+  .player { background: #0d0f15; aspect-ratio: 16/9; box-shadow: 0 30px 70px -30px rgba(17,19,24,.55); position: relative; overflow: hidden; }
+  .player video { width: 100%; height: 100%; display: block; background: #0d0f15; }
+  .soon { position: absolute; inset: 0; display: none; place-items: center; text-align: center; color: #fff; background: linear-gradient(rgba(13,15,21,.72), rgba(13,15,21,.88)), url(img/assembly.jpg) center/cover; padding: 20px; }
+  .soon b { display: block; font-size: 22px; letter-spacing: -.02em; margin-bottom: 6px; }
+  .soon span { color: #C9D3FF; font-size: 14px; }
+  .player.novideo video { display: none; }
+  .player.novideo .soon { display: grid; }
+  .chapters { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+  .chapters b { color: var(--ink); }
+
+  /* grids */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+  .card { background: #fff; border: 1px solid var(--line); padding: 18px; }
+  .card h4 { margin: 0 0 6px; font-size: 15.5px; letter-spacing: -.01em; }
+  .card p { font-size: 14px; margin: 0; }
+  .card .n { font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .14em; }
+
+  /* pipeline */
+  .pipe { counter-reset: s; list-style: none; padding: 0; margin: 22px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+  .pipe li { counter-increment: s; background: #fff; border: 1px solid var(--line); border-top: 3px solid var(--blue); padding: 14px 14px 12px; font-size: 13.5px; color: var(--text); }
+  .pipe li::before { content: counter(s, decimal-leading-zero); display: block; font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .1em; margin-bottom: 4px; }
+  .pipe b { color: var(--ink); display: block; font-size: 14.5px; }
+
+  figure { margin: 0; background: #fff; border: 1px solid var(--line); }
+  figure img { width: 100%; height: auto; cursor: zoom-in; }
+  figcaption { font-size: 13px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--line); }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+  .shots .wide { grid-column: 1 / -1; }
+
+  /* results */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 22px 0 14px; background: #fff; border: 1px solid var(--line); }
+  .stat { padding: 18px; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: 0; }
+  .stat b { display: block; font-size: 30px; font-weight: 800; letter-spacing: -.03em; color: var(--blue); line-height: 1.05; }
+  .stat span { display: block; font-size: 13px; color: var(--text); margin-top: 6px; }
+  .stat small { display: block; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  .note { background: var(--amber-bg); border-left: 3px solid #E0A100; padding: 14px 16px; font-size: 14px; color: var(--amber); max-width: none; }
+  .note b { color: #5E3D00; }
+  ul.pts { padding-left: 18px; margin: 0; color: var(--text); font-size: 14.5px; }
+  ul.pts li { margin: 6px 0; }
+  ul.pts li::marker { color: var(--blue); }
+
+  .tech { display: grid; grid-template-columns: 180px 1fr; gap: 0; background: #fff; border: 1px solid var(--line); font-size: 14px; }
+  .tech div { padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .tech div:nth-child(odd) { font-weight: 700; background: var(--light); }
+  .tech div:nth-last-child(-n+2) { border-bottom: 0; }
+
+  footer { background: var(--ink-2); color: #C9D3FF; padding: 36px 0; font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: center; }
+  footer a { color: #fff; font-weight: 600; text-decoration: none; margin-left: 18px; }
+  footer a:first-child { margin-left: 0; }
+
+  /* lightbox */
+  .lb { position: fixed; inset: 0; background: rgba(10,12,18,.92); display: none; place-items: center; z-index: 50; padding: 20px; cursor: zoom-out; }
+  .lb.open { display: grid; }
+  .lb img { max-width: 100%; max-height: 92vh; background: #fff; }
+
+  @media (max-width: 860px) {
+    .grid2, .shots { grid-template-columns: 1fr; }
+    .grid4 { grid-template-columns: 1fr 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(2) { border-right: 0; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    nav .links { display: none; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 0 16px; }
+    .grid4, .stats { grid-template-columns: 1fr; }
+    .stat { border-right: 0; border-bottom: 1px solid var(--line); }
+    .tech { grid-template-columns: 1fr; }
+    .tech div:nth-child(odd) { border-bottom: 0; padding-bottom: 2px; }
+    header { padding: 44px 0 52px; }
+    footer a { margin: 0 14px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="../portfolio/">← Xavier Camarasa</a>
+    <div class="links">
+      <a href="#demo">Demo</a><a href="#problem">Problem</a><a href="#approach">Approach</a><a href="#results">Results</a><a href="../CV/">CV</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <p class="kicker">Case study · Final-year project · UPV</p>
+    <h1>Industrial Drawing Automation</h1>
+    <p class="lead">An Autodesk Inventor add-in that generates and reviews manufacturing drawings from 3D models, and justifies every dimension with the rule and UNE-EN ISO standard behind it.</p>
+    <ul class="chips"><li>C# · .NET 8</li><li>Inventor COM API</li><li>Python</li><li>scikit-learn</li><li>UNE-EN ISO</li></ul>
+    <div class="facts">
+      <span><b>Role</b> · Sole developer</span>
+      <span><b>Since</b> · Sep 2026</span>
+      <span><b>Status</b> · Working prototype, industry validation in progress</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap video" id="demo">
+  <div class="player" id="player">
+    <video controls preload="metadata" playsinline poster="img/assembly.jpg">
+      <source src="demo.mp4" type="video/mp4">
+    </video>
+    <div class="soon"><div><b>Demo video coming soon</b><span>Meanwhile, the walkthrough below shows real output of the add-in.</span></div></div>
+  </div>
+  <ul class="chapters">
+    <li><b>Generate drawing</b> from a 3D part</li>
+    <li><b>Justification report</b> for every dimension</li>
+    <li><b>Review drawing</b> with issues marked on the sheet</li>
+    <li><b>Learn style</b> from a company's drawings</li>
+    <li><b>Assembly drawing</b> with parts list and balloons</li>
+  </ul>
+</div>
+
+<section id="problem">
+  <div class="wrap grid2">
+    <div>
+      <h2>The problem</h2>
+      <h3 class="title">CAD tools project views. They don't decide what the workshop needs.</h3>
+      <p>Inventor can project views and retrieve model dimensions, but choosing <b>which</b> dimensions a machinist needs, in which view and where to place them so the sheet is readable and compliant, is still a drafter's job, and every company does it slightly differently.</p>
+      <p>Historical drawings don't record which 3D feature each dimension refers to, so that knowledge is hard to reuse or check.</p>
+    </div>
+    <figure>
+      <img src="img/shaft.jpg" alt="Automatically generated drawing of a stepped shaft with section A-A, chamfers, fillets and a keyway" loading="lazy" width="1600" height="1131">
+      <figcaption>Generated drawing of a stepped shaft: dimensions, section A-A for the keyway, general tolerances and surface finish.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="wrap">
+    <h2>The approach</h2>
+    <h3 class="title">Intent before drawing: decide and justify each dimension, then draw it.</h3>
+    <p>Each dimension starts as an <b>intent</b> (feature, value, priority, rule, standard, allowed views) and is classed as a hard <b>constraint</b>, a professional <b>heuristic</b> or a company <b>style</b> choice. Only then is it placed on the sheet.</p>
+    <ol class="pipe">
+      <li><b>Read the part</b>Generated model or the client's IPT/STEP; part family detected automatically.</li>
+      <li><b>Dimension intents</b>What must be defined, with rule and standard for each one.</li>
+      <li><b>View plan</b>Only the views needed; a section only when it adds information.</li>
+      <li><b>Placement</b>Side, row and spacing taken from the company style profile.</li>
+      <li><b>Inventor adapter</b>Anchors on real geometry, creates the dimensions, resolves crossings.</li>
+      <li><b>Quality check</b>Readability rules, and every dimension measured against the model.</li>
+    </ol>
+    <div class="grid4">
+      <div class="card"><div class="n">BUTTON 1</div><h4>Generate drawing</h4><p>Five part families: shafts, bushings, flanges, plates with hole tables, L-brackets.</p></div>
+      <div class="card"><div class="n">BUTTON 2–3</div><h4>Review drawing / folder</h4><p>Missing or duplicated dimensions, readability, scale and title block, marked on a sheet sketch.</p></div>
+      <div class="card"><div class="n">BUTTON 4</div><h4>Learn style</h4><p>Learns a readable, editable style profile from 5–20 company drawings, with a confidence per parameter.</p></div>
+      <div class="card"><div class="n">ASSEMBLIES</div><h4>Assembly drawing</h4><p>Views, isometric, parts list and balloons; switches to a section if a part is hidden.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <h2>Output</h2>
+    <h3 class="title">What the add-in produces</h3>
+    <div class="shots">
+      <figure class="wide">
+        <img src="img/assembly.jpg" alt="Automatically generated assembly drawing of a shaft support with section A-A, isometric view, parts list and balloons" loading="lazy" width="1600" height="1131">
+        <figcaption>Assembly drawing of a demo shaft support built from my own parts: views, section, isometric, 12-item parts list and balloons. Generated in seconds.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/report.jpg" alt="Justification report listing each dimension with its rule, standard and model check" loading="lazy" width="1240" height="1100">
+        <figcaption>Justification report: for each dimension, the rule, the standard, its level (constraint, heuristic, style) and its check against the 3D model.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/style.jpg" alt="Same plate drawn with the default ISO profile and with a company example profile" loading="lazy" width="1600" height="483">
+        <figcaption>Company style as configuration: the same plate with the default ISO profile and with an example profile (row spacing, Ø text alignment).</figcaption>
+      </figure>
+      <figure class="wide">
+        <img src="img/holes.jpg" alt="Plate with holes dimensioned by coordinates and the same plate with a hole table" loading="lazy" width="2000" height="701">
+        <figcaption>Plate with nine holes: coordinate dimensioning versus a hole table. The profile decides which one the company prefers.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <h2>Results so far</h2>
+    <h3 class="title">Measured with reproducible A/B tests, not by eye</h3>
+    <div class="stats">
+      <div class="stat"><b>377 / 377</b><span>injected defects of 8 types detected by the reviewer</span><small>0 false alarms on the 60 clean drawings</small></div>
+      <div class="stat"><b>3,145</b><span>dimensions on 240 generated parts, each checked against the model</span><small>2,909 required intents, 0 missing</small></div>
+      <div class="stat"><b>91.7 → 99.5</b><span>mean quality score, architecture v0.9 → v1.0</span><small>Same seeds: 163 better, 77 equal, 0 worse</small></div>
+      <div class="stat"><b>~70%</b><span>of what professional drafters dimension is reproduced by the rules</span><small>86–87% counting equivalent forms; 45 third-party drawings</small></div>
+    </div>
+    <p class="note"><b>Read these numbers in context.</b> Most evidence comes from synthetic parts and from defects injected into the system's own drawings: it measures technical correctness, not professional quality or time saved. Evaluation with practising drafters and real company drawings is the next milestone.</p>
+  </div>
+</section>
+
+<section id="learned">
+  <div class="wrap grid2">
+    <div>
+      <h2>Engineering highlights</h2>
+      <ul class="pts">
+        <li><b>Own quality gate.</b> Every change is A/B tested with the same seeds; when the automatic check said "nothing worse", I also measured the PDFs and reviewed by eye, which caught regressions the metric missed.</li>
+        <li><b>Shippable product.</b> Single-file installer with embedded Python, no admin rights, works across Inventor versions from 2027; signed licence with a 30-day trial.</li>
+        <li><b>Runs locally.</b> No model or drawing leaves the machine, which matters to manufacturers.</li>
+        <li><b>Applied ML where it adds value.</b> Learned style profiles and a feature recogniser (scikit-learn) trained only on my own synthetic parts, with calibrated confidence so uncertain cases go to human review.</li>
+        <li><b>Documented as I go.</b> 120+ logged engineering entries with decisions, problems and tests; built with an AI coding assistant.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Tech</h2>
+      <div class="tech">
+        <div>Add-in &amp; generator</div><div>C# · .NET 8 · Inventor 2027 COM API (~11,400 lines)</div>
+        <div>Domain layer</div><div>Intent model, style profile, sheet geometry, independent of Inventor</div>
+        <div>Reports &amp; ML</div><div>Python · NumPy · pandas · scikit-learn (~6,500 lines)</div>
+        <div>Tests</div><div>43 C# + 71 Python tests; automated in-Inventor test of the four buttons</div>
+        <div>Standards</div><div>UNE-EN ISO 129-1, ISO 2768 and others: catalogue of 38 rules</div>
+        <div>Code</div><div>Private, intended to become a commercial product. Walkthrough on request.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Xavier Camarasa · Junior Software Engineer</span>
+    <span><a href="../CV/">CV</a><a href="../portfolio/">Portfolio</a><a href="mailto:xavicamarasaa@gmail.com">Contact</a></span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-label="Enlarged image"><img alt=""></div>
+
+<script>
+  (function () {
+    var player = document.getElementById('player');
+    var video = player.querySelector('video');
+    var source = video.querySelector('source');
+    function none() { player.classList.add('novideo'); }
+    source.addEventListener('error', none);
+    video.addEventListener('error', none);
+    if (location.protocol !== 'file:') {
+      fetch('demo.mp4', { method: 'HEAD' }).then(function (r) { if (!r.ok) none(); }).catch(none);
+    }
+    var lb = document.getElementById('lb'), lbi = lb.querySelector('img');
+    document.querySelectorAll('figure img').forEach(function (img) {
+      img.addEventListener('click', function () { lbi.src = img.src; lbi.alt = img.alt; lb.classList.add('open'); });
+    });
+    lb.addEventListener('click', function () { lb.classList.remove('open'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+  })();
+</script>
+</body>
+</html>
